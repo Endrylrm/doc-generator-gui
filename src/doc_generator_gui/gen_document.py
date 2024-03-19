@@ -13,6 +13,8 @@ from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
 
 from .cpf_input import Cpf_Input
 
+from xml.etree import ElementTree as et
+
 
 # Key Extractor Page/Frame Widget
 class Gen_Document(QtWidgets.QWidget):
@@ -46,16 +48,19 @@ class Gen_Document(QtWidgets.QWidget):
         self.wordsToReplace: list[str] = []
         self.replaceWith: list[str] = []
 
+        empresa_xml = et.parse("empresa.xml")
+        root = empresa_xml.getroot()
+
         self.empresa_Dados: dict[str, str] = {
-            "$empresa$": "Teste de Empresa LTDA",
-            "$cnpj_empresa$": "00.000.000/0000-00",
-            "$rua_empresa$": "Rua de Teste - Nº 10.000",
-            "$bairro_empresa$": "Bairro de Teste",
-            "$cidade_empresa$": "Cidade de Teste",
-            "$estado_empresa$": "Estado de Teste",
-            "$pais_empresa$": "País de Teste",
-            "$cep_empresa$": "00000-000",
-            "$fone_empresa$": "+55 (41) 90000-0000",
+            "$empresa$": root.find("nome").text,
+            "$cnpj_empresa$": root.find("cnpj").text,
+            "$rua_empresa$": root.find("rua").text,
+            "$bairro_empresa$": root.find("bairro").text,
+            "$cidade_empresa$": root.find("cidade").text,
+            "$estado_empresa$": root.find("estado").text,
+            "$pais_empresa$": root.find("pais").text,
+            "$cep_empresa$": root.find("cep").text,
+            "$fone_empresa$": root.find("telefone").text,
         }
 
         self.tiposImpressao: list[str] = [
