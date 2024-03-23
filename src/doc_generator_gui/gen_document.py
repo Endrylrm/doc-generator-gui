@@ -52,15 +52,15 @@ class Gen_Document(QtWidgets.QWidget):
         root = empresa_xml.getroot()
 
         self.empresa_Dados: dict[str, str] = {
-            "$empresa$": root.find("nome").text,
-            "$cnpj_empresa$": root.find("cnpj").text,
-            "$rua_empresa$": root.find("rua").text,
-            "$bairro_empresa$": root.find("bairro").text,
-            "$cidade_empresa$": root.find("cidade").text,
-            "$estado_empresa$": root.find("estado").text,
-            "$pais_empresa$": root.find("pais").text,
-            "$cep_empresa$": root.find("cep").text,
-            "$fone_empresa$": root.find("telefone").text,
+            root.find("nome").attrib["replace"]: root.find("nome").attrib["value"],
+            root.find("cnpj").attrib["replace"]: root.find("cnpj").attrib["value"],
+            root.find("rua").attrib["replace"]: root.find("rua").attrib["value"],
+            root.find("bairro").attrib["replace"]: root.find("bairro").attrib["value"],
+            root.find("cidade").attrib["replace"]: root.find("cidade").attrib["value"],
+            root.find("estado").attrib["replace"]: root.find("estado").attrib["value"],
+            root.find("pais").attrib["replace"]: root.find("pais").attrib["value"],
+            root.find("cep").attrib["replace"]: root.find("cep").attrib["value"],
+            root.find("fone").attrib["replace"]: root.find("fone").attrib["value"],
         }
 
         self.tiposImpressao: list[str] = [

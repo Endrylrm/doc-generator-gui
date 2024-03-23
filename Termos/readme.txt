@@ -1,1 +1,1 @@
-os termos vem aqui.
+os termos em PDF gerados pelo sistema aparecem aqui.
