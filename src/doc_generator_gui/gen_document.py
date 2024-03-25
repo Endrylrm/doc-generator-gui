@@ -186,7 +186,7 @@ class Gen_Document(QtWidgets.QWidget):
         self.buttonGenDoc = QtWidgets.QPushButton(
             self, text="\N{Document} " + "Gerar Documento"
         )
-        self.buttonGenDoc.clicked.connect(self.GenerateAndPrintDoc)
+        self.buttonGenDoc.clicked.connect(self.GenerateDocument)
 
     # Grid Configuration
     def GridConfigs(self):
@@ -537,35 +537,33 @@ class Gen_Document(QtWidgets.QWidget):
             self.isDesativarPreviewImpressao = False
             print(self.isDesativarImpressao)
 
-    def GenerateAndPrintDoc(self):
-        if not self.CheckInputs():
-            return
-        # curdir = os.path.dirname(os.path.abspath(__file__)).replace(os.sep, "/")
-
+    def OutputPath(self) -> str:
         if not self.isDevolucao:
-            with open(f"./Templates/{self.fileTermo}", "r", encoding="utf-8") as file:
-                filedata: str = file.read()
             output: str = (
                 f"./Termos/Termo de Entrega de {self.PrintTypeComboBox.currentText()} - "
                 + self.EmployeeNameInput.text()
                 + ".pdf"
             )
         else:
-            with open(
-                f"./Templates/{self.fileTermoDevol}", "r", encoding="utf-8"
-            ) as file:
-                filedata: str = file.read()
             output: str = (
                 f"./Termos/Termo de Devolução de {self.PrintTypeComboBox.currentText()} - "
                 + self.EmployeeNameInput.text()
                 + ".pdf"
             )
 
-        with open("./Templates/header.html", "r", encoding="utf-8") as file:
-            headerfiledata: str = file.read()
+        return output
 
-        with open("./Templates/footer.html", "r", encoding="utf-8") as file:
-            footerfiledata: str = file.read()
+    def ReadHtmlFiles(self):
+        fileToRead = self.fileTermo if not self.isDevolucao else self.fileTermoDevol
+
+        with (
+            open("./Templates/header.html", "r", encoding="utf-8") as header_file,
+            open(f"./Templates/{fileToRead}", "r", encoding="utf-8") as termo_file,
+            open("./Templates/footer.html", "r", encoding="utf-8") as footer_file,
+        ):
+            headerfiledata: str = header_file.read()
+            termodata: str = termo_file.read()
+            footerfiledata: str = footer_file.read()
 
         obsTermo: str = self.DeviceNoteInput.text()
 
@@ -580,10 +578,10 @@ class Gen_Document(QtWidgets.QWidget):
         self.replaceWith.append(obsTermo)
 
         for old_word, new_word in zip(self.wordsToReplace, self.replaceWith):
-            filedata = filedata.replace(old_word, new_word)
+            termodata = termodata.replace(old_word, new_word)
 
         for variavel, dados in self.empresa_Dados.items():
-            filedata = filedata.replace(variavel, dados)
+            termodata = termodata.replace(variavel, dados)
             headerfiledata = headerfiledata.replace(variavel, dados)
             footerfiledata = footerfiledata.replace(variavel, dados)
 
@@ -593,6 +591,15 @@ class Gen_Document(QtWidgets.QWidget):
             footerfiledata = footerfiledata.replace("$data$", str(dataAtual))
         else:
             footerfiledata = footerfiledata.replace("$data$", self.DatePicker.text())
+
+        return {
+            "header_html": headerfiledata,
+            "termo_html": termodata,
+            "footer_html": footerfiledata,
+        }
+
+    def GeneratePDF(self, output: str):
+        htmlData: dict[str, str] = self.ReadHtmlFiles()
 
         # print(filedata)
         pdf_printer = QtPrintSupport.QPrinter(
@@ -611,51 +618,61 @@ class Gen_Document(QtWidgets.QWidget):
         pdf_painter.begin(pdf_printer)
         pdf_painter.scale(8.5, 8.5)
         pdf_painter.translate(0, 5)
-        pdf_Doc.setHtml(headerfiledata)
+        pdf_Doc.setHtml(htmlData["header_html"])
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.translate(30, 72)
-        pdf_Doc.setHtml(filedata)
+        pdf_Doc.setHtml(htmlData["termo_html"])
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.translate(-30, 665)
-        pdf_Doc.setHtml(footerfiledata)
+        pdf_Doc.setHtml(htmlData["footer_html"])
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.end()
 
-        if not self.isDesativarImpressao:
-            printer = QtPrintSupport.QPrinter(
-                QtPrintSupport.QPrinter.PrinterMode.HighResolution
+    def PrintDocument(self, input_pdf: str):
+        printer = QtPrintSupport.QPrinter(
+            QtPrintSupport.QPrinter.PrinterMode.HighResolution
+        )
+        printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
+        printer.setResolution(607)
+        printer.setFullPage(True)
+        printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
+
+        def PaintingDocument():
+            pdf_file = QtPdf.QPdfDocument()
+            pdf_file.load(input_pdf)
+            size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
+            imagefromPDF = pdf_file.render(0, size)
+            painter = QtGui.QPainter()
+            painter.begin(printer)
+            painter.translate(2, 0)
+            painter.drawImage(0, 0, imagefromPDF)
+            painter.end()
+
+        if not self.isDesativarPreviewImpressao:
+            printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(printer)
+            printPreviewDialog.setWindowTitle(
+                f"Imprimir Termo de {self.PrintTypeComboBox.currentText()}"
             )
-            printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
-            printer.setResolution(607)
-            printer.setFullPage(True)
-            printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
+            printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
+            printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
+            printPreviewDialog.paintRequested.connect(PaintingDocument)
 
-            def painting():
-                pdf_file = QtPdf.QPdfDocument()
-                pdf_file.load(output)
-                size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
-                imagefromPDF = pdf_file.render(0, size)
-                painter = QtGui.QPainter()
-                painter.begin(printer)
-                painter.translate(2, 0)
-                painter.drawImage(0, 0, imagefromPDF)
-                painter.end()
+            if printPreviewDialog.exec() == printPreviewDialog.DialogCode.Accepted:
+                PaintingDocument()
+        else:
+            printDialog = QtPrintSupport.QPrintDialog(printer)
 
-            if not self.isDesativarPreviewImpressao:
-                printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(printer)
-                printPreviewDialog.setWindowTitle(
-                    f"Imprimir Termo de {self.PrintTypeComboBox.currentText()}"
-                )
-                printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
-                printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
-                printPreviewDialog.paintRequested.connect(painting)
+            if printDialog.exec() == printDialog.DialogCode.Accepted:
+                PaintingDocument()
 
-                if printPreviewDialog.exec() == printPreviewDialog.DialogCode.Accepted:
-                    painting()
-            else:
-                printDialog = QtPrintSupport.QPrintDialog(printer)
+    def GenerateDocument(self):
+        if not self.CheckInputs():
+            return
 
-                if printDialog.exec() == printDialog.DialogCode.Accepted:
-                    painting()
+        Output: str = self.OutputPath()
+        self.GeneratePDF(Output)
+
+        if not self.isDesativarImpressao:
+            self.PrintDocument(Output)
 
         self.replaceWith.clear()
