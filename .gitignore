@@ -1,6 +1,9 @@
 # Termos em PDF
 Termos/*.pdf
 
+# upx
+upx/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

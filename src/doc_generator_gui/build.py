@@ -11,6 +11,8 @@ def Build_Nuitka():
             "-m",
             "nuitka",
             "--standalone",
+            "--plugin-enable=upx",
+            "--upx-binary=./upx/upx.exe",
             "--enable-plugin=pyside6",
             "--disable-console",
             "--windows-icon-from-ico=gen_document.ico",
@@ -32,6 +34,8 @@ def Build_PyInstaller():
             "--noconsole",
             "--icon",
             "gen_document.ico",
+            "--upx-dir",
+            "./upx/",
             # other pyinstaller options...
         ]
     )
