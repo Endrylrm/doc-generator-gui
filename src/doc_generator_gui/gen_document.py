@@ -553,7 +553,7 @@ class Gen_Document(QtWidgets.QWidget):
 
         return output
 
-    def ReadHtmlFiles(self):
+    def ReadHtmlFiles(self) -> dict[str, str]:
         fileToRead = self.fileTermo if not self.isDevolucao else self.fileTermoDevol
 
         with (
@@ -656,9 +656,6 @@ class Gen_Document(QtWidgets.QWidget):
             printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
             printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
             printPreviewDialog.paintRequested.connect(PaintingDocument)
-
-            if printPreviewDialog.exec() == printPreviewDialog.DialogCode.Accepted:
-                PaintingDocument()
         else:
             printDialog = QtPrintSupport.QPrintDialog(printer)
 
