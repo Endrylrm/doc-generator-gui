@@ -601,7 +601,6 @@ class Gen_Document(QtWidgets.QWidget):
     def GeneratePDF(self, output: str):
         htmlData: dict[str, str] = self.ReadHtmlFiles()
 
-        # print(filedata)
         pdf_printer = QtPrintSupport.QPrinter(
             QtPrintSupport.QPrinter.PrinterMode.HighResolution
         )
@@ -656,6 +655,8 @@ class Gen_Document(QtWidgets.QWidget):
             printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
             printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
             printPreviewDialog.paintRequested.connect(PaintingDocument)
+            # Visualizador de impressão não estava sendo executado
+            printPreviewDialog.exec()
         else:
             printDialog = QtPrintSupport.QPrintDialog(printer)
 
