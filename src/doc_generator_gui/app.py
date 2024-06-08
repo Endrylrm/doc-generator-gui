@@ -17,46 +17,46 @@ class App(QtWidgets.QMainWindow):
 
     def __init__(
         self,
-        AppTitle: str = None,
-        AppWidth: int = None,
-        AppHeight: int = None,
-        AppIcon: str = None,
+        app_title: str = None,
+        app_width: int = None,
+        app_height: int = None,
+        app_icon: str = None,
         *args,
         **kwargs
     ):
         """
         Main Window Widget "Application":
-        Class App(AppTitle, AppWidth, AppHeight, AppIcon):
-        AppTitle: Used to change the Application Window Title.
-        AppWidth: Used to change the Application Window Width.
-        AppHeight: Used to change the Application Window Height.
-        AppIcon: Used to change the Application Icon.
+        Class App(app_title, app_width, app_height, app_icon):
+        app_title: Used to change the Application Window Title.
+        app_width: Used to change the Application Window Width.
+        app_height: Used to change the Application Window Height.
+        app_icon: Used to change the Application Icon.
 
         Initialization of Application (Main Window) Class.
         """
 
         super().__init__(*args, **kwargs)
         # Window Title
-        if AppTitle is not None:
-            self.setWindowTitle(AppTitle)
+        if app_title is not None:
+            self.setWindowTitle(app_title)
         # window size
-        if AppWidth and AppHeight is not None:
-            self.CenterWindow(AppWidth, AppHeight)
+        if app_width and app_height is not None:
+            self.CenterWindow(app_width, app_height)
         # the Window icon
-        if AppIcon is not None:
-            self.setWindowIcon(QtGui.QIcon(AppIcon))
+        if app_icon is not None:
+            self.setWindowIcon(QtGui.QIcon(app_icon))
         # a container for our pages widgets
         self.container = QtWidgets.QWidget(self)
         # it's geometry is the size of our window
-        self.container.setGeometry(0, 0, AppWidth, AppHeight)
+        self.container.setGeometry(0, 0, app_width, app_height)
         # our container grid layout
-        self.containerGrid = QtWidgets.QGridLayout(self.container)
+        self.container_grid = QtWidgets.QGridLayout(self.container)
         # set our container layout a grid layout
-        self.container.setLayout(self.containerGrid)
+        self.container.setLayout(self.container_grid)
         # our pages / frames / widgets Dictionary
         self.pages = {}
         # current Page
-        self.currentPage: str = None
+        self.current_page: str = None
         # init our pages
         self.InitPages(self.container)
         # show the main page when we open our app
@@ -82,7 +82,7 @@ class App(QtWidgets.QMainWindow):
         # for each of our pages
         for page in self.pages:
             # Add our pages to Main Window container grid
-            self.containerGrid.addWidget(self.pages[page], 0, 0)
+            self.container_grid.addWidget(self.pages[page], 0, 0)
 
     # Page/Frame to show function
     def ShowPage(self, page: str):
@@ -95,31 +95,31 @@ class App(QtWidgets.QMainWindow):
         """
 
         # hide our current page
-        if self.currentPage is not None:
-            self.pages[self.currentPage].hide()
+        if self.current_page is not None:
+            self.pages[self.current_page].hide()
         # show our new page
         self.pages[page].show()
         # set our current page as our new page
-        self.currentPage = page
+        self.current_page = page
 
     # Center window function
-    def CenterWindow(self, AppWidth: int = 300, AppHeight: int = 300):
+    def CenterWindow(self, app_width: int = 300, app_height: int = 300):
         """
-        Function CenterWindow(AppWidth, AppHeight)
-        AppWidth: The width of our root/window widget.
-        AppHeight: the height of our root/window widget.
+        Function CenterWindow(app_width, app_height)
+        app_width: The width of our root/window widget.
+        app_height: the height of our root/window widget.
 
         Center our windows on screen and controls it's size.
         """
 
         # set the size
-        self.setGeometry(0, 0, AppWidth, AppHeight)
+        self.setGeometry(0, 0, app_width, app_height)
         # get the frame geometry (size and position)
-        appGeometry = self.frameGeometry()
+        app_geometry = self.frameGeometry()
         # get the center of the screen
         screen = self.screen().availableGeometry().center()
         # Move the frame to the center of the screen
-        appGeometry.moveCenter(screen)
+        app_geometry.moveCenter(screen)
         # Also move our widget to the center of the screen
         # based on the top left point
-        self.move(appGeometry.topLeft())
+        self.move(app_geometry.topLeft())

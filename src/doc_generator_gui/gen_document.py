@@ -39,19 +39,19 @@ class Gen_Document(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.isDataManual: bool = False
-        self.isDevolucao: bool = False
-        self.isDesativarImpressao: bool = False
-        self.isDesativarPreviewImpressao: bool = False
-        self.fileTermo: str = ""
-        self.fileTermoDevol: str = ""
-        self.wordsToReplace: list[str] = []
-        self.replaceWith: list[str] = []
+        self.is_data_manual: bool = False
+        self.is_devolucao: bool = False
+        self.is_desativar_impressao: bool = False
+        self.is_desativar_preview_impressao: bool = False
+        self.file_termo: str = ""
+        self.file_termo_devol: str = ""
+        self.words_to_replace: list[str] = []
+        self.new_words: list[str] = []
 
         empresa_xml = et.parse("empresa.xml")
         root = empresa_xml.getroot()
 
-        self.empresa_Dados: dict[str, str] = {
+        self.empresa_dados: dict[str, str] = {
             root.find("nome").attrib["replace"]: root.find("nome").attrib["value"],
             root.find("cnpj").attrib["replace"]: root.find("cnpj").attrib["value"],
             root.find("rua").attrib["replace"]: root.find("rua").attrib["value"],
@@ -63,7 +63,7 @@ class Gen_Document(QtWidgets.QWidget):
             root.find("fone").attrib["replace"]: root.find("fone").attrib["value"],
         }
 
-        self.tiposImpressao: list[str] = [
+        self.tipos_impressao: list[str] = [
             "Cartucho",
             "Celular",
             "iButton",
@@ -74,7 +74,7 @@ class Gen_Document(QtWidgets.QWidget):
 
         # used to remove a variable from our words to replace variable
         # by adding the types we will hide the serial input
-        self.tiposParaRemoverInput: list[str] = ["iButton", "Inversor"]
+        self.types_to_remove_input: list[str] = ["iButton", "Inversor"]
 
         # first create our widgets
         self.CreateWidgets(controller)
@@ -94,99 +94,101 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         # Label - Title
-        self.LabelTitle = QtWidgets.QLabel(
+        self.label_title = QtWidgets.QLabel(
             self, text="<b>Gerador de Termos de Responsabilidade</b>"
         )
         # separator - Title
-        self.separatorTitle = QtWidgets.QFrame(self)
-        self.separatorTitle.setLineWidth(1)
-        self.separatorTitle.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separatorTitle.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separator_title = QtWidgets.QFrame(self)
+        self.separator_title.setLineWidth(1)
+        self.separator_title.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separator_title.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Label - Print Type
-        self.LabelPrintTypeComboBox = QtWidgets.QLabel(
+        self.label_print_type_combobox = QtWidgets.QLabel(
             self, text="<b>Layout de Impressão</b>"
         )
         # ComboBox - Print Type
-        self.PrintTypeComboBox = QtWidgets.QComboBox(self)
-        for print_type in self.tiposImpressao:
-            self.PrintTypeComboBox.addItem(print_type)
-        self.PrintTypeComboBox.currentTextChanged.connect(self.MatchPrintType)
+        self.print_type_combobox = QtWidgets.QComboBox(self)
+        for print_type in self.tipos_impressao:
+            self.print_type_combobox.addItem(print_type)
+        self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
-        self.separatorComboBox = QtWidgets.QFrame(self)
-        self.separatorComboBox.setLineWidth(1)
-        self.separatorComboBox.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separatorComboBox.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separator_combobox = QtWidgets.QFrame(self)
+        self.separator_combobox.setLineWidth(1)
+        self.separator_combobox.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separator_combobox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Label - Employee Name
-        self.LabelEmployee = QtWidgets.QLabel(
+        self.label_employee = QtWidgets.QLabel(
             self, text="<b>Nome do Funcionário (Obrigatório):</b>"
         )
         # LineEdit - Nome do funcionário
-        self.EmployeeNameInput = QtWidgets.QLineEdit(self)
-        self.EmployeeNameInput.setPlaceholderText("Digite o nome do funcionário...")
+        self.input_employee_name = QtWidgets.QLineEdit(self)
+        self.input_employee_name.setPlaceholderText("Digite o nome do funcionário...")
         # Label - CPF do funcionário
-        self.LabelEmployeeCPF = QtWidgets.QLabel(
+        self.label_employee_cpf = QtWidgets.QLabel(
             self, text="<b>CPF / CNPJ do Funcionário (Obrigatório):</b>"
         )
         # LineEdit - CPF do funcionário
-        self.EmployeeCPFInput = Cpf_Input(self)
+        self.input_employee_cpf = Cpf_Input(self)
         # Label - Marca / Modelo do dispositivo
-        self.LabelDevice = QtWidgets.QLabel(self)
+        self.label_device = QtWidgets.QLabel(self)
         # LineEdit - Marca / Modelo do dispositivo
-        self.DeviceInput = QtWidgets.QLineEdit(self)
+        self.input_device = QtWidgets.QLineEdit(self)
         # Label - Serial / IMEI do dispositivo
-        self.LabelDeviceSerial = QtWidgets.QLabel(self)
+        self.label_device_serial = QtWidgets.QLabel(self)
         # LineEdit - Serial / IMEI do dispositivo
-        self.DeviceSerialInput = QtWidgets.QLineEdit(self)
+        self.input_device_serial = QtWidgets.QLineEdit(self)
         # Label - Observação
-        self.LabelDeviceNote = QtWidgets.QLabel(
+        self.label_device_note = QtWidgets.QLabel(
             self, text="<b>Observação (Opcional):</b>"
         )
         # LineEdit - Observação
-        self.DeviceNoteInput = QtWidgets.QLineEdit(self)
+        self.input_device_note = QtWidgets.QLineEdit(self)
         # CheckBox - Ativar Data Manual
-        self.DataManual = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
-        self.DataManual.setToolTip(
+        self.data_manual = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
+        self.data_manual.setToolTip(
             "<b>Ativar Data Manual:</b>\nDesativa a data automâtica e permite a seleção de datas."
         )
-        self.DataManual.stateChanged.connect(self.CheckDataManual)
+        self.data_manual.stateChanged.connect(self.CheckDataManual)
         # CheckBox - Devolução
-        self.Devolucao = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
-        self.Devolucao.stateChanged.connect(self.CheckDevolucao)
-        self.Devolucao.setToolTip(
+        self.devolucao = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
+        self.devolucao.stateChanged.connect(self.CheckDevolucao)
+        self.devolucao.setToolTip(
             "<b>Devolução de Dispositivo.:</b>\nAtive para gerar os termos de devolução."
         )
         # CheckBox - Desativar Visualização de Impressão
-        self.DesativarPreviewImpressao = QtWidgets.QCheckBox(
+        self.desativar_preview_impressao = QtWidgets.QCheckBox(
             self, text="Desativar visualização de impressão."
         )
-        self.DesativarPreviewImpressao.stateChanged.connect(self.CheckPreviewImpressao)
-        self.DesativarPreviewImpressao.setToolTip(
+        self.desativar_preview_impressao.stateChanged.connect(
+            self.CheckPreviewImpressao
+        )
+        self.desativar_preview_impressao.setToolTip(
             "<b>Desativar visualização de impressão.:</b>\nDesativa a visualização de impressão."
         )
         # CheckBox - Desativar Impressão
-        self.DesativarImpressao = QtWidgets.QCheckBox(
+        self.desativar_impressao = QtWidgets.QCheckBox(
             self, text="Desativar impressão automática."
         )
-        self.DesativarImpressao.stateChanged.connect(self.CheckImpressao)
-        self.DesativarImpressao.setToolTip(
+        self.desativar_impressao.stateChanged.connect(self.CheckImpressao)
+        self.desativar_impressao.setToolTip(
             "<b>Desativar impressão automática.:</b>\nDesativa a impressão automática, gerando apenas o PDF."
         )
         # DateTimeEdit - Data Manual
-        self.DatePicker = QtWidgets.QDateTimeEdit(self)
-        self.DatePicker.setCalendarPopup(True)
-        self.DatePicker.setDateTime(QtCore.QDateTime.currentDateTime())
-        self.DatePicker.setDisplayFormat("dddd, dd 'de' MMMM 'de' yyyy")
-        self.DatePicker.setEnabled(False)
+        self.date_picker = QtWidgets.QDateTimeEdit(self)
+        self.date_picker.setCalendarPopup(True)
+        self.date_picker.setDateTime(QtCore.QDateTime.currentDateTime())
+        self.date_picker.setDisplayFormat("dddd, dd 'de' MMMM 'de' yyyy")
+        self.date_picker.setEnabled(False)
         # separator - Buttons
-        self.separatorButton = QtWidgets.QFrame(self)
-        self.separatorButton.setLineWidth(1)
-        self.separatorButton.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separatorButton.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separator_buttons = QtWidgets.QFrame(self)
+        self.separator_buttons.setLineWidth(1)
+        self.separator_buttons.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separator_buttons.setFrameShadow(QtWidgets.QFrame.Sunken)
         # PushButton - Gerar Documento
-        self.buttonGenDoc = QtWidgets.QPushButton(
+        self.button_gen_doc = QtWidgets.QPushButton(
             self, text="\N{Document} " + "Gerar Documento"
         )
-        self.buttonGenDoc.clicked.connect(self.GenerateDocument)
+        self.button_gen_doc.clicked.connect(self.GenerateDocument)
 
     # Grid Configuration
     def GridConfigs(self):
@@ -200,62 +202,67 @@ class Gen_Document(QtWidgets.QWidget):
         widgetGridLayout = QtWidgets.QGridLayout(self)
         # Label - Título
         widgetGridLayout.addWidget(
-            self.LabelTitle, 0, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
+            self.label_title, 0, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
         )
         # separator - Título
-        widgetGridLayout.addWidget(self.separatorTitle, 1, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separator_title, 1, 0, 1, 2)
         # Label - Tipo de impressão
         widgetGridLayout.addWidget(
-            self.LabelPrintTypeComboBox, 2, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
+            self.label_print_type_combobox,
+            2,
+            0,
+            1,
+            2,
+            QtGui.Qt.AlignmentFlag.AlignCenter,
         )
         # ComboBox - Tipo de impressão
-        widgetGridLayout.addWidget(self.PrintTypeComboBox, 3, 0, 1, 2)
+        widgetGridLayout.addWidget(self.print_type_combobox, 3, 0, 1, 2)
         # separator - Tipo de impressão ComboBox
-        widgetGridLayout.addWidget(self.separatorComboBox, 4, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separator_combobox, 4, 0, 1, 2)
         # Label - Nome do Funcionário
         widgetGridLayout.addWidget(
-            self.LabelEmployee, 5, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
+            self.label_employee, 5, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Nome do Funcionário Input
-        widgetGridLayout.addWidget(self.EmployeeNameInput, 6, 0, 1, 1)
+        widgetGridLayout.addWidget(self.input_employee_name, 6, 0, 1, 1)
         # Label - CPF do funcionário
         widgetGridLayout.addWidget(
-            self.LabelEmployeeCPF, 5, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
+            self.label_employee_cpf, 5, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - CPF do funcionário Input
-        widgetGridLayout.addWidget(self.EmployeeCPFInput, 6, 1, 1, 1)
+        widgetGridLayout.addWidget(self.input_employee_cpf, 6, 1, 1, 1)
         # Label - Marca / Modelo do dispositivo
         widgetGridLayout.addWidget(
-            self.LabelDevice, 7, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
+            self.label_device, 7, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Marca / Modelo do dispositivo
-        widgetGridLayout.addWidget(self.DeviceInput, 8, 0, 1, 1)
+        widgetGridLayout.addWidget(self.input_device, 8, 0, 1, 1)
         # Label - Serial / IMEI do dispositivo
         widgetGridLayout.addWidget(
-            self.LabelDeviceSerial, 7, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
+            self.label_device_serial, 7, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Serial / IMEI do dispositivo
-        widgetGridLayout.addWidget(self.DeviceSerialInput, 8, 1, 1, 1)
+        widgetGridLayout.addWidget(self.input_device_serial, 8, 1, 1, 1)
         # Label - Observação
         widgetGridLayout.addWidget(
-            self.LabelDeviceNote, 9, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignLeft
+            self.label_device_note, 9, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Observação
-        widgetGridLayout.addWidget(self.DeviceNoteInput, 10, 0, 1, 2)
+        widgetGridLayout.addWidget(self.input_device_note, 10, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widgetGridLayout.addWidget(self.DataManual, 11, 0, 1, 1)
+        widgetGridLayout.addWidget(self.data_manual, 11, 0, 1, 1)
         # DateTimeEdit - Data Manual
-        widgetGridLayout.addWidget(self.DatePicker, 11, 1, 1, 1)
+        widgetGridLayout.addWidget(self.date_picker, 11, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widgetGridLayout.addWidget(self.Devolucao, 12, 0, 1, 1)
+        widgetGridLayout.addWidget(self.devolucao, 12, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widgetGridLayout.addWidget(self.DesativarPreviewImpressao, 12, 1, 1, 1)
+        widgetGridLayout.addWidget(self.desativar_preview_impressao, 12, 1, 1, 1)
         # CheckBox - Desativar Impressão
-        widgetGridLayout.addWidget(self.DesativarImpressao, 13, 0, 1, 1)
+        widgetGridLayout.addWidget(self.desativar_impressao, 13, 0, 1, 1)
         # separator - Buttons
-        widgetGridLayout.addWidget(self.separatorButton, 15, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separator_buttons, 15, 0, 1, 2)
         # PushButton - Gerar Documento
-        widgetGridLayout.addWidget(self.buttonGenDoc, 16, 0, 1, 2)
+        widgetGridLayout.addWidget(self.button_gen_doc, 16, 0, 1, 2)
         # space between widgets
         widgetGridLayout.setSpacing(10)
         # stretch last row
@@ -271,335 +278,345 @@ class Gen_Document(QtWidgets.QWidget):
         accordingly.
         """
 
-        match self.PrintTypeComboBox.currentText():
+        match self.print_type_combobox.currentText():
             case "Cartucho":
-                self.LabelDeviceSerial.setEnabled(True)
-                self.DeviceSerialInput.setEnabled(True)
-                self.LabelDeviceSerial.setHidden(False)
-                self.DeviceSerialInput.setHidden(False)
-                self.wordsToReplace = [
+                self.label_device_serial.setEnabled(True)
+                self.input_device_serial.setEnabled(True)
+                self.label_device_serial.setHidden(False)
+                self.input_device_serial.setHidden(False)
+                self.words_to_replace = [
                     "$cartucho$",
                     "$impressora$",
                     "$name$",
                     "$cpf$",
                     "$obs$",
                 ]
-                self.fileTermo = "termo_cartucho.html"
-                self.fileTermoDevol = "termo_cartucho_devol.html"
-                self.LabelDevice.setText(
+                self.file_termo = "termo_cartucho.html"
+                self.file_termo_devol = "termo_cartucho_devol.html"
+                self.label_device.setText(
                     "<b>Cartucho de Impressora do Funcionário (Obrigatório):</b>"
                 )
-                self.LabelDeviceSerial.setText(
+                self.label_device_serial.setText(
                     "<b>Modelo de impressora do Funcionário (Obrigatório):</b>"
                 )
-                self.DeviceInput.clear()
-                self.DeviceInput.setPlaceholderText(
+                self.input_device.clear()
+                self.input_device.setPlaceholderText(
                     "Digite o cartucho de impressora a ser entregue ao funcionário..."
                 )
-                self.DeviceInput.setMaxLength(100)
-                self.DeviceSerialInput.clear()
-                self.DeviceSerialInput.setPlaceholderText(
+                self.input_device.setMaxLength(100)
+                self.input_device_serial.clear()
+                self.input_device_serial.setPlaceholderText(
                     "Digite o modelo de impressora que será usado esse cartucho..."
                 )
-                self.DeviceSerialInput.setMaxLength(100)
-                self.DeviceNoteInput.setPlaceholderText(
+                self.input_device_serial.setMaxLength(100)
+                self.input_device_note.setPlaceholderText(
                     "Digite uma observação referente a esse cartucho de impressora..."
                 )
             case "Celular":
-                self.LabelDeviceSerial.setEnabled(True)
-                self.DeviceSerialInput.setEnabled(True)
-                self.LabelDeviceSerial.setHidden(False)
-                self.DeviceSerialInput.setHidden(False)
-                self.wordsToReplace = [
+                self.label_device_serial.setEnabled(True)
+                self.input_device_serial.setEnabled(True)
+                self.label_device_serial.setHidden(False)
+                self.input_device_serial.setHidden(False)
+                self.words_to_replace = [
                     "$celular$",
                     "$imei$",
                     "$name$",
                     "$cpf$",
                     "$obs$",
                 ]
-                self.fileTermo = "termo_celular.html"
-                self.fileTermoDevol = "termo_celular_devol.html"
-                self.LabelDevice.setText("<b>Celular do Funcionário (Obrigatório):</b>")
-                self.LabelDeviceSerial.setText(
+                self.file_termo = "termo_celular.html"
+                self.file_termo_devol = "termo_celular_devol.html"
+                self.label_device.setText(
+                    "<b>Celular do Funcionário (Obrigatório):</b>"
+                )
+                self.label_device_serial.setText(
                     "<b>IMEI do Celular do Funcionário (Obrigatório):</b>"
                 )
-                self.DeviceInput.clear()
-                self.DeviceInput.setPlaceholderText(
+                self.input_device.clear()
+                self.input_device.setPlaceholderText(
                     "Digite o Celular a ser entregue ao funcionário..."
                 )
-                self.DeviceInput.setMaxLength(100)
-                self.DeviceSerialInput.clear()
-                self.DeviceSerialInput.setPlaceholderText(
+                self.input_device.setMaxLength(100)
+                self.input_device_serial.clear()
+                self.input_device_serial.setPlaceholderText(
                     "Digite o IMEI do Celular a ser entregue ao funcionário..."
                 )
-                self.DeviceSerialInput.setMaxLength(33)
-                self.DeviceNoteInput.setPlaceholderText(
+                self.input_device_serial.setMaxLength(33)
+                self.input_device_note.setPlaceholderText(
                     "Digite uma observação referente a esse celular..."
                 )
             case "iButton":
-                self.DeviceSerialInput.clear()
-                self.LabelDeviceSerial.setEnabled(False)
-                self.DeviceSerialInput.setEnabled(False)
-                self.LabelDeviceSerial.setHidden(True)
-                self.DeviceSerialInput.setHidden(True)
-                self.wordsToReplace = ["$button$", "$name$", "$cpf$", "$obs$"]
-                self.fileTermo = "termo_ibutton.html"
-                self.fileTermoDevol = "termo_ibutton_devol.html"
-                self.LabelDevice.setText("<b>Código do iButton (Obrigatório):</b>")
-                self.DeviceInput.clear()
-                self.DeviceInput.setPlaceholderText(
+                self.input_device_serial.clear()
+                self.label_device_serial.setEnabled(False)
+                self.input_device_serial.setEnabled(False)
+                self.label_device_serial.setHidden(True)
+                self.input_device_serial.setHidden(True)
+                self.words_to_replace = ["$button$", "$name$", "$cpf$", "$obs$"]
+                self.file_termo = "termo_ibutton.html"
+                self.file_termo_devol = "termo_ibutton_devol.html"
+                self.label_device.setText("<b>Código do iButton (Obrigatório):</b>")
+                self.input_device.clear()
+                self.input_device.setPlaceholderText(
                     "Digite o código do iButton a ser entregue ao funcionário..."
                 )
-                self.DeviceInput.setMaxLength(12)
-                self.DeviceNoteInput.setPlaceholderText(
+                self.input_device.setMaxLength(12)
+                self.input_device_note.setPlaceholderText(
                     "Digite uma observação referente a esse iButton..."
                 )
             case "Impressora":
-                self.LabelDeviceSerial.setEnabled(True)
-                self.DeviceSerialInput.setEnabled(True)
-                self.LabelDeviceSerial.setHidden(False)
-                self.DeviceSerialInput.setHidden(False)
-                self.wordsToReplace = [
+                self.label_device_serial.setEnabled(True)
+                self.input_device_serial.setEnabled(True)
+                self.label_device_serial.setHidden(False)
+                self.input_device_serial.setHidden(False)
+                self.words_to_replace = [
                     "$impressora$",
                     "$serial$",
                     "$name$",
                     "$cpf$",
                     "$obs$",
                 ]
-                self.fileTermo = "termo_impressora.html"
-                self.fileTermoDevol = "termo_impressora_devol.html"
-                self.LabelDevice.setText(
+                self.file_termo = "termo_impressora.html"
+                self.file_termo_devol = "termo_impressora_devol.html"
+                self.label_device.setText(
                     "<b>Impressora do Funcionário (Obrigatório):</b>"
                 )
-                self.LabelDeviceSerial.setText(
+                self.label_device_serial.setText(
                     "<b>Serial da impressora do Funcionário (Obrigatório):</b>"
                 )
-                self.DeviceInput.clear()
-                self.DeviceInput.setPlaceholderText(
+                self.input_device.clear()
+                self.input_device.setPlaceholderText(
                     "Digite a impressora a ser entregue ao funcionário..."
                 )
-                self.DeviceInput.setMaxLength(100)
-                self.DeviceSerialInput.clear()
-                self.DeviceSerialInput.setPlaceholderText(
+                self.input_device.setMaxLength(100)
+                self.input_device_serial.clear()
+                self.input_device_serial.setPlaceholderText(
                     "Digite o Serial da impressora a ser entregue ao funcionário..."
                 )
-                self.DeviceSerialInput.setMaxLength(10)
-                self.DeviceNoteInput.setPlaceholderText(
+                self.input_device_serial.setMaxLength(10)
+                self.input_device_note.setPlaceholderText(
                     "Digite uma observação referente a essa impressora..."
                 )
             case "Inversor":
-                self.DeviceSerialInput.clear()
-                self.LabelDeviceSerial.setEnabled(False)
-                self.DeviceSerialInput.setEnabled(False)
-                self.LabelDeviceSerial.setHidden(True)
-                self.DeviceSerialInput.setHidden(True)
-                self.wordsToReplace = ["$inversor$", "$name$", "$cpf$", "$obs$"]
-                self.fileTermo = "termo_inversor.html"
-                self.fileTermoDevol = "termo_inversor_devol.html"
-                self.LabelDevice.setText(
+                self.input_device_serial.clear()
+                self.label_device_serial.setEnabled(False)
+                self.input_device_serial.setEnabled(False)
+                self.label_device_serial.setHidden(True)
+                self.input_device_serial.setHidden(True)
+                self.words_to_replace = ["$inversor$", "$name$", "$cpf$", "$obs$"]
+                self.file_termo = "termo_inversor.html"
+                self.file_termo_devol = "termo_inversor_devol.html"
+                self.label_device.setText(
                     "<b>Marca/Modelo do inversor (Obrigatório):</b>"
                 )
-                self.DeviceInput.clear()
-                self.DeviceInput.setPlaceholderText(
+                self.input_device.clear()
+                self.input_device.setPlaceholderText(
                     "Digite o inversor a ser entregue ao funcionário..."
                 )
-                self.DeviceInput.setMaxLength(100)
-                self.DeviceNoteInput.setPlaceholderText(
+                self.input_device.setMaxLength(100)
+                self.input_device_note.setPlaceholderText(
                     "Digite uma observação referente a esse inversor..."
                 )
             case "Notebook":
-                self.LabelDeviceSerial.setEnabled(True)
-                self.DeviceSerialInput.setEnabled(True)
-                self.LabelDeviceSerial.setHidden(False)
-                self.DeviceSerialInput.setHidden(False)
-                self.wordsToReplace = [
+                self.label_device_serial.setEnabled(True)
+                self.input_device_serial.setEnabled(True)
+                self.label_device_serial.setHidden(False)
+                self.input_device_serial.setHidden(False)
+                self.words_to_replace = [
                     "$notebook$",
                     "$serial$",
                     "$name$",
                     "$cpf$",
                     "$obs$",
                 ]
-                self.fileTermo = "termo_notebook.html"
-                self.fileTermoDevol = "termo_notebook_devol.html"
-                self.LabelDevice.setText(
+                self.file_termo = "termo_notebook.html"
+                self.file_termo_devol = "termo_notebook_devol.html"
+                self.label_device.setText(
                     "<b>Notebook do Funcionário (Obrigatório):</b>"
                 )
-                self.LabelDeviceSerial.setText(
+                self.label_device_serial.setText(
                     "<b>Serial do Notebook do Funcionário (Obrigatório):</b>"
                 )
-                self.DeviceInput.clear()
-                self.DeviceInput.setPlaceholderText(
+                self.input_device.clear()
+                self.input_device.setPlaceholderText(
                     "Digite o Notebook a ser entregue ao funcionário..."
                 )
-                self.DeviceInput.setMaxLength(100)
-                self.DeviceSerialInput.clear()
-                self.DeviceSerialInput.setPlaceholderText(
+                self.input_device.setMaxLength(100)
+                self.input_device_serial.clear()
+                self.input_device_serial.setPlaceholderText(
                     "Digite o Serial do Notebook a ser entregue ao funcionário..."
                 )
-                self.DeviceSerialInput.setMaxLength(10)
-                self.DeviceNoteInput.setPlaceholderText(
+                self.input_device_serial.setMaxLength(10)
+                self.input_device_note.setPlaceholderText(
                     "Digite uma observação referente a esse Notebook..."
                 )
             case _:
                 print("opção não encontrada!!!")
 
     def CheckInputs(self) -> bool:
-        deviceString: str = ""
-        msgBoxIcon = QtGui.QIcon("gen_document.ico")
-        if self.EmployeeNameInput.text() == "":
+        device_str: str = ""
+        msg_box_icon = QtGui.QIcon("gen_document.ico")
+        if self.input_employee_name.text() == "":
             CreateInfoMessageBox(
                 "Aviso - Campo Nome está vazio!",
                 "Sem nome do funcionário!",
                 "Por gentileza, coloque o nome do funcionário.",
-                msgWinIcon=msgBoxIcon,
+                msgWinIcon=msg_box_icon,
             )
             return False
-        if self.EmployeeCPFInput.text() == "":
+        if self.input_employee_cpf.text() == "":
             CreateInfoMessageBox(
                 "Aviso - Campo CPF está vazio!",
                 "Sem CPF do funcionário!",
                 "Por gentileza, coloque o CPF do funcionário.",
-                msgWinIcon=msgBoxIcon,
+                msgWinIcon=msg_box_icon,
             )
             return False
-        if self.DeviceInput.text() == "":
-            match self.PrintTypeComboBox.currentText():
+        if self.input_device.text() == "":
+            match self.print_type_combobox.currentText():
                 case "Cartucho":
-                    deviceString = "Cartucho de impressora"
+                    device_str = "Cartucho de impressora"
                 case "Celular":
-                    deviceString = "Marca/Modelo de Celular"
+                    device_str = "Marca/Modelo de Celular"
                 case "iButton":
-                    deviceString = "Código do iButton"
+                    device_str = "Código do iButton"
                 case "Impressora":
-                    deviceString = "Marca/Modelo de Impressora"
+                    device_str = "Marca/Modelo de Impressora"
                 case "Inversor":
-                    deviceString = "Marca/Modelo de inversor"
+                    device_str = "Marca/Modelo de inversor"
                 case "Notebook":
-                    deviceString = "Marca/Modelo de Notebook"
+                    device_str = "Marca/Modelo de Notebook"
             CreateInfoMessageBox(
-                f"Aviso - Campo {deviceString} está vazio!",
-                f"Sem {deviceString} do funcionário!",
-                f"Por gentileza, coloque o {deviceString} do funcionário.",
-                msgWinIcon=msgBoxIcon,
+                f"Aviso - Campo {device_str} está vazio!",
+                f"Sem {device_str} do funcionário!",
+                f"Por gentileza, coloque o {device_str} do funcionário.",
+                msgWinIcon=msg_box_icon,
             )
             return False
         if (
-            self.DeviceSerialInput.text() == ""
-            and self.PrintTypeComboBox.currentText() not in self.tiposParaRemoverInput
+            self.input_device_serial.text() == ""
+            and self.print_type_combobox.currentText() not in self.types_to_remove_input
         ):
-            match self.PrintTypeComboBox.currentText():
+            match self.print_type_combobox.currentText():
                 case "Cartucho":
-                    deviceString = "Marca/Modelo de impressora"
+                    device_str = "Marca/Modelo de impressora"
                 case "Celular":
-                    deviceString = "IMEI do Celular"
+                    device_str = "IMEI do Celular"
                 case "iButton":
-                    deviceString = "Código do iButton"
+                    device_str = "Código do iButton"
                 case "Impressora":
-                    deviceString = "Serial da Impressora"
+                    device_str = "Serial da Impressora"
                 case "Inversor":
-                    deviceString = "Marca/Modelo de inversor"
+                    device_str = "Marca/Modelo de inversor"
                 case "Notebook":
-                    deviceString = "Serial do Notebook"
+                    device_str = "Serial do Notebook"
             CreateInfoMessageBox(
-                f"Aviso - Campo {deviceString} está vazio!",
-                f"Sem {deviceString} do funcionário!",
-                f"Por gentileza, coloque o {deviceString} do funcionário.",
-                msgWinIcon=msgBoxIcon,
+                f"Aviso - Campo {device_str} está vazio!",
+                f"Sem {device_str} do funcionário!",
+                f"Por gentileza, coloque o {device_str} do funcionário.",
+                msgWinIcon=msg_box_icon,
             )
             return False
         else:
             return True
 
     def CheckDataManual(self):
-        if self.DataManual.isChecked():
-            self.isDataManual = True
-            self.DatePicker.setEnabled(True)
+        if self.data_manual.isChecked():
+            self.is_data_manual = True
+            self.date_picker.setEnabled(True)
         else:
-            self.isDataManual = False
-            self.DatePicker.setEnabled(False)
+            self.is_data_manual = False
+            self.date_picker.setEnabled(False)
 
     def CheckDevolucao(self):
-        if self.Devolucao.isChecked():
-            self.isDevolucao = True
+        if self.devolucao.isChecked():
+            self.is_devolucao = True
         else:
-            self.isDevolucao = False
+            self.is_devolucao = False
 
     def CheckImpressao(self):
-        if self.DesativarImpressao.isChecked():
-            self.isDesativarImpressao = True
+        if self.desativar_impressao.isChecked():
+            self.is_desativar_impressao = True
         else:
-            self.isDesativarImpressao = False
+            self.is_desativar_impressao = False
 
     def CheckPreviewImpressao(self):
-        if self.DesativarPreviewImpressao.isChecked():
-            self.isDesativarPreviewImpressao = True
+        if self.desativar_preview_impressao.isChecked():
+            self.is_desativar_preview_impressao = True
         else:
-            self.isDesativarPreviewImpressao = False
-            print(self.isDesativarImpressao)
+            self.is_desativar_preview_impressao = False
+            print(self.is_desativar_impressao)
 
     def OutputPath(self) -> str:
-        if not self.isDevolucao:
+        if not self.is_devolucao:
             output: str = (
-                f"./Termos/Termo de Entrega de {self.PrintTypeComboBox.currentText()} - "
-                + self.EmployeeNameInput.text()
+                f"./Termos/Termo de Entrega de {self.print_type_combobox.currentText()} - "
+                + self.input_employee_name.text()
                 + ".pdf"
             )
         else:
             output: str = (
-                f"./Termos/Termo de Devolução de {self.PrintTypeComboBox.currentText()} - "
-                + self.EmployeeNameInput.text()
+                f"./Termos/Termo de Devolução de {self.print_type_combobox.currentText()} - "
+                + self.input_employee_name.text()
                 + ".pdf"
             )
 
         return output
 
     def ReadHtmlFiles(self) -> dict[str, str]:
-        fileToRead = self.fileTermo if not self.isDevolucao else self.fileTermoDevol
+        file_to_read = (
+            self.file_termo if not self.is_devolucao else self.file_termo_devol
+        )
 
         with (
             open("./Templates/header.html", "r", encoding="utf-8") as header_file,
-            open(f"./Templates/{fileToRead}", "r", encoding="utf-8") as termo_file,
+            open(f"./Templates/{file_to_read}", "r", encoding="utf-8") as termo_file,
             open("./Templates/footer.html", "r", encoding="utf-8") as footer_file,
         ):
-            headerfiledata: str = header_file.read()
-            termodata: str = termo_file.read()
-            footerfiledata: str = footer_file.read()
+            header_file_data: str = header_file.read()
+            termo_data: str = termo_file.read()
+            footer_file_data: str = footer_file.read()
 
-        obsTermo: str = self.DeviceNoteInput.text()
+        obsTermo: str = self.input_device_note.text()
 
         if obsTermo != "":
             obsTermo = "<b>Observação:</b> " + obsTermo
 
-        self.replaceWith.append(self.DeviceInput.text())
-        if not self.PrintTypeComboBox.currentText() in self.tiposParaRemoverInput:
-            self.replaceWith.append(self.DeviceSerialInput.text())
-        self.replaceWith.append(self.EmployeeNameInput.text())
-        self.replaceWith.append(self.EmployeeCPFInput.text())
-        self.replaceWith.append(obsTermo)
+        self.new_words.append(self.input_device.text())
+        if not self.print_type_combobox.currentText() in self.types_to_remove_input:
+            self.new_words.append(self.input_device_serial.text())
+        self.new_words.append(self.input_employee_name.text())
+        self.new_words.append(self.input_employee_cpf.text())
+        self.new_words.append(obsTermo)
 
-        for old_word, new_word in zip(self.wordsToReplace, self.replaceWith):
-            termodata = termodata.replace(old_word, new_word)
+        for old_word, new_word in zip(self.words_to_replace, self.new_words):
+            termo_data = termo_data.replace(old_word, new_word)
 
-        for variavel, dados in self.empresa_Dados.items():
-            termodata = termodata.replace(variavel, dados)
-            headerfiledata = headerfiledata.replace(variavel, dados)
-            footerfiledata = footerfiledata.replace(variavel, dados)
+        for variavel, dados in self.empresa_dados.items():
+            termo_data = termo_data.replace(variavel, dados)
+            header_file_data = header_file_data.replace(variavel, dados)
+            footer_file_data = footer_file_data.replace(variavel, dados)
 
-        if not self.isDataManual:
-            dataAtual: str = str(datetime.datetime.now().strftime("%A, %d de %B de %Y"))
+        if not self.is_data_manual:
+            data_atual: str = str(
+                datetime.datetime.now().strftime("%A, %d de %B de %Y")
+            )
 
-            footerfiledata = footerfiledata.replace("$data$", str(dataAtual))
+            footer_file_data = footer_file_data.replace("$data$", str(data_atual))
         else:
-            footerfiledata = footerfiledata.replace("$data$", self.DatePicker.text())
+            footer_file_data = footer_file_data.replace(
+                "$data$", self.date_picker.text()
+            )
 
-        return {
-            "header_html": headerfiledata,
-            "termo_html": termodata,
-            "footer_html": footerfiledata,
+        changed_html_file: dict = {
+            "header_html": header_file_data,
+            "termo_html": termo_data,
+            "footer_html": footer_file_data,
         }
 
+        return changed_html_file
+
     def GeneratePDF(self, output: str):
-        htmlData: dict[str, str] = self.ReadHtmlFiles()
+        html_data: dict[str, str] = self.ReadHtmlFiles()
 
         pdf_printer = QtPrintSupport.QPrinter(
             QtPrintSupport.QPrinter.PrinterMode.HighResolution
@@ -617,13 +634,13 @@ class Gen_Document(QtWidgets.QWidget):
         pdf_painter.begin(pdf_printer)
         pdf_painter.scale(8.5, 8.5)
         pdf_painter.translate(0, 5)
-        pdf_Doc.setHtml(htmlData["header_html"])
+        pdf_Doc.setHtml(html_data["header_html"])
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.translate(30, 72)
-        pdf_Doc.setHtml(htmlData["termo_html"])
+        pdf_Doc.setHtml(html_data["termo_html"])
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.translate(-30, 665)
-        pdf_Doc.setHtml(htmlData["footer_html"])
+        pdf_Doc.setHtml(html_data["footer_html"])
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.end()
 
@@ -640,27 +657,27 @@ class Gen_Document(QtWidgets.QWidget):
             pdf_file = QtPdf.QPdfDocument()
             pdf_file.load(input_pdf)
             size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
-            imagefromPDF = pdf_file.render(0, size)
+            image_from_pdf = pdf_file.render(0, size)
             painter = QtGui.QPainter()
             painter.begin(printer)
             painter.translate(2, 0)
-            painter.drawImage(0, 0, imagefromPDF)
+            painter.drawImage(0, 0, image_from_pdf)
             painter.end()
 
-        if not self.isDesativarPreviewImpressao:
-            printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(printer)
-            printPreviewDialog.setWindowTitle(
-                f"Imprimir Termo de {self.PrintTypeComboBox.currentText()}"
+        if not self.is_desativar_preview_impressao:
+            print_preview_dialog = QtPrintSupport.QPrintPreviewDialog(printer)
+            print_preview_dialog.setWindowTitle(
+                f"Imprimir Termo de {self.print_type_combobox.currentText()}"
             )
-            printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
-            printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
-            printPreviewDialog.paintRequested.connect(PaintingDocument)
+            print_preview_dialog_icon = QtGui.QIcon("gen_document.ico")
+            print_preview_dialog.setWindowIcon(print_preview_dialog_icon)
+            print_preview_dialog.paintRequested.connect(PaintingDocument)
             # Visualizador de impressão não estava sendo executado
-            printPreviewDialog.exec()
+            print_preview_dialog.exec()
         else:
-            printDialog = QtPrintSupport.QPrintDialog(printer)
+            print_dialog = QtPrintSupport.QPrintDialog(printer)
 
-            if printDialog.exec() == printDialog.DialogCode.Accepted:
+            if print_dialog.exec() == print_dialog.DialogCode.Accepted:
                 PaintingDocument()
 
     def GenerateDocument(self):
@@ -670,7 +687,7 @@ class Gen_Document(QtWidgets.QWidget):
         Output: str = self.OutputPath()
         self.GeneratePDF(Output)
 
-        if not self.isDesativarImpressao:
+        if not self.is_desativar_impressao:
             self.PrintDocument(Output)
 
-        self.replaceWith.clear()
+        self.new_words.clear()

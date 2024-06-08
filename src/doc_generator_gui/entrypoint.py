@@ -21,10 +21,10 @@ def main():
         app.installTranslator(translator)
 
     # Our Main Window.
-    Window = App("Gerador de Termos", 800, 600, "gen_document.ico")
+    window = App("Gerador de Termos", 800, 600, "gen_document.ico")
 
     # all windows are hidden by default, so just show it.
-    Window.show()
+    window.show()
 
     # main event loop.
     sys.exit(app.exec())
