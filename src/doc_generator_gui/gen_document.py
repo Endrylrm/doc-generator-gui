@@ -199,15 +199,15 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         # Grid Creation
-        widgetGridLayout = QtWidgets.QGridLayout(self)
+        widget_grid_layout = QtWidgets.QGridLayout(self)
         # Label - Título
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_title, 0, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
         )
         # separator - Título
-        widgetGridLayout.addWidget(self.separator_title, 1, 0, 1, 2)
+        widget_grid_layout.addWidget(self.separator_title, 1, 0, 1, 2)
         # Label - Tipo de impressão
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_print_type_combobox,
             2,
             0,
@@ -216,59 +216,59 @@ class Gen_Document(QtWidgets.QWidget):
             QtGui.Qt.AlignmentFlag.AlignCenter,
         )
         # ComboBox - Tipo de impressão
-        widgetGridLayout.addWidget(self.print_type_combobox, 3, 0, 1, 2)
+        widget_grid_layout.addWidget(self.print_type_combobox, 3, 0, 1, 2)
         # separator - Tipo de impressão ComboBox
-        widgetGridLayout.addWidget(self.separator_combobox, 4, 0, 1, 2)
+        widget_grid_layout.addWidget(self.separator_combobox, 4, 0, 1, 2)
         # Label - Nome do Funcionário
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_employee, 5, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Nome do Funcionário Input
-        widgetGridLayout.addWidget(self.input_employee_name, 6, 0, 1, 1)
+        widget_grid_layout.addWidget(self.input_employee_name, 6, 0, 1, 1)
         # Label - CPF do funcionário
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_employee_cpf, 5, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - CPF do funcionário Input
-        widgetGridLayout.addWidget(self.input_employee_cpf, 6, 1, 1, 1)
+        widget_grid_layout.addWidget(self.input_employee_cpf, 6, 1, 1, 1)
         # Label - Marca / Modelo do dispositivo
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_device, 7, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Marca / Modelo do dispositivo
-        widgetGridLayout.addWidget(self.input_device, 8, 0, 1, 1)
+        widget_grid_layout.addWidget(self.input_device, 8, 0, 1, 1)
         # Label - Serial / IMEI do dispositivo
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_device_serial, 7, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Serial / IMEI do dispositivo
-        widgetGridLayout.addWidget(self.input_device_serial, 8, 1, 1, 1)
+        widget_grid_layout.addWidget(self.input_device_serial, 8, 1, 1, 1)
         # Label - Observação
-        widgetGridLayout.addWidget(
+        widget_grid_layout.addWidget(
             self.label_device_note, 9, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignLeft
         )
         # LineEdit - Observação
-        widgetGridLayout.addWidget(self.input_device_note, 10, 0, 1, 2)
+        widget_grid_layout.addWidget(self.input_device_note, 10, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widgetGridLayout.addWidget(self.data_manual, 11, 0, 1, 1)
+        widget_grid_layout.addWidget(self.data_manual, 11, 0, 1, 1)
         # DateTimeEdit - Data Manual
-        widgetGridLayout.addWidget(self.date_picker, 11, 1, 1, 1)
+        widget_grid_layout.addWidget(self.date_picker, 11, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widgetGridLayout.addWidget(self.devolucao, 12, 0, 1, 1)
+        widget_grid_layout.addWidget(self.devolucao, 12, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widgetGridLayout.addWidget(self.desativar_preview_impressao, 12, 1, 1, 1)
+        widget_grid_layout.addWidget(self.desativar_preview_impressao, 12, 1, 1, 1)
         # CheckBox - Desativar Impressão
-        widgetGridLayout.addWidget(self.desativar_impressao, 13, 0, 1, 1)
+        widget_grid_layout.addWidget(self.desativar_impressao, 13, 0, 1, 1)
         # separator - Buttons
-        widgetGridLayout.addWidget(self.separator_buttons, 15, 0, 1, 2)
+        widget_grid_layout.addWidget(self.separator_buttons, 15, 0, 1, 2)
         # PushButton - Gerar Documento
-        widgetGridLayout.addWidget(self.button_gen_doc, 16, 0, 1, 2)
+        widget_grid_layout.addWidget(self.button_gen_doc, 16, 0, 1, 2)
         # space between widgets
-        widgetGridLayout.setSpacing(10)
+        widget_grid_layout.setSpacing(10)
         # stretch last row
-        widgetGridLayout.setRowStretch(14, 1)
+        widget_grid_layout.setRowStretch(14, 1)
         # set this widget layout to the grid layout
-        self.setLayout(widgetGridLayout)
+        self.setLayout(widget_grid_layout)
 
     def MatchPrintType(self):
         """
@@ -460,7 +460,7 @@ class Gen_Document(QtWidgets.QWidget):
                 "Aviso - Campo Nome está vazio!",
                 "Sem nome do funcionário!",
                 "Por gentileza, coloque o nome do funcionário.",
-                msgWinIcon=msg_box_icon,
+                msg_win_icon=msg_box_icon,
             )
             return False
         if self.input_employee_cpf.text() == "":
@@ -468,7 +468,7 @@ class Gen_Document(QtWidgets.QWidget):
                 "Aviso - Campo CPF está vazio!",
                 "Sem CPF do funcionário!",
                 "Por gentileza, coloque o CPF do funcionário.",
-                msgWinIcon=msg_box_icon,
+                msg_win_icon=msg_box_icon,
             )
             return False
         if self.input_device.text() == "":
@@ -489,7 +489,7 @@ class Gen_Document(QtWidgets.QWidget):
                 f"Aviso - Campo {device_str} está vazio!",
                 f"Sem {device_str} do funcionário!",
                 f"Por gentileza, coloque o {device_str} do funcionário.",
-                msgWinIcon=msg_box_icon,
+                msg_win_icon=msg_box_icon,
             )
             return False
         if (
@@ -513,7 +513,7 @@ class Gen_Document(QtWidgets.QWidget):
                 f"Aviso - Campo {device_str} está vazio!",
                 f"Sem {device_str} do funcionário!",
                 f"Por gentileza, coloque o {device_str} do funcionário.",
-                msgWinIcon=msg_box_icon,
+                msg_win_icon=msg_box_icon,
             )
             return False
         else:
