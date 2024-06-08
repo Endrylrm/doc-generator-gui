@@ -544,7 +544,6 @@ class Gen_Document(QtWidgets.QWidget):
             self.is_desativar_preview_impressao = True
         else:
             self.is_desativar_preview_impressao = False
-            print(self.is_desativar_impressao)
 
     def OutputPath(self) -> str:
         if not self.is_devolucao:
