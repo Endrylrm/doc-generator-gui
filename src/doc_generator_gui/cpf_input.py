@@ -5,7 +5,9 @@ from PySide6 import QtWidgets
 class Cpf_Input(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         QtWidgets.QLineEdit.__init__(self, parent=parent)
-        self.setPlaceholderText("Observação: Digitar só números, formata automaticamente.")
+        self.setPlaceholderText(
+            "Observação: Digite apenas os números do CPF, formatação automática."
+        )
         self.textChanged.connect(self.format_text)
         self.setMaxLength(18)
 

@@ -266,6 +266,81 @@ class Gen_Document(QtWidgets.QWidget):
         else:
             self.date_picker.setEnabled(False)
 
+    def CheckInputs(self) -> bool:
+        """
+        Function CheckInputs()
+
+        this just checks if out inputs are not empty and
+        open a message box to tell the user if a required
+        input is empty.
+        """
+
+        device_str: str = ""
+        msg_box_icon = QtGui.QIcon("gen_document.ico")
+        if self.input_employee_name.text() == "":
+            CreateInfoMessageBox(
+                "Aviso - Campo Nome está vazio!",
+                "Sem nome do funcionário!",
+                "Por gentileza, coloque o nome do funcionário.",
+                msg_win_icon=msg_box_icon,
+            )
+            return False
+        if self.input_employee_cpf.text() == "":
+            CreateInfoMessageBox(
+                "Aviso - Campo CPF está vazio!",
+                "Sem CPF do funcionário!",
+                "Por gentileza, coloque o CPF do funcionário.",
+                msg_win_icon=msg_box_icon,
+            )
+            return False
+        if self.input_device.text() == "":
+            match self.print_type_combobox.currentText():
+                case "Cartucho":
+                    device_str = "Cartucho de impressora"
+                case "Celular":
+                    device_str = "Marca/Modelo de Celular"
+                case "iButton":
+                    device_str = "Código do iButton"
+                case "Impressora":
+                    device_str = "Marca/Modelo de Impressora"
+                case "Inversor":
+                    device_str = "Marca/Modelo de inversor"
+                case "Notebook":
+                    device_str = "Marca/Modelo de Notebook"
+            CreateInfoMessageBox(
+                f"Aviso - Campo {device_str} está vazio!",
+                f"Sem {device_str} do funcionário!",
+                f"Por gentileza, coloque o {device_str} do funcionário.",
+                msg_win_icon=msg_box_icon,
+            )
+            return False
+        if (
+            self.input_device_serial.text() == ""
+            and self.print_type_combobox.currentText() not in self.types_to_remove_input
+        ):
+            match self.print_type_combobox.currentText():
+                case "Cartucho":
+                    device_str = "Marca/Modelo de impressora"
+                case "Celular":
+                    device_str = "IMEI do Celular"
+                case "iButton":
+                    device_str = "Código do iButton"
+                case "Impressora":
+                    device_str = "Serial da Impressora"
+                case "Inversor":
+                    device_str = "Marca/Modelo de inversor"
+                case "Notebook":
+                    device_str = "Serial do Notebook"
+            CreateInfoMessageBox(
+                f"Aviso - Campo {device_str} está vazio!",
+                f"Sem {device_str} do funcionário!",
+                f"Por gentileza, coloque o {device_str} do funcionário.",
+                msg_win_icon=msg_box_icon,
+            )
+            return False
+        else:
+            return True
+
     def ConfigPrintType(
         self,
         strings_to_replace: list[str],
@@ -295,7 +370,7 @@ class Gen_Document(QtWidgets.QWidget):
         device_serial_text_length: the max length of the text on the device serial input.
         device_serial_input_enabled: set if the serial input is enabled and visible.
 
-        configures our Print layout, changes the text and layout
+        Configures our Print layout, changes the text and gui layout
         accordingly.
         """
 
@@ -396,81 +471,6 @@ class Gen_Document(QtWidgets.QWidget):
                 )
             case _:
                 print("opção não encontrada!!!")
-
-    def CheckInputs(self) -> bool:
-        """
-        Function CheckInputs()
-
-        this just checks if out inputs are not empty and
-        open a message box to tell the user if a required
-        input is empty.
-        """
-
-        device_str: str = ""
-        msg_box_icon = QtGui.QIcon("gen_document.ico")
-        if self.input_employee_name.text() == "":
-            CreateInfoMessageBox(
-                "Aviso - Campo Nome está vazio!",
-                "Sem nome do funcionário!",
-                "Por gentileza, coloque o nome do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        if self.input_employee_cpf.text() == "":
-            CreateInfoMessageBox(
-                "Aviso - Campo CPF está vazio!",
-                "Sem CPF do funcionário!",
-                "Por gentileza, coloque o CPF do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        if self.input_device.text() == "":
-            match self.print_type_combobox.currentText():
-                case "Cartucho":
-                    device_str = "Cartucho de impressora"
-                case "Celular":
-                    device_str = "Marca/Modelo de Celular"
-                case "iButton":
-                    device_str = "Código do iButton"
-                case "Impressora":
-                    device_str = "Marca/Modelo de Impressora"
-                case "Inversor":
-                    device_str = "Marca/Modelo de inversor"
-                case "Notebook":
-                    device_str = "Marca/Modelo de Notebook"
-            CreateInfoMessageBox(
-                f"Aviso - Campo {device_str} está vazio!",
-                f"Sem {device_str} do funcionário!",
-                f"Por gentileza, coloque o {device_str} do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        if (
-            self.input_device_serial.text() == ""
-            and self.print_type_combobox.currentText() not in self.types_to_remove_input
-        ):
-            match self.print_type_combobox.currentText():
-                case "Cartucho":
-                    device_str = "Marca/Modelo de impressora"
-                case "Celular":
-                    device_str = "IMEI do Celular"
-                case "iButton":
-                    device_str = "Código do iButton"
-                case "Impressora":
-                    device_str = "Serial da Impressora"
-                case "Inversor":
-                    device_str = "Marca/Modelo de inversor"
-                case "Notebook":
-                    device_str = "Serial do Notebook"
-            CreateInfoMessageBox(
-                f"Aviso - Campo {device_str} está vazio!",
-                f"Sem {device_str} do funcionário!",
-                f"Por gentileza, coloque o {device_str} do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        else:
-            return True
 
     def OutputPath(self) -> str:
         if not self.devolucao.isChecked():
