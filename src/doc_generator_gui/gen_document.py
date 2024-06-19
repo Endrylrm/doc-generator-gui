@@ -45,8 +45,7 @@ class Gen_Document(QtWidgets.QWidget):
         self.is_desativar_preview_impressao: bool = False
         self.file_termo: str = ""
         self.file_termo_devol: str = ""
-        self.words_to_replace: list[str] = []
-        self.new_words: list[str] = []
+        self.strings_to_replace: list[str] = []
 
         empresa_xml = et.parse("empresa.xml")
         root = empresa_xml.getroot()
@@ -270,6 +269,58 @@ class Gen_Document(QtWidgets.QWidget):
         # set this widget layout to the grid layout
         self.setLayout(widget_grid_layout)
 
+    def ConfigPrintType(
+        self,
+        strings_to_replace: list[str],
+        termo_filename: str = "",
+        termo_devol_filename: str = "",
+        device_text: str = "",
+        device_serial_text: str = "",
+        device_placeholder: str = "",
+        device_serial_placeholder: str = "",
+        remark_placeholder: str = "",
+        device_text_length: int = 200,
+        device_serial_text_length: int = 200,
+        device_serial_input_enabled: bool = True,
+    ):
+        """
+        Function ConfigPrintType()
+
+        strings_to_replace: the strings we are going to replace on our terms.
+        termo_filename: Our term html file name.
+        termo_devol_filename: out devolution term html file name.
+        device_text: the text to show on the device label.
+        device_serial_text: the text to show on the device serial label.
+        device_placeholder: the placeholder text to show on the device input.
+        device_serial_placeholder: the placeholder text to show on the device serial input.
+        remark_placeholder: the placeholder text to show on the remark input.
+        device_text_length: the max length of the text on the device input.
+        device_serial_text_length: the max length of the text on the device serial input.
+        device_serial_input_enabled: set if the serial input is enabled and visible.
+
+        configures our Print layout, changes the text and layout
+        accordingly.
+        """
+
+        enable_device_input = True if device_serial_input_enabled == True else False
+        hide_device_input = False if device_serial_input_enabled == True else True
+        self.label_device_serial.setEnabled(enable_device_input)
+        self.input_device_serial.setEnabled(enable_device_input)
+        self.label_device_serial.setHidden(hide_device_input)
+        self.input_device_serial.setHidden(hide_device_input)
+        self.strings_to_replace = strings_to_replace
+        self.file_termo = termo_filename
+        self.file_termo_devol = termo_devol_filename
+        self.label_device.setText(device_text)
+        self.label_device_serial.setText(device_serial_text)
+        self.input_device.clear()
+        self.input_device.setPlaceholderText(device_placeholder)
+        self.input_device.setMaxLength(device_text_length)
+        self.input_device_serial.clear()
+        self.input_device_serial.setPlaceholderText(device_serial_placeholder)
+        self.input_device_serial.setMaxLength(device_serial_text_length)
+        self.input_device_note.setPlaceholderText(remark_placeholder)
+
     def MatchPrintType(self):
         """
         Function MatchPrintType()
@@ -280,179 +331,84 @@ class Gen_Document(QtWidgets.QWidget):
 
         match self.print_type_combobox.currentText():
             case "Cartucho":
-                self.label_device_serial.setEnabled(True)
-                self.input_device_serial.setEnabled(True)
-                self.label_device_serial.setHidden(False)
-                self.input_device_serial.setHidden(False)
-                self.words_to_replace = [
-                    "$cartucho$",
-                    "$impressora$",
-                    "$name$",
-                    "$cpf$",
-                    "$obs$",
-                ]
-                self.file_termo = "termo_cartucho.html"
-                self.file_termo_devol = "termo_cartucho_devol.html"
-                self.label_device.setText(
-                    "<b>Cartucho de Impressora do Funcionário (Obrigatório):</b>"
-                )
-                self.label_device_serial.setText(
-                    "<b>Modelo de impressora do Funcionário (Obrigatório):</b>"
-                )
-                self.input_device.clear()
-                self.input_device.setPlaceholderText(
-                    "Digite o cartucho de impressora a ser entregue ao funcionário..."
-                )
-                self.input_device.setMaxLength(100)
-                self.input_device_serial.clear()
-                self.input_device_serial.setPlaceholderText(
-                    "Digite o modelo de impressora que será usado esse cartucho..."
-                )
-                self.input_device_serial.setMaxLength(100)
-                self.input_device_note.setPlaceholderText(
-                    "Digite uma observação referente a esse cartucho de impressora..."
+                self.ConfigPrintType(
+                    ["$cartucho$", "$impressora$", "$name$", "$cpf$", "$obs$"],
+                    "termo_cartucho.html",
+                    "termo_cartucho_devol.html",
+                    "<b>Cartucho de Impressora do Funcionário (Obrigatório):</b>",
+                    "<b>Modelo de impressora do Funcionário (Obrigatório):</b>",
+                    "Digite o cartucho de impressora a ser entregue ao funcionário...",
+                    "Digite o modelo de impressora que será usado esse cartucho...",
+                    "Digite uma observação referente a esse cartucho de impressora...",
                 )
             case "Celular":
-                self.label_device_serial.setEnabled(True)
-                self.input_device_serial.setEnabled(True)
-                self.label_device_serial.setHidden(False)
-                self.input_device_serial.setHidden(False)
-                self.words_to_replace = [
-                    "$celular$",
-                    "$imei$",
-                    "$name$",
-                    "$cpf$",
-                    "$obs$",
-                ]
-                self.file_termo = "termo_celular.html"
-                self.file_termo_devol = "termo_celular_devol.html"
-                self.label_device.setText(
-                    "<b>Celular do Funcionário (Obrigatório):</b>"
-                )
-                self.label_device_serial.setText(
-                    "<b>IMEI do Celular do Funcionário (Obrigatório):</b>"
-                )
-                self.input_device.clear()
-                self.input_device.setPlaceholderText(
-                    "Digite o Celular a ser entregue ao funcionário..."
-                )
-                self.input_device.setMaxLength(100)
-                self.input_device_serial.clear()
-                self.input_device_serial.setPlaceholderText(
-                    "Digite o IMEI do Celular a ser entregue ao funcionário..."
-                )
-                self.input_device_serial.setMaxLength(33)
-                self.input_device_note.setPlaceholderText(
-                    "Digite uma observação referente a esse celular..."
+                self.ConfigPrintType(
+                    ["$celular$", "$imei$", "$name$", "$cpf$", "$obs$"],
+                    "termo_celular.html",
+                    "termo_celular_devol.html",
+                    "<b>Celular do Funcionário (Obrigatório):</b>",
+                    "<b>IMEI do Celular do Funcionário (Obrigatório):</b>",
+                    "Digite o Celular a ser entregue ao funcionário...",
+                    "Digite o IMEI do Celular a ser entregue ao funcionário...",
+                    "Digite uma observação referente a esse celular...",
+                    device_serial_text_length=33,
                 )
             case "iButton":
-                self.input_device_serial.clear()
-                self.label_device_serial.setEnabled(False)
-                self.input_device_serial.setEnabled(False)
-                self.label_device_serial.setHidden(True)
-                self.input_device_serial.setHidden(True)
-                self.words_to_replace = ["$button$", "$name$", "$cpf$", "$obs$"]
-                self.file_termo = "termo_ibutton.html"
-                self.file_termo_devol = "termo_ibutton_devol.html"
-                self.label_device.setText("<b>Código do iButton (Obrigatório):</b>")
-                self.input_device.clear()
-                self.input_device.setPlaceholderText(
-                    "Digite o código do iButton a ser entregue ao funcionário..."
-                )
-                self.input_device.setMaxLength(12)
-                self.input_device_note.setPlaceholderText(
-                    "Digite uma observação referente a esse iButton..."
+                self.ConfigPrintType(
+                    ["$button$", "$name$", "$cpf$", "$obs$"],
+                    "termo_ibutton.html",
+                    "termo_ibutton_devol.html",
+                    "<b>Código do iButton (Obrigatório):</b>",
+                    device_placeholder="Digite o código do iButton a ser entregue ao funcionário...",
+                    remark_placeholder="Digite uma observação referente a esse iButton...",
+                    device_text_length=12,
+                    device_serial_input_enabled=False,
                 )
             case "Impressora":
-                self.label_device_serial.setEnabled(True)
-                self.input_device_serial.setEnabled(True)
-                self.label_device_serial.setHidden(False)
-                self.input_device_serial.setHidden(False)
-                self.words_to_replace = [
-                    "$impressora$",
-                    "$serial$",
-                    "$name$",
-                    "$cpf$",
-                    "$obs$",
-                ]
-                self.file_termo = "termo_impressora.html"
-                self.file_termo_devol = "termo_impressora_devol.html"
-                self.label_device.setText(
-                    "<b>Impressora do Funcionário (Obrigatório):</b>"
-                )
-                self.label_device_serial.setText(
-                    "<b>Serial da impressora do Funcionário (Obrigatório):</b>"
-                )
-                self.input_device.clear()
-                self.input_device.setPlaceholderText(
-                    "Digite a impressora a ser entregue ao funcionário..."
-                )
-                self.input_device.setMaxLength(100)
-                self.input_device_serial.clear()
-                self.input_device_serial.setPlaceholderText(
-                    "Digite o Serial da impressora a ser entregue ao funcionário..."
-                )
-                self.input_device_serial.setMaxLength(10)
-                self.input_device_note.setPlaceholderText(
-                    "Digite uma observação referente a essa impressora..."
+                self.ConfigPrintType(
+                    ["$impressora$", "$serial$", "$name$", "$cpf$", "$obs$"],
+                    "termo_impressora.html",
+                    "termo_impressora_devol.html",
+                    "<b>Impressora do Funcionário (Obrigatório):</b>",
+                    "<b>Serial da impressora do Funcionário (Obrigatório):</b>",
+                    "Digite a impressora a ser entregue ao funcionário...",
+                    "Digite o Serial da impressora a ser entregue ao funcionário...",
+                    "Digite uma observação referente a essa impressora...",
+                    device_serial_text_length=10,
                 )
             case "Inversor":
-                self.input_device_serial.clear()
-                self.label_device_serial.setEnabled(False)
-                self.input_device_serial.setEnabled(False)
-                self.label_device_serial.setHidden(True)
-                self.input_device_serial.setHidden(True)
-                self.words_to_replace = ["$inversor$", "$name$", "$cpf$", "$obs$"]
-                self.file_termo = "termo_inversor.html"
-                self.file_termo_devol = "termo_inversor_devol.html"
-                self.label_device.setText(
-                    "<b>Marca/Modelo do inversor (Obrigatório):</b>"
-                )
-                self.input_device.clear()
-                self.input_device.setPlaceholderText(
-                    "Digite o inversor a ser entregue ao funcionário..."
-                )
-                self.input_device.setMaxLength(100)
-                self.input_device_note.setPlaceholderText(
-                    "Digite uma observação referente a esse inversor..."
+                self.ConfigPrintType(
+                    ["$inversor$", "$name$", "$cpf$", "$obs$"],
+                    "termo_inversor.html",
+                    "termo_inversor_devol.html",
+                    "<b>Marca/Modelo do inversor (Obrigatório):</b>",
+                    device_placeholder="Digite o inversor a ser entregue ao funcionário...",
+                    remark_placeholder="Digite uma observação referente a esse inversor...",
+                    device_serial_input_enabled=False,
                 )
             case "Notebook":
-                self.label_device_serial.setEnabled(True)
-                self.input_device_serial.setEnabled(True)
-                self.label_device_serial.setHidden(False)
-                self.input_device_serial.setHidden(False)
-                self.words_to_replace = [
-                    "$notebook$",
-                    "$serial$",
-                    "$name$",
-                    "$cpf$",
-                    "$obs$",
-                ]
-                self.file_termo = "termo_notebook.html"
-                self.file_termo_devol = "termo_notebook_devol.html"
-                self.label_device.setText(
-                    "<b>Notebook do Funcionário (Obrigatório):</b>"
-                )
-                self.label_device_serial.setText(
-                    "<b>Serial do Notebook do Funcionário (Obrigatório):</b>"
-                )
-                self.input_device.clear()
-                self.input_device.setPlaceholderText(
-                    "Digite o Notebook a ser entregue ao funcionário..."
-                )
-                self.input_device.setMaxLength(100)
-                self.input_device_serial.clear()
-                self.input_device_serial.setPlaceholderText(
-                    "Digite o Serial do Notebook a ser entregue ao funcionário..."
-                )
-                self.input_device_serial.setMaxLength(10)
-                self.input_device_note.setPlaceholderText(
-                    "Digite uma observação referente a esse Notebook..."
+                self.ConfigPrintType(
+                    ["$notebook$", "$serial$", "$name$", "$cpf$", "$obs$"],
+                    "termo_notebook.html",
+                    "termo_notebook_devol.html",
+                    "<b>Notebook do Funcionário (Obrigatório):</b>",
+                    "<b>Serial do Notebook do Funcionário (Obrigatório):</b>",
+                    "Digite o Notebook a ser entregue ao funcionário...",
+                    "Digite o Serial do Notebook a ser entregue ao funcionário...",
+                    "Digite uma observação referente a esse Notebook...",
                 )
             case _:
                 print("opção não encontrada!!!")
 
     def CheckInputs(self) -> bool:
+        """
+        Function CheckInputs()
+
+        this just checks if out inputs are not empty and
+        open a message box to tell the user if a required
+        input is empty.
+        """
+
         device_str: str = ""
         msg_box_icon = QtGui.QIcon("gen_document.ico")
         if self.input_employee_name.text() == "":
@@ -562,6 +518,14 @@ class Gen_Document(QtWidgets.QWidget):
         return output
 
     def ReadHtmlFiles(self) -> dict[str, str]:
+        """
+        Function ReadHtmlFiles()
+
+        this read our terms html files and replaces the placeholder
+        strings with the strings in our self.strings_to_replace list,
+        returning a dictionary containing all the html data.
+        """
+
         file_to_read = (
             self.file_termo if not self.is_devolucao else self.file_termo_devol
         )
@@ -580,20 +544,22 @@ class Gen_Document(QtWidgets.QWidget):
         if obsTermo != "":
             obsTermo = "<b>Observação:</b> " + obsTermo
 
-        self.new_words.append(self.input_device.text())
+        new_strings: list[str] = []
+
+        new_strings.append(self.input_device.text())
         if not self.print_type_combobox.currentText() in self.types_to_remove_input:
-            self.new_words.append(self.input_device_serial.text())
-        self.new_words.append(self.input_employee_name.text())
-        self.new_words.append(self.input_employee_cpf.text())
-        self.new_words.append(obsTermo)
+            new_strings.append(self.input_device_serial.text())
+        new_strings.append(self.input_employee_name.text())
+        new_strings.append(self.input_employee_cpf.text())
+        new_strings.append(obsTermo)
 
-        for old_word, new_word in zip(self.words_to_replace, self.new_words):
-            termo_data = termo_data.replace(old_word, new_word)
+        for old_string, new_string in zip(self.strings_to_replace, new_strings):
+            termo_data = termo_data.replace(old_string, new_string)
 
-        for variavel, dados in self.empresa_dados.items():
-            termo_data = termo_data.replace(variavel, dados)
-            header_file_data = header_file_data.replace(variavel, dados)
-            footer_file_data = footer_file_data.replace(variavel, dados)
+        for variable, data in self.empresa_dados.items():
+            termo_data = termo_data.replace(variable, data)
+            header_file_data = header_file_data.replace(variable, data)
+            footer_file_data = footer_file_data.replace(variable, data)
 
         if not self.is_data_manual:
             data_atual: str = str(
@@ -615,6 +581,17 @@ class Gen_Document(QtWidgets.QWidget):
         return changed_html_file
 
     def GeneratePDF(self, output: str):
+        """
+        Function GeneratePDF(output)
+        output: output path for the PDF file.
+
+        we use a QPrinter, QPainter and QTextdocument to generate a
+        PDF file of our HTML, we scale our painter and begin painting
+        by changing the html in our text document, also translating the
+        painter when necessary and call the draw function of our PaintContext
+        to start painting.
+        """
+
         html_data: dict[str, str] = self.ReadHtmlFiles()
 
         pdf_printer = QtPrintSupport.QPrinter(
@@ -644,6 +621,15 @@ class Gen_Document(QtWidgets.QWidget):
         pdf_painter.end()
 
     def PrintDocument(self, input_pdf: str):
+        """
+        Function PrintDocument(input_pdf)
+        input_pdf: the path of our PDF file to send to a native printer.
+
+        this function is responsible to send our PDF file to a native
+        printer, it uses a QPrinter to send to a native printer,
+        QPrintPreviewDialog to preview or QPrintDialog to a fast printing.
+        """
+
         printer = QtPrintSupport.QPrinter(
             QtPrintSupport.QPrinter.PrinterMode.HighResolution
         )
@@ -653,6 +639,13 @@ class Gen_Document(QtWidgets.QWidget):
         printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
 
         def PaintingDocument():
+            """
+            Function PaintingDocument()
+
+            this nested function is responsible to convert our pdf file
+            in a image and then use a QPainter to paint to a native printer.
+            """
+
             pdf_file = QtPdf.QPdfDocument()
             pdf_file.load(input_pdf)
             size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
@@ -688,5 +681,3 @@ class Gen_Document(QtWidgets.QWidget):
 
         if not self.is_desativar_impressao:
             self.PrintDocument(Output)
-
-        self.new_words.clear()
