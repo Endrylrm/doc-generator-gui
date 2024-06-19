@@ -39,10 +39,6 @@ class Gen_Document(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.is_data_manual: bool = False
-        self.is_devolucao: bool = False
-        self.is_desativar_impressao: bool = False
-        self.is_desativar_preview_impressao: bool = False
         self.file_termo: str = ""
         self.file_termo_devol: str = ""
         self.strings_to_replace: list[str] = []
@@ -150,16 +146,12 @@ class Gen_Document(QtWidgets.QWidget):
         self.data_manual.stateChanged.connect(self.CheckDataManual)
         # CheckBox - Devolução
         self.devolucao = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
-        self.devolucao.stateChanged.connect(self.CheckDevolucao)
         self.devolucao.setToolTip(
             "<b>Devolução de Dispositivo.:</b>\nAtive para gerar os termos de devolução."
         )
         # CheckBox - Desativar Visualização de Impressão
         self.desativar_preview_impressao = QtWidgets.QCheckBox(
             self, text="Desativar visualização de impressão."
-        )
-        self.desativar_preview_impressao.stateChanged.connect(
-            self.CheckPreviewImpressao
         )
         self.desativar_preview_impressao.setToolTip(
             "<b>Desativar visualização de impressão.:</b>\nDesativa a visualização de impressão."
@@ -168,7 +160,6 @@ class Gen_Document(QtWidgets.QWidget):
         self.desativar_impressao = QtWidgets.QCheckBox(
             self, text="Desativar impressão automática."
         )
-        self.desativar_impressao.stateChanged.connect(self.CheckImpressao)
         self.desativar_impressao.setToolTip(
             "<b>Desativar impressão automática.:</b>\nDesativa a impressão automática, gerando apenas o PDF."
         )
@@ -268,6 +259,12 @@ class Gen_Document(QtWidgets.QWidget):
         widget_grid_layout.setRowStretch(14, 1)
         # set this widget layout to the grid layout
         self.setLayout(widget_grid_layout)
+
+    def CheckDataManual(self):
+        if self.data_manual.isChecked():
+            self.date_picker.setEnabled(True)
+        else:
+            self.date_picker.setEnabled(False)
 
     def ConfigPrintType(
         self,
@@ -475,34 +472,8 @@ class Gen_Document(QtWidgets.QWidget):
         else:
             return True
 
-    def CheckDataManual(self):
-        if self.data_manual.isChecked():
-            self.is_data_manual = True
-            self.date_picker.setEnabled(True)
-        else:
-            self.is_data_manual = False
-            self.date_picker.setEnabled(False)
-
-    def CheckDevolucao(self):
-        if self.devolucao.isChecked():
-            self.is_devolucao = True
-        else:
-            self.is_devolucao = False
-
-    def CheckImpressao(self):
-        if self.desativar_impressao.isChecked():
-            self.is_desativar_impressao = True
-        else:
-            self.is_desativar_impressao = False
-
-    def CheckPreviewImpressao(self):
-        if self.desativar_preview_impressao.isChecked():
-            self.is_desativar_preview_impressao = True
-        else:
-            self.is_desativar_preview_impressao = False
-
     def OutputPath(self) -> str:
-        if not self.is_devolucao:
+        if not self.devolucao.isChecked():
             output: str = (
                 f"./Termos/Termo de Entrega de {self.print_type_combobox.currentText()} - "
                 + self.input_employee_name.text()
@@ -527,7 +498,7 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         file_to_read = (
-            self.file_termo if not self.is_devolucao else self.file_termo_devol
+            self.file_termo if not self.devolucao.isChecked() else self.file_termo_devol
         )
 
         with (
@@ -561,7 +532,7 @@ class Gen_Document(QtWidgets.QWidget):
             header_file_data = header_file_data.replace(variable, data)
             footer_file_data = footer_file_data.replace(variable, data)
 
-        if not self.is_data_manual:
+        if not self.data_manual.isChecked():
             data_atual: str = str(
                 datetime.datetime.now().strftime("%A, %d de %B de %Y")
             )
@@ -656,7 +627,7 @@ class Gen_Document(QtWidgets.QWidget):
             painter.drawImage(0, 0, image_from_pdf)
             painter.end()
 
-        if not self.is_desativar_preview_impressao:
+        if not self.desativar_preview_impressao.isChecked():
             print_preview_dialog = QtPrintSupport.QPrintPreviewDialog(printer)
             print_preview_dialog.setWindowTitle(
                 f"Imprimir Termo de {self.print_type_combobox.currentText()}"
@@ -679,5 +650,5 @@ class Gen_Document(QtWidgets.QWidget):
         Output: str = self.OutputPath()
         self.GeneratePDF(Output)
 
-        if not self.is_desativar_impressao:
+        if not self.desativar_impressao.isChecked():
             self.PrintDocument(Output)
