@@ -307,6 +307,8 @@ class Gen_Document(QtWidgets.QWidget):
                     device_str = "Marca/Modelo de inversor"
                 case "Notebook":
                     device_str = "Marca/Modelo de Notebook"
+                case _:
+                    device_str = "Opção não implementada"
             CreateInfoMessageBox(
                 f"Aviso - Campo {device_str} está vazio!",
                 f"Sem {device_str} do funcionário!",
@@ -323,14 +325,12 @@ class Gen_Document(QtWidgets.QWidget):
                     device_str = "Marca/Modelo de impressora"
                 case "Celular":
                     device_str = "IMEI do Celular"
-                case "iButton":
-                    device_str = "Código do iButton"
                 case "Impressora":
                     device_str = "Serial da Impressora"
-                case "Inversor":
-                    device_str = "Marca/Modelo de inversor"
                 case "Notebook":
                     device_str = "Serial do Notebook"
+                case _:
+                    device_str = "Opção não implementada"
             CreateInfoMessageBox(
                 f"Aviso - Campo {device_str} está vazio!",
                 f"Sem {device_str} do funcionário!",
@@ -356,7 +356,7 @@ class Gen_Document(QtWidgets.QWidget):
         device_serial_input_enabled: bool = True,
     ):
         """
-        Function ConfigPrintType()
+        Function ConfigPrintType(strings_to_replace, termo_filename, termo_devol_filename, device_text,)
 
         strings_to_replace: the strings we are going to replace on our terms.
         termo_filename: Our term html file name.
@@ -470,7 +470,7 @@ class Gen_Document(QtWidgets.QWidget):
                     "Digite uma observação referente a esse Notebook...",
                 )
             case _:
-                print("opção não encontrada!!!")
+                print("opção não implementada.")
 
     def OutputPath(self) -> str:
         if not self.devolucao.isChecked():
@@ -551,10 +551,17 @@ class Gen_Document(QtWidgets.QWidget):
 
         return changed_html_file
 
-    def GeneratePDF(self, output: str):
+    def GeneratePDF(
+        self,
+        output: str,
+        pdf_printer: QtPrintSupport.QPrinter,
+        pdf_painter: QtGui.QPainter,
+    ):
         """
-        Function GeneratePDF(output)
+        Function GeneratePDF(output, pdf_printer, painter)
         output: output path for the PDF file.
+        pdf_printer: the printer responsible to generate the PDF file.
+        pdf_painter: the painter responsible to paint out HTML to the PDF file.
 
         we use a QPrinter, QPainter and QTextdocument to generate a
         PDF file of our HTML, we scale our painter and begin painting
@@ -565,16 +572,9 @@ class Gen_Document(QtWidgets.QWidget):
 
         html_data: dict[str, str] = self.ReadHtmlFiles()
 
-        pdf_printer = QtPrintSupport.QPrinter(
-            QtPrintSupport.QPrinter.PrinterMode.HighResolution
-        )
         pdf_printer.setOutputFormat(pdf_printer.OutputFormat.PdfFormat)
         pdf_printer.setResolution(600)
-        pdf_printer.setFullPage(True)
         pdf_printer.setOutputFileName(output)
-        pdf_printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
-        pdf_printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
-        pdf_painter = QtGui.QPainter()
         pdf_Doc = QtGui.QTextDocument()
         pdf_Doc_PaintCtx = pdf_Doc.documentLayout().PaintContext()
         pdf_Doc.setTextWidth(530)
@@ -591,23 +591,22 @@ class Gen_Document(QtWidgets.QWidget):
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.end()
 
-    def PrintDocument(self, input_pdf: str):
+    def PrintDocument(
+        self, input_pdf: str, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter
+    ):
         """
-        Function PrintDocument(input_pdf)
+        Function PrintDocument(input_pdf, printer, painter)
         input_pdf: the path of our PDF file to send to a native printer.
+        printer: the printer responsible to send to our native printer.
+        painter: the painter responsible to paint out the PDF file to our native printer.
 
         this function is responsible to send our PDF file to a native
         printer, it uses a QPrinter to send to a native printer,
         QPrintPreviewDialog to preview or QPrintDialog to a fast printing.
         """
 
-        printer = QtPrintSupport.QPrinter(
-            QtPrintSupport.QPrinter.PrinterMode.HighResolution
-        )
-        printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
+        printer.setOutputFormat(printer.OutputFormat.NativeFormat)
         printer.setResolution(607)
-        printer.setFullPage(True)
-        printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
 
         def PaintingDocument():
             """
@@ -621,8 +620,8 @@ class Gen_Document(QtWidgets.QWidget):
             pdf_file.load(input_pdf)
             size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
             image_from_pdf = pdf_file.render(0, size)
-            painter = QtGui.QPainter()
             painter.begin(printer)
+            painter.scale(1, 1)
             painter.translate(2, 0)
             painter.drawImage(0, 0, image_from_pdf)
             painter.end()
@@ -647,8 +646,17 @@ class Gen_Document(QtWidgets.QWidget):
         if not self.CheckInputs():
             return
 
+        printer = QtPrintSupport.QPrinter(
+            QtPrintSupport.QPrinter.PrinterMode.HighResolution
+        )
+        printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
+        printer.setFullPage(True)
+        printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
+
+        painter = QtGui.QPainter()
+
         Output: str = self.OutputPath()
-        self.GeneratePDF(Output)
+        self.GeneratePDF(Output, printer, painter)
 
         if not self.desativar_impressao.isChecked():
-            self.PrintDocument(Output)
+            self.PrintDocument(Output, printer, painter)
