@@ -36,7 +36,6 @@ def Build_PyInstaller():
             "gen_document.ico",
             "--upx-dir",
             "./upx/",
-            # other pyinstaller options...
         ]
     )
 

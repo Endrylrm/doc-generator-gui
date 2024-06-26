@@ -11,13 +11,13 @@ python = ">=3.8,<3.13"
 PySide6 = "^6.6.3.1"
 
 [tool.poetry.group.dev.dependencies]
-Nuitka = "^2.3.7"
+Nuitka = "^2.3.10"
 pyinstaller = "^6.8.0"
 pytest = "^8.2.2"
 
 [tool.poetry.scripts]
-build-nuitka = "src.doc_generator_gui.build:Build_Nuitka"
-build-pyinstaller = "src.doc_generator_gui.build:Build_PyInstaller"
+build-nuitka = "build:Build_Nuitka"
+build-pyinstaller = "build:Build_PyInstaller"
 main = "src.main:main"
 
 [build-system]
