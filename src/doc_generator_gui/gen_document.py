@@ -138,6 +138,11 @@ class Gen_Document(QtWidgets.QWidget):
         )
         # LineEdit - Observação
         self.input_device_note = QtWidgets.QLineEdit(self)
+        # separator - CheckBox
+        self.separator_checkbox = QtWidgets.QFrame(self)
+        self.separator_checkbox.setLineWidth(1)
+        self.separator_checkbox.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # CheckBox - Ativar Data Manual
         self.data_manual = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
         self.data_manual.setToolTip(
@@ -239,24 +244,26 @@ class Gen_Document(QtWidgets.QWidget):
         )
         # LineEdit - Observação
         widget_grid_layout.addWidget(self.input_device_note, 10, 0, 1, 2)
+        # separator - CheckBox
+        widget_grid_layout.addWidget(self.separator_checkbox, 11, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widget_grid_layout.addWidget(self.data_manual, 11, 0, 1, 1)
+        widget_grid_layout.addWidget(self.data_manual, 12, 0, 1, 1)
         # DateTimeEdit - Data Manual
-        widget_grid_layout.addWidget(self.date_picker, 11, 1, 1, 1)
+        widget_grid_layout.addWidget(self.date_picker, 12, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widget_grid_layout.addWidget(self.devolucao, 12, 0, 1, 1)
+        widget_grid_layout.addWidget(self.devolucao, 13, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widget_grid_layout.addWidget(self.desativar_preview_impressao, 12, 1, 1, 1)
+        widget_grid_layout.addWidget(self.desativar_preview_impressao, 13, 1, 1, 1)
         # CheckBox - Desativar Impressão
-        widget_grid_layout.addWidget(self.desativar_impressao, 13, 0, 1, 1)
+        widget_grid_layout.addWidget(self.desativar_impressao, 14, 0, 1, 1)
         # separator - Buttons
-        widget_grid_layout.addWidget(self.separator_buttons, 15, 0, 1, 2)
+        widget_grid_layout.addWidget(self.separator_buttons, 16, 0, 1, 2)
         # PushButton - Gerar Documento
-        widget_grid_layout.addWidget(self.button_gen_doc, 16, 0, 1, 2)
+        widget_grid_layout.addWidget(self.button_gen_doc, 17, 0, 1, 2)
         # space between widgets
         widget_grid_layout.setSpacing(10)
         # stretch last row
-        widget_grid_layout.setRowStretch(14, 1)
+        widget_grid_layout.setRowStretch(15, 1)
         # set this widget layout to the grid layout
         self.setLayout(widget_grid_layout)
 
