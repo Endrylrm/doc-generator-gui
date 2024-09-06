@@ -14,7 +14,7 @@ def Build_Nuitka():
             "--plugin-enable=upx",
             "--upx-binary=./upx/upx.exe",
             "--enable-plugin=pyside6",
-            "--disable-console",
+            "--windows-console-mode=disable",
             "--windows-icon-from-ico=gen_document.ico",
             "./src/main.py",
         ]

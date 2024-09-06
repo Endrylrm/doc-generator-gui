@@ -634,7 +634,6 @@ class Gen_Document(QtWidgets.QWidget):
             print_preview_dialog_icon = QtGui.QIcon("gen_document.ico")
             print_preview_dialog.setWindowIcon(print_preview_dialog_icon)
             print_preview_dialog.paintRequested.connect(PaintingDocument)
-            # Visualizador de impressão não estava sendo executado
             print_preview_dialog.exec()
         else:
             print_dialog = QtPrintSupport.QPrintDialog(printer)
@@ -656,6 +655,7 @@ class Gen_Document(QtWidgets.QWidget):
         painter = QtGui.QPainter()
 
         Output: str = self.OutputPath()
+
         self.GeneratePDF(Output, printer, painter)
 
         if not self.desativar_impressao.isChecked():
