@@ -13,7 +13,7 @@ PySide6 = "^6.7.2"
 [tool.poetry.group.dev.dependencies]
 Nuitka = "^2.4.8"
 pyinstaller = "^6.10.0"
-pytest = "^8.3.2"
+pytest = "^8.3.3"
 
 [tool.poetry.scripts]
 build-nuitka = "build:Build_Nuitka"
