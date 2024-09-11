@@ -1,0 +1,38 @@
+{
+    "name": {
+        "replace": "$empresa$",
+        "value": "Teste de Empresa LTDA"
+    },
+    "cnpj": {
+		"replace": "$cnpj_empresa$",
+		"value": "00.000.000/0000-00"
+    },
+    "rua": {
+        "replace": "$rua_empresa$",
+        "value": "Rua de Teste - Nº 10.000"
+    },
+    "bairro": {
+        "replace": "$bairro_empresa$",
+        "value": "Bairro de Teste"
+    },
+    "cidade": {
+        "replace": "$cidade_empresa$",
+        "value": "Cidade de Teste"
+    },
+    "estado": {
+        "replace": "$estado_empresa$",
+        "value": "Estado de Teste"
+    },
+    "pais": {
+        "replace": "$pais_empresa$",
+        "value": "País de Teste"
+    },
+    "cep": {
+        "replace": "$cep_empresa$",
+        "value": "00000-000"
+    },
+    "fone": {
+        "replace": "$fone_empresa$",
+        "value": "+55 (41) 90000-0000"
+    }
+}

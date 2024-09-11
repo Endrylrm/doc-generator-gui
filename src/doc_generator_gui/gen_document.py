@@ -4,6 +4,7 @@ __author_email__ = "Endrylrm@hotmail.com"
 import os
 import locale
 import datetime
+import json
 
 # utilities to help with creation of message boxes
 from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
@@ -12,9 +13,6 @@ from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
 from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
 
 from .cpf_input import Cpf_Input
-
-from xml.etree import ElementTree as et
-
 
 # Key Extractor Page/Frame Widget
 class Gen_Document(QtWidgets.QWidget):
@@ -41,42 +39,40 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.file_termo: str = ""
         self.file_termo_devol: str = ""
-        self.strings_to_replace: list[str] = []
+        self.output_path: str = ""
 
-        empresa_xml = et.parse("empresa.xml")
-        root = empresa_xml.getroot()
+        self.last_name = ""
+        self.last_cpf = ""
 
-        self.empresa_dados: dict[str, str] = {
-            root.find("nome").attrib["replace"]: root.find("nome").attrib["value"],
-            root.find("cnpj").attrib["replace"]: root.find("cnpj").attrib["value"],
-            root.find("rua").attrib["replace"]: root.find("rua").attrib["value"],
-            root.find("bairro").attrib["replace"]: root.find("bairro").attrib["value"],
-            root.find("cidade").attrib["replace"]: root.find("cidade").attrib["value"],
-            root.find("estado").attrib["replace"]: root.find("estado").attrib["value"],
-            root.find("pais").attrib["replace"]: root.find("pais").attrib["value"],
-            root.find("cep").attrib["replace"]: root.find("cep").attrib["value"],
-            root.find("fone").attrib["replace"]: root.find("fone").attrib["value"],
-        }
+        self.strings_to_replace: dict = {}
 
-        self.tipos_impressao: list[str] = [
-            "Cartucho",
-            "Celular",
-            "iButton",
-            "Impressora",
-            "Inversor",
-            "Notebook",
-        ]
+        self.layout_dict: dict = {}
+        self.current_layout: dict = {}
 
-        # used to remove a variable from our words to replace variable
-        # by adding the types we will hide the serial input
-        self.types_to_remove_input: list[str] = ["iButton", "Inversor"]
-
+        self.ReadConfigFiles()
+        
         # first create our widgets
         self.CreateWidgets(controller)
         # then set our grid layout and config
         self.GridConfigs()
 
         self.MatchPrintType()
+
+    def ReadConfigFiles(self):
+
+        with (
+            open("company.json", "r", encoding="utf-8") as company_file,
+            open("layouts.json", "r", encoding="utf-8") as layout_file,
+        ):
+            company_file_data = json.loads(company_file.read())
+            layouts = json.loads(layout_file.read())
+
+        self.layout_dict = layouts
+
+        for key in company_file_data.keys():
+            replace = company_file_data[key]["replace"]
+            value = company_file_data[key]["value"]
+            self.strings_to_replace[replace] = value
 
     # Creation of widgets on screen
     def CreateWidgets(self, controller):
@@ -103,7 +99,7 @@ class Gen_Document(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.print_type_combobox = QtWidgets.QComboBox(self)
-        for print_type in self.tipos_impressao:
+        for print_type in self.layout_dict.keys():
             self.print_type_combobox.addItem(print_type)
         self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
@@ -111,38 +107,34 @@ class Gen_Document(QtWidgets.QWidget):
         self.separator_combobox.setLineWidth(1)
         self.separator_combobox.setFrameShape(QtWidgets.QFrame.HLine)
         self.separator_combobox.setFrameShadow(QtWidgets.QFrame.Sunken)
-        # Label - Employee Name
-        self.label_employee = QtWidgets.QLabel(
-            self, text="<b>Nome do Funcionário (Obrigatório):</b>"
-        )
-        # LineEdit - Nome do funcionário
-        self.input_employee_name = QtWidgets.QLineEdit(self)
-        self.input_employee_name.setPlaceholderText("Digite o nome do funcionário...")
-        # Label - CPF do funcionário
-        self.label_employee_cpf = QtWidgets.QLabel(
-            self, text="<b>CPF / CNPJ do Funcionário (Obrigatório):</b>"
-        )
-        # LineEdit - CPF do funcionário
-        self.input_employee_cpf = Cpf_Input(self)
-        # Label - Marca / Modelo do dispositivo
-        self.label_device = QtWidgets.QLabel(self)
-        # LineEdit - Marca / Modelo do dispositivo
-        self.input_device = QtWidgets.QLineEdit(self)
-        # Label - Serial / IMEI do dispositivo
-        self.label_device_serial = QtWidgets.QLabel(self)
-        # LineEdit - Serial / IMEI do dispositivo
-        self.input_device_serial = QtWidgets.QLineEdit(self)
-        # Label - Observação
-        self.label_device_note = QtWidgets.QLabel(
-            self, text="<b>Observação (Opcional):</b>"
-        )
-        # LineEdit - Observação
-        self.input_device_note = QtWidgets.QLineEdit(self)
         # separator - CheckBox
         self.separator_checkbox = QtWidgets.QFrame(self)
         self.separator_checkbox.setLineWidth(1)
         self.separator_checkbox.setFrameShape(QtWidgets.QFrame.HLine)
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # Table - Layouts Data
+        table_headers = [
+            "Descrição",
+            "Preencher",
+        ]
+        self.tableDocument = QtWidgets.QTableWidget()
+        self.tableDocument.setRowCount(0)
+        self.tableDocument.setColumnCount(2)
+        self.tableDocument.setHorizontalHeaderLabels(table_headers)
+        self.tableDocument.horizontalHeader().setSectionResizeMode(
+            0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents
+        )
+        self.tableDocument.horizontalHeader().setSectionResizeMode(
+            1, QtWidgets.QHeaderView.ResizeMode.Stretch
+        )
+        self.tableDocument.setSelectionBehavior(
+            self.tableDocument.selectionBehavior().SelectItems
+        )
+        self.tableDocument.setSelectionMode(
+            self.tableDocument.selectionMode().SingleSelection
+        )
+
+        self.tableDocument.verticalHeader().setVisible(False)
         # CheckBox - Ativar Data Manual
         self.data_manual = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
         self.data_manual.setToolTip(
@@ -214,36 +206,8 @@ class Gen_Document(QtWidgets.QWidget):
         widget_grid_layout.addWidget(self.print_type_combobox, 3, 0, 1, 2)
         # separator - Tipo de impressão ComboBox
         widget_grid_layout.addWidget(self.separator_combobox, 4, 0, 1, 2)
-        # Label - Nome do Funcionário
-        widget_grid_layout.addWidget(
-            self.label_employee, 5, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
-        )
-        # LineEdit - Nome do Funcionário Input
-        widget_grid_layout.addWidget(self.input_employee_name, 6, 0, 1, 1)
-        # Label - CPF do funcionário
-        widget_grid_layout.addWidget(
-            self.label_employee_cpf, 5, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
-        )
-        # LineEdit - CPF do funcionário Input
-        widget_grid_layout.addWidget(self.input_employee_cpf, 6, 1, 1, 1)
-        # Label - Marca / Modelo do dispositivo
-        widget_grid_layout.addWidget(
-            self.label_device, 7, 0, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
-        )
-        # LineEdit - Marca / Modelo do dispositivo
-        widget_grid_layout.addWidget(self.input_device, 8, 0, 1, 1)
-        # Label - Serial / IMEI do dispositivo
-        widget_grid_layout.addWidget(
-            self.label_device_serial, 7, 1, 1, 1, QtGui.Qt.AlignmentFlag.AlignLeft
-        )
-        # LineEdit - Serial / IMEI do dispositivo
-        widget_grid_layout.addWidget(self.input_device_serial, 8, 1, 1, 1)
-        # Label - Observação
-        widget_grid_layout.addWidget(
-            self.label_device_note, 9, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignLeft
-        )
-        # LineEdit - Observação
-        widget_grid_layout.addWidget(self.input_device_note, 10, 0, 1, 2)
+        # Table - Data Layouts
+        widget_grid_layout.addWidget(self.tableDocument, 5, 0, 6, 2)
         # separator - CheckBox
         widget_grid_layout.addWidget(self.separator_checkbox, 11, 0, 1, 2)
         # CheckBox - Ativar Data Manual
@@ -273,235 +237,155 @@ class Gen_Document(QtWidgets.QWidget):
         else:
             self.date_picker.setEnabled(False)
 
-    def CheckInputs(self) -> bool:
+    def CheckEmptyInputs(self) -> bool:
         """
-        Function CheckInputs()
+        Function CheckEmptyInputs()
 
         this just checks if out inputs are not empty and
         open a message box to tell the user if a required
         input is empty.
         """
 
-        device_str: str = ""
         msg_box_icon = QtGui.QIcon("gen_document.ico")
-        if self.input_employee_name.text() == "":
-            CreateInfoMessageBox(
-                "Aviso - Campo Nome está vazio!",
-                "Sem nome do funcionário!",
-                "Por gentileza, coloque o nome do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        if self.input_employee_cpf.text() == "":
-            CreateInfoMessageBox(
-                "Aviso - Campo CPF está vazio!",
-                "Sem CPF do funcionário!",
-                "Por gentileza, coloque o CPF do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        if self.input_device.text() == "":
-            match self.print_type_combobox.currentText():
-                case "Cartucho":
-                    device_str = "Cartucho de impressora"
-                case "Celular":
-                    device_str = "Marca/Modelo de Celular"
-                case "iButton":
-                    device_str = "Código do iButton"
-                case "Impressora":
-                    device_str = "Marca/Modelo de Impressora"
-                case "Inversor":
-                    device_str = "Marca/Modelo de inversor"
-                case "Notebook":
-                    device_str = "Marca/Modelo de Notebook"
-                case _:
-                    device_str = "Opção não implementada"
-            CreateInfoMessageBox(
-                f"Aviso - Campo {device_str} está vazio!",
-                f"Sem {device_str} do funcionário!",
-                f"Por gentileza, coloque o {device_str} do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        if (
-            self.input_device_serial.text() == ""
-            and self.print_type_combobox.currentText() not in self.types_to_remove_input
-        ):
-            match self.print_type_combobox.currentText():
-                case "Cartucho":
-                    device_str = "Marca/Modelo de impressora"
-                case "Celular":
-                    device_str = "IMEI do Celular"
-                case "Impressora":
-                    device_str = "Serial da Impressora"
-                case "Notebook":
-                    device_str = "Serial do Notebook"
-                case _:
-                    device_str = "Opção não implementada"
-            CreateInfoMessageBox(
-                f"Aviso - Campo {device_str} está vazio!",
-                f"Sem {device_str} do funcionário!",
-                f"Por gentileza, coloque o {device_str} do funcionário.",
-                msg_win_icon=msg_box_icon,
-            )
-            return False
-        else:
-            return True
+        for row in range(self.tableDocument.rowCount()):
+            if (
+                self.tableDocument.cellWidget(row, 1).text() == ""
+                and self.GetValueFromLayout(row, "error_message") != ""
+            ):
+                CreateInfoMessageBox(
+                    f"Aviso - Campo {self.GetValueFromLayout(row, "error_message")} está vazio!",
+                    f"Sem {self.GetValueFromLayout(row, "error_message")}!",
+                    f"Por gentileza, coloque o {self.GetValueFromLayout(row, "error_message")}.",
+                    msg_win_icon=msg_box_icon,
+                )
+                return False
+        return True
 
-    def ConfigPrintType(
+    def AddRowToTable(
         self,
-        strings_to_replace: list[str],
-        termo_filename: str = "",
-        termo_devol_filename: str = "",
-        device_text: str = "",
-        device_serial_text: str = "",
-        device_placeholder: str = "",
-        device_serial_placeholder: str = "",
-        remark_placeholder: str = "",
-        device_text_length: int = 200,
-        device_serial_text_length: int = 200,
-        device_serial_input_enabled: bool = True,
+        description: str,
+        placeholder: str,
+        text_length: int,
+        row_type: str,
     ):
         """
-        Function ConfigPrintType(strings_to_replace, termo_filename, termo_devol_filename, device_text,)
+        Function AddRowToTable(description, description, placeholder, text_length, row_type)
+        description: description of the row.
+        placeholder: placeholder text for the line edit.
+        text_length: the max text length for our line edit.
+        row_type: type of row.
 
-        strings_to_replace: the strings we are going to replace on our terms.
-        termo_filename: Our term html file name.
-        termo_devol_filename: out devolution term html file name.
-        device_text: the text to show on the device label.
-        device_serial_text: the text to show on the device serial label.
-        device_placeholder: the placeholder text to show on the device input.
-        device_serial_placeholder: the placeholder text to show on the device serial input.
-        remark_placeholder: the placeholder text to show on the remark input.
-        device_text_length: the max length of the text on the device input.
-        device_serial_text_length: the max length of the text on the device serial input.
-        device_serial_input_enabled: set if the serial input is enabled and visible.
-
-        Configures our Print layout, changes the text and gui layout
-        accordingly.
+        Adds a new row to our tablewidget based on our json layout.
         """
 
-        enable_device_input = True if device_serial_input_enabled == True else False
-        hide_device_input = False if device_serial_input_enabled == True else True
-        self.label_device_serial.setEnabled(enable_device_input)
-        self.input_device_serial.setEnabled(enable_device_input)
-        self.label_device_serial.setHidden(hide_device_input)
-        self.input_device_serial.setHidden(hide_device_input)
-        self.strings_to_replace = strings_to_replace
-        self.file_termo = termo_filename
-        self.file_termo_devol = termo_devol_filename
-        self.label_device.setText(device_text)
-        self.label_device_serial.setText(device_serial_text)
-        self.input_device.clear()
-        self.input_device.setPlaceholderText(device_placeholder)
-        self.input_device.setMaxLength(device_text_length)
-        self.input_device_serial.clear()
-        self.input_device_serial.setPlaceholderText(device_serial_placeholder)
-        self.input_device_serial.setMaxLength(device_serial_text_length)
-        self.input_device_note.setPlaceholderText(remark_placeholder)
+        index = self.tableDocument.rowCount()
+        description_font = QtGui.QFont()
+        description_font.setBold(True)
+        self.tableDocument.setRowCount(index + 1)
+        item_description = QtWidgets.QTableWidgetItem(description)
+        item_description.setFont(description_font)
+        item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
+        self.tableDocument.setItem(index, 0, item_description)
+        if row_type == "name":
+            item_input = QtWidgets.QLineEdit()
+            item_input.setPlaceholderText(placeholder)
+            item_input.setMaxLength(text_length)
+            item_input.textChanged.connect(self.SetLastName)
+            if self.last_name != "":
+                item_input.setText(self.last_name)
+            self.tableDocument.setCellWidget(index, 1, item_input)
+        elif row_type == "cpf":
+            item_input = Cpf_Input()
+            item_input.setPlaceholderText(placeholder)
+            item_input.textChanged.connect(self.SetLastCPF)
+            if self.last_cpf != "":
+                item_input.setText(self.last_cpf)
+            self.tableDocument.setCellWidget(index, 1, item_input)
+        else:
+            item_input = QtWidgets.QLineEdit()
+            item_input.setPlaceholderText(placeholder)
+            item_input.setMaxLength(text_length)
+            self.tableDocument.setCellWidget(index, 1, item_input)
+
+    def SetLastName(self, text):
+        self.last_name = text
+    
+    def SetLastCPF(self, text):
+        self.last_cpf = text
+        
+    def GetValueFromLayout(self, index: int, key: str):
+        """
+        Function GetValueFromLayout(index, key)
+        index: the index of the parent key.
+        key: the key we want the value.
+
+        we convert our dictionary items in a list, then we returns the
+        data from the dictionary based on the index of a parent key, 
+        by selecting the corresponding key.
+        """
+
+        layout_data = list(self.current_layout.items())[index][1]
+        return layout_data[key] if key in layout_data else ""
 
     def MatchPrintType(self):
         """
         Function MatchPrintType()
 
         matches our selected Print layout, changes the text and layout
-        accordingly.
+        of the table widget accordingly.
         """
 
-        match self.print_type_combobox.currentText():
-            case "Cartucho":
-                self.ConfigPrintType(
-                    ["$cartucho$", "$impressora$", "$name$", "$cpf$", "$obs$"],
-                    "termo_cartucho.html",
-                    "termo_cartucho_devol.html",
-                    "<b>Cartucho de Impressora do Funcionário (Obrigatório):</b>",
-                    "<b>Modelo de impressora do Funcionário (Obrigatório):</b>",
-                    "Digite o cartucho de impressora a ser entregue ao funcionário...",
-                    "Digite o modelo de impressora que será usado esse cartucho...",
-                    "Digite uma observação referente a esse cartucho de impressora...",
-                )
-            case "Celular":
-                self.ConfigPrintType(
-                    ["$celular$", "$imei$", "$name$", "$cpf$", "$obs$"],
-                    "termo_celular.html",
-                    "termo_celular_devol.html",
-                    "<b>Celular do Funcionário (Obrigatório):</b>",
-                    "<b>IMEI do Celular do Funcionário (Obrigatório):</b>",
-                    "Digite o Celular a ser entregue ao funcionário...",
-                    "Digite o IMEI do Celular a ser entregue ao funcionário...",
-                    "Digite uma observação referente a esse celular...",
-                    device_serial_text_length=33,
-                )
-            case "iButton":
-                self.ConfigPrintType(
-                    ["$button$", "$name$", "$cpf$", "$obs$"],
-                    "termo_ibutton.html",
-                    "termo_ibutton_devol.html",
-                    "<b>Código do iButton (Obrigatório):</b>",
-                    device_placeholder="Digite o código do iButton a ser entregue ao funcionário...",
-                    remark_placeholder="Digite uma observação referente a esse iButton...",
-                    device_text_length=12,
-                    device_serial_input_enabled=False,
-                )
-            case "Impressora":
-                self.ConfigPrintType(
-                    ["$impressora$", "$serial$", "$name$", "$cpf$", "$obs$"],
-                    "termo_impressora.html",
-                    "termo_impressora_devol.html",
-                    "<b>Impressora do Funcionário (Obrigatório):</b>",
-                    "<b>Serial da impressora do Funcionário (Obrigatório):</b>",
-                    "Digite a impressora a ser entregue ao funcionário...",
-                    "Digite o Serial da impressora a ser entregue ao funcionário...",
-                    "Digite uma observação referente a essa impressora...",
-                    device_serial_text_length=10,
-                )
-            case "Inversor":
-                self.ConfigPrintType(
-                    ["$inversor$", "$name$", "$cpf$", "$obs$"],
-                    "termo_inversor.html",
-                    "termo_inversor_devol.html",
-                    "<b>Marca/Modelo do inversor (Obrigatório):</b>",
-                    device_placeholder="Digite o inversor a ser entregue ao funcionário...",
-                    remark_placeholder="Digite uma observação referente a esse inversor...",
-                    device_serial_input_enabled=False,
-                )
-            case "Notebook":
-                self.ConfigPrintType(
-                    ["$notebook$", "$serial$", "$name$", "$cpf$", "$obs$"],
-                    "termo_notebook.html",
-                    "termo_notebook_devol.html",
-                    "<b>Notebook do Funcionário (Obrigatório):</b>",
-                    "<b>Serial do Notebook do Funcionário (Obrigatório):</b>",
-                    "Digite o Notebook a ser entregue ao funcionário...",
-                    "Digite o Serial do Notebook a ser entregue ao funcionário...",
-                    "Digite uma observação referente a esse Notebook...",
-                )
-            case _:
-                print("opção não implementada.")
+        self.tableDocument.setRowCount(0)
 
-    def OutputPath(self) -> str:
+        if self.print_type_combobox.currentText() != None:
+            self.current_layout = self.layout_dict[
+                self.print_type_combobox.currentText()
+            ]
+            for key in self.current_layout.keys():
+                if key == "Config":
+                    self.file_termo = self.current_layout["Config"]["termo"]
+                    self.file_termo_devol = self.current_layout["Config"]["termo_devol"]
+                else:
+                    self.AddRowToTable(
+                        self.current_layout[key]["description"],
+                        self.current_layout[key]["placeholder"],
+                        (
+                            self.current_layout[key]["maxTextLength"]
+                            if "maxTextLength" in self.current_layout[key]
+                            else 500
+                        ),
+                        self.current_layout[key]["type"],
+                    )
+
+    def SetOutputPath(self) -> str:
+        """
+        Function SetOutputPath()
+
+        Sets the output path for our PDF files, by getting the
+        name of the employee in our table and the current type.
+        """
+
+        print_type = self.print_type_combobox.currentText()
+
+        for row in range(self.tableDocument.rowCount()):
+            if self.GetValueFromLayout(row, "type") == "name":
+                name = self.tableDocument.cellWidget(row, 1).text()
+
         if not self.devolucao.isChecked():
-            output: str = (
-                f"./Termos/Termo de Entrega de {self.print_type_combobox.currentText()} - "
-                + self.input_employee_name.text()
-                + ".pdf"
+            self.output_path: str = (
+                f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
             )
         else:
-            output: str = (
-                f"./Termos/Termo de Devolução de {self.print_type_combobox.currentText()} - "
-                + self.input_employee_name.text()
-                + ".pdf"
+            self.output_path: str = (
+                f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
             )
-
-        return output
 
     def ReadHtmlFiles(self) -> dict[str, str]:
         """
         Function ReadHtmlFiles()
 
-        this read our terms html files and replaces the placeholder
-        strings with the strings in our self.strings_to_replace list,
-        returning a dictionary containing all the html data.
+        this function read our terms html files, returning a dictionary
+        containing all the html data.
         """
 
         file_to_read = (
@@ -513,31 +397,59 @@ class Gen_Document(QtWidgets.QWidget):
             open(f"./Templates/{file_to_read}", "r", encoding="utf-8") as termo_file,
             open("./Templates/footer.html", "r", encoding="utf-8") as footer_file,
         ):
-            header_file_data: str = header_file.read()
-            termo_data: str = termo_file.read()
-            footer_file_data: str = footer_file.read()
 
-        obsTermo: str = self.input_device_note.text()
+            html_file = {
+                "header_html": header_file.read(),
+                "termo_html": termo_file.read(),
+                "footer_html": footer_file.read(),
+            }
 
-        if obsTermo != "":
-            obsTermo = "<b>Observação:</b> " + obsTermo
+        return html_file
 
-        new_strings: list[str] = []
+    def GetDataFromInputs(self):
+        """
+        Function GetDataFromInputs()
 
-        new_strings.append(self.input_device.text())
-        if not self.print_type_combobox.currentText() in self.types_to_remove_input:
-            new_strings.append(self.input_device_serial.text())
-        new_strings.append(self.input_employee_name.text())
-        new_strings.append(self.input_employee_cpf.text())
-        new_strings.append(obsTermo)
+        Gets the data from every input and adds to our string
+        replace dictionary.
+        """
 
-        for old_string, new_string in zip(self.strings_to_replace, new_strings):
+        for row in range(self.tableDocument.rowCount()):
+            str_to_replace = self.GetValueFromLayout(row, "replace")
+
+            current_text = self.tableDocument.cellWidget(row, 1).text()
+
+            if current_text != "":
+                if self.GetValueFromLayout(row, "prefix") != "":
+                    prefix = self.GetValueFromLayout(row, "prefix")
+                    current_text = prefix + current_text
+
+                if self.GetValueFromLayout(row, "suffix") != "":
+                    suffix = self.GetValueFromLayout(row, "suffix")
+                    current_text = current_text + suffix
+
+            self.strings_to_replace[str_to_replace] = current_text
+
+    def ReturnCleanHTML(self):
+        """
+        Function ReturnCleanHTML()
+
+        this function changes all the variables in our html with the correct data,
+        returning a dictionary containing all cleaned html data.
+        """
+
+        self.GetDataFromInputs()
+
+        html_file = self.ReadHtmlFiles()
+
+        header_file_data: str = html_file["header_html"]
+        termo_data: str = html_file["termo_html"]
+        footer_file_data: str = html_file["footer_html"]           
+
+        for old_string, new_string in self.strings_to_replace.items():
+            header_file_data = header_file_data.replace(old_string, new_string)
             termo_data = termo_data.replace(old_string, new_string)
-
-        for variable, data in self.empresa_dados.items():
-            termo_data = termo_data.replace(variable, data)
-            header_file_data = header_file_data.replace(variable, data)
-            footer_file_data = footer_file_data.replace(variable, data)
+            footer_file_data = footer_file_data.replace(old_string, new_string)
 
         if not self.data_manual.isChecked():
             data_atual: str = str(
@@ -550,23 +462,21 @@ class Gen_Document(QtWidgets.QWidget):
                 "$data$", self.date_picker.text()
             )
 
-        changed_html_file: dict = {
+        cleaned_html_file: dict = {
             "header_html": header_file_data,
             "termo_html": termo_data,
             "footer_html": footer_file_data,
         }
 
-        return changed_html_file
+        return cleaned_html_file
 
     def GeneratePDF(
         self,
-        output: str,
         pdf_printer: QtPrintSupport.QPrinter,
         pdf_painter: QtGui.QPainter,
     ):
         """
-        Function GeneratePDF(output, pdf_printer, painter)
-        output: output path for the PDF file.
+        Function GeneratePDF(pdf_printer, painter)
         pdf_printer: the printer responsible to generate the PDF file.
         pdf_painter: the painter responsible to paint out HTML to the PDF file.
 
@@ -577,11 +487,11 @@ class Gen_Document(QtWidgets.QWidget):
         to start painting.
         """
 
-        html_data: dict[str, str] = self.ReadHtmlFiles()
+        html_data: dict = self.ReturnCleanHTML()
 
         pdf_printer.setOutputFormat(pdf_printer.OutputFormat.PdfFormat)
         pdf_printer.setResolution(600)
-        pdf_printer.setOutputFileName(output)
+        pdf_printer.setOutputFileName(self.output_path)
         pdf_Doc = QtGui.QTextDocument()
         pdf_Doc_PaintCtx = pdf_Doc.documentLayout().PaintContext()
         pdf_Doc.setTextWidth(530)
@@ -598,12 +508,9 @@ class Gen_Document(QtWidgets.QWidget):
         pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
         pdf_painter.end()
 
-    def PrintDocument(
-        self, input_pdf: str, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter
-    ):
+    def PrintDocument(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
         """
-        Function PrintDocument(input_pdf, printer, painter)
-        input_pdf: the path of our PDF file to send to a native printer.
+        Function PrintDocument(printer, painter)
         printer: the printer responsible to send to our native printer.
         painter: the painter responsible to paint out the PDF file to our native printer.
 
@@ -624,7 +531,7 @@ class Gen_Document(QtWidgets.QWidget):
             """
 
             pdf_file = QtPdf.QPdfDocument()
-            pdf_file.load(input_pdf)
+            pdf_file.load(self.output_path)
             size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
             image_from_pdf = pdf_file.render(0, size)
             painter.begin(printer)
@@ -649,7 +556,14 @@ class Gen_Document(QtWidgets.QWidget):
                 PaintingDocument()
 
     def GenerateDocument(self):
-        if not self.CheckInputs():
+        """
+        Function GenerateDocument()
+
+        Responsible to start the PDF creation and sending to a
+        printer (optional).
+        """
+
+        if not self.CheckEmptyInputs():
             return
 
         printer = QtPrintSupport.QPrinter(
@@ -661,9 +575,9 @@ class Gen_Document(QtWidgets.QWidget):
 
         painter = QtGui.QPainter()
 
-        Output: str = self.OutputPath()
+        self.SetOutputPath()
 
-        self.GeneratePDF(Output, printer, painter)
+        self.GeneratePDF(printer, painter)
 
         if not self.desativar_impressao.isChecked():
-            self.PrintDocument(Output, printer, painter)
+            self.PrintDocument(printer, painter)

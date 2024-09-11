@@ -2,7 +2,7 @@
 
 Esse software tem a função de gerar termos em PDF para empresas usando HTML e CSS, através do PySide6 (QT).
 
-<b style="color: red;">Atenção:</b> Esse projeto que criei é com o intuito de estudar programação através da linguagem Python e não deve ser usado em produção, devido a possíveis falhas de seguranças ou bugs.
+<b style="color: red;">Atenção:</b> Esse projeto que criei é com o intuito de estudar programação através da linguagem Python e me auxiliar com essa parte de termos onde estava trabalhando, não deve ser usado em produção, devido a possíveis falhas de seguranças ou bugs.
 
 ## Usando o Gerador de Termos
 
@@ -20,7 +20,56 @@ Após preencher e marcar as opções desejadas, é só clicar em "Gerar Document
 
 ## Extendendo
 
-<b style="color: purple;">TODO:</b> em desenvolvimento.
+Layouts de impressão são criados através do arquivo `layouts.json` e os dados da empresa ficam no arquivo `company.json`.
+
+Exemplo - `layouts.json`:
+
+```json
+{
+    "Celular": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"celular": {
+			"description": "Celular do Funcionário (Obrigatório):",
+			"placeholder": "Digite o Celular a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Celular do Funcionário",
+			"replace": "$celular$"
+		},
+		"imei": {
+			"description": "IMEI do Celular do Funcionário (Obrigatório):",
+			"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
+			"replace": "$imei$",
+			"type": "normal",
+			"error_message": "IMEI do Celular do Funcionário",
+			"maxTextLength": 33
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a esse celular...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_celular.html",
+            "termo_devol": "termo_celular_devol.html"
+		}
+    }
+}
+```
 
 ## Build / Deploy
 

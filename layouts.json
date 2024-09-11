@@ -1,0 +1,238 @@
+{
+    "Cartucho": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"cartucho": {
+			"description": "Cartucho de Impressora do Funcionário (Obrigatório):",
+			"placeholder": "Digite o cartucho de impressora a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Cartucho de Impressora do Funcionário",
+			"replace": "$cartucho$"
+		},
+		"impressora": {
+			"description": "Modelo de impressora do Funcionário (Obrigatório):",
+			"placeholder": "Digite o modelo de impressora que será usado esse cartucho...",
+			"type": "normal",
+			"error_message": "Modelo de impressora do Funcionário",
+			"replace": "$impressora$"
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a esse cartucho de impressora...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_cartucho.html",
+            "termo_devol": "termo_cartucho_devol.html"
+		}
+    },
+    "Celular": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"celular": {
+			"description": "Celular do Funcionário (Obrigatório):",
+			"placeholder": "Digite o Celular a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Celular do Funcionário",
+			"replace": "$celular$"
+		},
+		"imei": {
+			"description": "IMEI do Celular do Funcionário (Obrigatório):",
+			"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
+			"replace": "$imei$",
+			"type": "normal",
+			"error_message": "IMEI do Celular do Funcionário",
+			"maxTextLength": 33
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a esse celular...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_celular.html",
+            "termo_devol": "termo_celular_devol.html"
+		}
+    },
+	"iButton": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"ibutton": {
+			"description": "Código do iButton (Obrigatório):",
+			"placeholder": "Digite o código do iButton a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Código do iButton do Funcionário",
+			"replace": "$button$",
+			"maxTextLength": 12
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a esse iButton...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_ibutton.html",
+            "termo_devol": "termo_ibutton_devol.html"
+		}
+    },
+	"Impressora": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"impressora": {
+			"description": "Impressora do Funcionário (Obrigatório):",
+			"placeholder": "Digite a impressora a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Impressora do Funcionário",
+			"replace": "$impressora$"
+		},
+		"serial": {
+			"description": "Serial da impressora do Funcionário (Obrigatório):",
+			"placeholder": "Digite o Serial da impressora a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Serial da impressora do Funcionário",
+			"replace": "$serial$",
+			"maxTextLength": 10
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a essa impressora...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_impressora.html",
+            "termo_devol": "termo_impressora_devol.html"
+		}
+    },
+	"Inversor": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"inversor": {
+			"description": "Marca/Modelo do inversor (Obrigatório):",
+			"placeholder": "Digite o inversor a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Marca/Modelo do inversor do Funcionário",
+			"replace": "$inversor$",
+			"maxTextLength": 12
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a esse inversor...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_inversor.html",
+            "termo_devol": "termo_inversor_devol.html"
+		}
+    },
+	"Notebook": {
+        "nome": {
+            "description": "Nome do Funcionário (Obrigatório):",
+			"placeholder": "Digite o nome do funcionário...",
+			"type": "name",
+			"error_message": "Nome do funcionário",
+            "replace": "$name$"
+        },
+        "cpf": {
+			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"type": "cpf",
+			"error_message": "CPF do funcionário",
+			"replace": "$cpf$"
+		},
+		"notebook": {
+			"description": "Notebook do Funcionário (Obrigatório):",
+			"placeholder": "Digite o Notebook a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Notebook do Funcionário",
+			"replace": "$notebook$"
+		},
+		"serial": {
+			"description": "Serial do Notebook do Funcionário (Obrigatório):",
+			"placeholder": "Digite o Serial do Notebook a ser entregue ao funcionário...",
+			"type": "normal",
+			"error_message": "Serial do Notebook do Funcionário",
+			"replace": "$serial$"
+		},
+		"remark": {
+			"description": "Observação (Opcional):",
+			"placeholder": "Digite uma observação referente a esse Notebook...",
+			"prefix": "<b>Observação:</b> ",
+			"type": "remark",
+			"replace": "$obs$"
+		},
+		"Config": {
+            "termo": "termo_impressora.html",
+            "termo_devol": "termo_impressora_devol.html"
+		}
+    }	
+}
