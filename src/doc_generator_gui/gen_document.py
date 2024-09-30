@@ -231,10 +231,11 @@ class Gen_Document(QtWidgets.QWidget):
         self.setLayout(widget_grid_layout)
 
     def CheckDataManual(self):
+        self.date_picker.setEnabled(False)
+        
         if self.data_manual.isChecked():
             self.date_picker.setEnabled(True)
-        else:
-            self.date_picker.setEnabled(False)
+            
 
     def CheckEmptyInputs(self) -> bool:
         """
@@ -285,27 +286,26 @@ class Gen_Document(QtWidgets.QWidget):
         item_description.setFont(description_font)
         item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         self.tableDocument.setItem(index, 0, item_description)
-        match row_type:
-            case "name":
-                item_input = QtWidgets.QLineEdit()
-                item_input.setPlaceholderText(placeholder)
-                item_input.setMaxLength(text_length)
-                item_input.textChanged.connect(self.SetLastName)
-                if self.last_name != "":
-                    item_input.setText(self.last_name)
-                self.tableDocument.setCellWidget(index, 1, item_input)
-            case "cpf":
-                item_input = Cpf_Input()
-                item_input.setPlaceholderText(placeholder)
-                item_input.textChanged.connect(self.SetLastCPF)
-                if self.last_cpf != "":
-                    item_input.setText(self.last_cpf)
-                self.tableDocument.setCellWidget(index, 1, item_input)
-            case _: # default input
-                item_input = QtWidgets.QLineEdit()
-                item_input.setPlaceholderText(placeholder)
-                item_input.setMaxLength(text_length)
-                self.tableDocument.setCellWidget(index, 1, item_input)
+        if row_type == "name":
+            item_input = QtWidgets.QLineEdit()
+            item_input.setPlaceholderText(placeholder)
+            item_input.setMaxLength(text_length)
+            item_input.textChanged.connect(self.SetLastName)
+            if self.last_name != "":
+                item_input.setText(self.last_name)
+            self.tableDocument.setCellWidget(index, 1, item_input)
+        if row_type == "cpf":
+            item_input = Cpf_Input()
+            item_input.setPlaceholderText(placeholder)
+            item_input.textChanged.connect(self.SetLastCPF)
+            if self.last_cpf != "":
+                item_input.setText(self.last_cpf)
+            self.tableDocument.setCellWidget(index, 1, item_input)
+        if row_type not in ["name", "cpf"]: 
+            item_input = QtWidgets.QLineEdit()
+            item_input.setPlaceholderText(placeholder)
+            item_input.setMaxLength(text_length)
+            self.tableDocument.setCellWidget(index, 1, item_input)
 
     def SetLastName(self, text):
         self.last_name = text
@@ -371,13 +371,13 @@ class Gen_Document(QtWidgets.QWidget):
             if self.GetValueFromLayout(row, "type") == "name":
                 name = self.tableDocument.cellWidget(row, 1).text()
 
+        self.output_path = (
+            f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
+        )
+
         if not self.devolucao.isChecked():
             self.output_path = (
                 f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
-            )
-        else:
-            self.output_path = (
-                f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
             )
 
     def ReadHtmlFiles(self) -> dict[str, str]:
