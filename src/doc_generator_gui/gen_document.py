@@ -59,7 +59,6 @@ class Gen_Document(QtWidgets.QWidget):
         self.MatchPrintType()
 
     def ReadConfigFiles(self):
-
         with (
             open("company.json", "r", encoding="utf-8") as company_file,
             open("layouts.json", "r", encoding="utf-8") as layout_file,
@@ -286,26 +285,27 @@ class Gen_Document(QtWidgets.QWidget):
         item_description.setFont(description_font)
         item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         self.tableDocument.setItem(index, 0, item_description)
-        if row_type == "name":
-            item_input = QtWidgets.QLineEdit()
-            item_input.setPlaceholderText(placeholder)
-            item_input.setMaxLength(text_length)
-            item_input.textChanged.connect(self.SetLastName)
-            if self.last_name != "":
-                item_input.setText(self.last_name)
-            self.tableDocument.setCellWidget(index, 1, item_input)
-        elif row_type == "cpf":
-            item_input = Cpf_Input()
-            item_input.setPlaceholderText(placeholder)
-            item_input.textChanged.connect(self.SetLastCPF)
-            if self.last_cpf != "":
-                item_input.setText(self.last_cpf)
-            self.tableDocument.setCellWidget(index, 1, item_input)
-        else:
-            item_input = QtWidgets.QLineEdit()
-            item_input.setPlaceholderText(placeholder)
-            item_input.setMaxLength(text_length)
-            self.tableDocument.setCellWidget(index, 1, item_input)
+        match row_type:
+            case "name":
+                item_input = QtWidgets.QLineEdit()
+                item_input.setPlaceholderText(placeholder)
+                item_input.setMaxLength(text_length)
+                item_input.textChanged.connect(self.SetLastName)
+                if self.last_name != "":
+                    item_input.setText(self.last_name)
+                self.tableDocument.setCellWidget(index, 1, item_input)
+            case "cpf":
+                item_input = Cpf_Input()
+                item_input.setPlaceholderText(placeholder)
+                item_input.textChanged.connect(self.SetLastCPF)
+                if self.last_cpf != "":
+                    item_input.setText(self.last_cpf)
+                self.tableDocument.setCellWidget(index, 1, item_input)
+            case _: # default input
+                item_input = QtWidgets.QLineEdit()
+                item_input.setPlaceholderText(placeholder)
+                item_input.setMaxLength(text_length)
+                self.tableDocument.setCellWidget(index, 1, item_input)
 
     def SetLastName(self, text):
         self.last_name = text
@@ -372,11 +372,11 @@ class Gen_Document(QtWidgets.QWidget):
                 name = self.tableDocument.cellWidget(row, 1).text()
 
         if not self.devolucao.isChecked():
-            self.output_path: str = (
+            self.output_path = (
                 f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
             )
         else:
-            self.output_path: str = (
+            self.output_path = (
                 f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
             )
 
