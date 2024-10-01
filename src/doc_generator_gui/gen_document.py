@@ -341,21 +341,21 @@ class Gen_Document(QtWidgets.QWidget):
             self.current_layout = self.layout_dict[
                 self.print_type_combobox.currentText()
             ]
+            self.file_termo = self.current_layout["Config"]["termo"]
+            self.file_termo_devol = self.current_layout["Config"]["termo_devol"]
             for key in self.current_layout.keys():
                 if key == "Config":
-                    self.file_termo = self.current_layout["Config"]["termo"]
-                    self.file_termo_devol = self.current_layout["Config"]["termo_devol"]
-                else:
-                    self.AddRowToTable(
-                        self.current_layout[key]["description"],
-                        self.current_layout[key]["placeholder"],
-                        (
-                            self.current_layout[key]["maxTextLength"]
-                            if "maxTextLength" in self.current_layout[key]
-                            else 500
-                        ),
-                        self.current_layout[key]["type"],
-                    )
+                    continue
+                self.AddRowToTable(
+                    self.current_layout[key]["description"],
+                    self.current_layout[key]["placeholder"],
+                    (
+                        self.current_layout[key]["maxTextLength"]
+                        if "maxTextLength" in self.current_layout[key]
+                        else 500
+                    ),
+                    self.current_layout[key]["type"],
+                )
 
     def SetOutputPath(self) -> str:
         """
