@@ -23,7 +23,8 @@ def Build_Nuitka():
     os.mkdir("./main.dist/Termos")
     shutil.copytree("./translations/", "./main.dist/PySide6/translations")
     shutil.copytree("./Templates/", "./main.dist/Templates")
-    shutil.copy("empresa.xml", "./main.dist/")
+    shutil.copy("company.json", "./main.dist/")
+    shutil.copy("layouts.json", "./main.dist/")
     shutil.copy("gen_document.ico", "./main.dist/")
 
 
@@ -41,5 +42,6 @@ def Build_PyInstaller():
 
     os.mkdir("./dist/main/Termos")
     shutil.copytree("./Templates/", "./dist/main/Templates")
-    shutil.copy("empresa.xml", "./dist/main/")
+    shutil.copy("company.json", "./dist/main/")
+    shutil.copy("layouts.json", "./dist/main/")
     shutil.copy("gen_document.ico", "./dist/main/")
