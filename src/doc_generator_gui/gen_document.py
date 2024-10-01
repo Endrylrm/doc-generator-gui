@@ -468,13 +468,13 @@ class Gen_Document(QtWidgets.QWidget):
 
     def GeneratePDF(
         self,
-        pdf_printer: QtPrintSupport.QPrinter,
-        pdf_painter: QtGui.QPainter,
+        printer: QtPrintSupport.QPrinter,
+        painter: QtGui.QPainter,
     ):
         """
-        Function GeneratePDF(pdf_printer, painter)
-        pdf_printer: the printer responsible to generate the PDF file.
-        pdf_painter: the painter responsible to paint out HTML to the PDF file.
+        Function GeneratePDF(printer, painter)
+        printer: the printer responsible to generate the PDF file.
+        painter: the painter responsible to paint out HTML to the PDF file.
 
         we use a QPrinter, QPainter and QTextdocument to generate a
         PDF file of our HTML, we scale our painter and begin painting
@@ -485,24 +485,24 @@ class Gen_Document(QtWidgets.QWidget):
 
         html_data: dict = self.ReturnCleanHTML()
 
-        pdf_printer.setOutputFormat(pdf_printer.OutputFormat.PdfFormat)
-        pdf_printer.setResolution(600)
-        pdf_printer.setOutputFileName(self.output_path)
+        printer.setOutputFormat(printer.OutputFormat.PdfFormat)
+        printer.setResolution(600)
+        printer.setOutputFileName(self.output_path)
         pdf_Doc = QtGui.QTextDocument()
         pdf_Doc_PaintCtx = pdf_Doc.documentLayout().PaintContext()
         pdf_Doc.setTextWidth(530)
-        pdf_painter.begin(pdf_printer)
-        pdf_painter.scale(8.5, 8.5)
-        pdf_painter.translate(0, 5)
+        painter.begin(printer)
+        painter.scale(8.5, 8.5)
+        painter.translate(0, 5)
         pdf_Doc.setHtml(html_data["header_html"])
-        pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
-        pdf_painter.translate(30, 72)
+        pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
+        painter.translate(30, 72)
         pdf_Doc.setHtml(html_data["termo_html"])
-        pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
-        pdf_painter.translate(-30, 665)
+        pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
+        painter.translate(-30, 665)
         pdf_Doc.setHtml(html_data["footer_html"])
-        pdf_Doc.documentLayout().draw(pdf_painter, pdf_Doc_PaintCtx)
-        pdf_painter.end()
+        pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
+        painter.end()
 
     def PrintDocument(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
         """
