@@ -440,32 +440,28 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.GetDataFromInputs()
 
-        html_file = self.ReadHtmlFiles()
-
-        header_file_data: str = html_file["header_html"]
-        termo_data: str = html_file["termo_html"]
-        footer_file_data: str = html_file["footer_html"]           
+        html_file = self.ReadHtmlFiles()        
 
         for old_string, new_string in self.strings_to_replace.items():
-            header_file_data = header_file_data.replace(old_string, new_string)
-            termo_data = termo_data.replace(old_string, new_string)
-            footer_file_data = footer_file_data.replace(old_string, new_string)
+            html_file["header_html"] = html_file["header_html"].replace(old_string, new_string)
+            html_file["termo_html"] = html_file["termo_html"].replace(old_string, new_string)
+            html_file["footer_html"] = html_file["footer_html"].replace(old_string, new_string)
 
         if not self.data_manual.isChecked():
             data_atual: str = str(
                 datetime.datetime.now().strftime("%A, %d de %B de %Y")
             )
 
-            footer_file_data = footer_file_data.replace("$data$", str(data_atual))
+            html_file["footer_html"] = html_file["footer_html"].replace("$data$", str(data_atual))
         else:
-            footer_file_data = footer_file_data.replace(
+            html_file["footer_html"] = html_file["footer_html"].replace(
                 "$data$", self.date_picker.text()
             )
 
         cleaned_html_file: dict = {
-            "header_html": header_file_data,
-            "termo_html": termo_data,
-            "footer_html": footer_file_data,
+            "header_html": html_file["header_html"],
+            "termo_html": html_file["termo_html"],
+            "footer_html": html_file["footer_html"],
         }
 
         return cleaned_html_file
