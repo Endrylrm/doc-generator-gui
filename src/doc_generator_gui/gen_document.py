@@ -420,13 +420,9 @@ class Gen_Document(QtWidgets.QWidget):
             current_text = self.tableDocument.cellWidget(row, 1).text()
 
             if current_text != "":
-                if self.GetValueFromLayout(row, "prefix") != "":
-                    prefix = self.GetValueFromLayout(row, "prefix")
-                    current_text = prefix + current_text
-
-                if self.GetValueFromLayout(row, "suffix") != "":
-                    suffix = self.GetValueFromLayout(row, "suffix")
-                    current_text = current_text + suffix
+                prefix = self.GetValueFromLayout(row, "prefix")
+                suffix = self.GetValueFromLayout(row, "suffix")
+                current_text = prefix + current_text + suffix
 
             self.strings_to_replace[str_to_replace] = current_text
 
