@@ -231,10 +231,11 @@ class Gen_Document(QtWidgets.QWidget):
         self.setLayout(widget_grid_layout)
 
     def CheckManualDate(self):
-        self.date_picker.setEnabled(False)
-        
         if self.manual_date.isChecked():
             self.date_picker.setEnabled(True)
+
+        if not self.manual_date.isChecked():
+            self.date_picker.setEnabled(False)
             
 
     def CheckEmptyInputs(self) -> bool:
@@ -286,6 +287,7 @@ class Gen_Document(QtWidgets.QWidget):
         item_description.setFont(description_font)
         item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         self.table_document.setItem(index, 0, item_description)
+        
         if row_type == "name":
             item_input = QtWidgets.QLineEdit()
             item_input.setPlaceholderText(placeholder)
@@ -294,6 +296,7 @@ class Gen_Document(QtWidgets.QWidget):
             if self.last_name != "":
                 item_input.setText(self.last_name)
             self.table_document.setCellWidget(index, 1, item_input)
+
         if row_type == "cpf":
             item_input = Cpf_Input()
             item_input.setPlaceholderText(placeholder)
@@ -301,6 +304,7 @@ class Gen_Document(QtWidgets.QWidget):
             if self.last_cpf != "":
                 item_input.setText(self.last_cpf)
             self.table_document.setCellWidget(index, 1, item_input)
+
         if row_type not in ["name", "cpf"]: 
             item_input = QtWidgets.QLineEdit()
             item_input.setPlaceholderText(placeholder)
@@ -371,10 +375,10 @@ class Gen_Document(QtWidgets.QWidget):
             if self.GetValueFromLayout(row, "type") == "name":
                 name = self.table_document.cellWidget(row, 1).text()
 
-        self.output_path = (
-            f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
-        )
-
+        if self.devolution.isChecked():
+            self.output_path = (
+                f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
+            )
         if not self.devolution.isChecked():
             self.output_path = (
                 f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
