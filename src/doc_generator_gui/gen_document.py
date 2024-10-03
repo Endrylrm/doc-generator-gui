@@ -436,23 +436,23 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.GetDataFromInputs()
 
-        html_file = self.ReadHtmlFiles()        
+        html_file = self.ReadHtmlFiles()
 
         for old_string, new_string in self.strings_to_replace.items():
             html_file["header_html"] = html_file["header_html"].replace(old_string, new_string)
             html_file["termo_html"] = html_file["termo_html"].replace(old_string, new_string)
             html_file["footer_html"] = html_file["footer_html"].replace(old_string, new_string)
 
+        if self.data_manual.isChecked():
+            html_file["footer_html"] = html_file["footer_html"].replace(
+                "$data$", self.date_picker.text()
+            )
+
         if not self.data_manual.isChecked():
             data_atual: str = str(
                 datetime.datetime.now().strftime("%A, %d de %B de %Y")
             )
-
             html_file["footer_html"] = html_file["footer_html"].replace("$data$", str(data_atual))
-        else:
-            html_file["footer_html"] = html_file["footer_html"].replace(
-                "$data$", self.date_picker.text()
-            )
 
         cleaned_html_file: dict = {
             "header_html": html_file["header_html"],
@@ -532,6 +532,11 @@ class Gen_Document(QtWidgets.QWidget):
             painter.drawImage(0, 0, image_from_pdf)
             painter.end()
 
+        if self.desativar_preview_impressao.isChecked():
+            print_dialog = QtPrintSupport.QPrintDialog(printer)
+            if print_dialog.exec() == print_dialog.DialogCode.Accepted:
+                PaintingDocument()
+
         if not self.desativar_preview_impressao.isChecked():
             print_preview_dialog = QtPrintSupport.QPrintPreviewDialog(printer)
             print_preview_dialog.setWindowTitle(
@@ -541,11 +546,6 @@ class Gen_Document(QtWidgets.QWidget):
             print_preview_dialog.setWindowIcon(print_preview_dialog_icon)
             print_preview_dialog.paintRequested.connect(PaintingDocument)
             print_preview_dialog.exec()
-        else:
-            print_dialog = QtPrintSupport.QPrintDialog(printer)
-
-            if print_dialog.exec() == print_dialog.DialogCode.Accepted:
-                PaintingDocument()
 
     def GenerateDocument(self):
         """
