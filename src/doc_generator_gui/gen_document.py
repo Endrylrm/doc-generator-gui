@@ -237,7 +237,6 @@ class Gen_Document(QtWidgets.QWidget):
         if not self.manual_date.isChecked():
             self.date_picker.setEnabled(False)
             
-
     def CheckEmptyInputs(self) -> bool:
         """
         Function CheckEmptyInputs()
