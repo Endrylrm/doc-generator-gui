@@ -116,47 +116,47 @@ class Gen_Document(QtWidgets.QWidget):
             "Descrição",
             "Preencher",
         ]
-        self.tableDocument = QtWidgets.QTableWidget()
-        self.tableDocument.setRowCount(0)
-        self.tableDocument.setColumnCount(2)
-        self.tableDocument.setHorizontalHeaderLabels(table_headers)
-        self.tableDocument.horizontalHeader().setSectionResizeMode(
+        self.table_document = QtWidgets.QTableWidget()
+        self.table_document.setRowCount(0)
+        self.table_document.setColumnCount(2)
+        self.table_document.setHorizontalHeaderLabels(table_headers)
+        self.table_document.horizontalHeader().setSectionResizeMode(
             0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
-        self.tableDocument.horizontalHeader().setSectionResizeMode(
+        self.table_document.horizontalHeader().setSectionResizeMode(
             1, QtWidgets.QHeaderView.ResizeMode.Stretch
         )
-        self.tableDocument.setSelectionBehavior(
-            self.tableDocument.selectionBehavior().SelectItems
+        self.table_document.setSelectionBehavior(
+            self.table_document.selectionBehavior().SelectItems
         )
-        self.tableDocument.setSelectionMode(
-            self.tableDocument.selectionMode().SingleSelection
+        self.table_document.setSelectionMode(
+            self.table_document.selectionMode().SingleSelection
         )
 
-        self.tableDocument.verticalHeader().setVisible(False)
+        self.table_document.verticalHeader().setVisible(False)
         # CheckBox - Ativar Data Manual
-        self.data_manual = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
-        self.data_manual.setToolTip(
+        self.manual_date = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
+        self.manual_date.setToolTip(
             "<b>Ativar Data Manual:</b>\nDesativa a data automâtica e permite a seleção de datas."
         )
-        self.data_manual.stateChanged.connect(self.CheckDataManual)
+        self.manual_date.stateChanged.connect(self.CheckManualDate)
         # CheckBox - Devolução
-        self.devolucao = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
-        self.devolucao.setToolTip(
+        self.devolution = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
+        self.devolution.setToolTip(
             "<b>Devolução de Dispositivo.:</b>\nAtive para gerar os termos de devolução."
         )
         # CheckBox - Desativar Visualização de Impressão
-        self.desativar_preview_impressao = QtWidgets.QCheckBox(
+        self.disable_printer_preview = QtWidgets.QCheckBox(
             self, text="Desativar visualização de impressão."
         )
-        self.desativar_preview_impressao.setToolTip(
+        self.disable_printer_preview.setToolTip(
             "<b>Desativar visualização de impressão.:</b>\nDesativa a visualização de impressão."
         )
         # CheckBox - Desativar Impressão
-        self.desativar_impressao = QtWidgets.QCheckBox(
+        self.disable_printer = QtWidgets.QCheckBox(
             self, text="Desativar impressão automática."
         )
-        self.desativar_impressao.setToolTip(
+        self.disable_printer.setToolTip(
             "<b>Desativar impressão automática.:</b>\nDesativa a impressão automática, gerando apenas o PDF."
         )
         # DateTimeEdit - Data Manual
@@ -206,19 +206,19 @@ class Gen_Document(QtWidgets.QWidget):
         # separator - Tipo de impressão ComboBox
         widget_grid_layout.addWidget(self.separator_combobox, 4, 0, 1, 2)
         # Table - Data Layouts
-        widget_grid_layout.addWidget(self.tableDocument, 5, 0, 6, 2)
+        widget_grid_layout.addWidget(self.table_document, 5, 0, 6, 2)
         # separator - CheckBox
         widget_grid_layout.addWidget(self.separator_checkbox, 11, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widget_grid_layout.addWidget(self.data_manual, 12, 0, 1, 1)
+        widget_grid_layout.addWidget(self.manual_date, 12, 0, 1, 1)
         # DateTimeEdit - Data Manual
         widget_grid_layout.addWidget(self.date_picker, 12, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widget_grid_layout.addWidget(self.devolucao, 13, 0, 1, 1)
+        widget_grid_layout.addWidget(self.devolution, 13, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widget_grid_layout.addWidget(self.desativar_preview_impressao, 13, 1, 1, 1)
+        widget_grid_layout.addWidget(self.disable_printer_preview, 13, 1, 1, 1)
         # CheckBox - Desativar Impressão
-        widget_grid_layout.addWidget(self.desativar_impressao, 14, 0, 1, 1)
+        widget_grid_layout.addWidget(self.disable_printer, 14, 0, 1, 1)
         # separator - Buttons
         widget_grid_layout.addWidget(self.separator_buttons, 16, 0, 1, 2)
         # PushButton - Gerar Documento
@@ -230,10 +230,10 @@ class Gen_Document(QtWidgets.QWidget):
         # set this widget layout to the grid layout
         self.setLayout(widget_grid_layout)
 
-    def CheckDataManual(self):
+    def CheckManualDate(self):
         self.date_picker.setEnabled(False)
         
-        if self.data_manual.isChecked():
+        if self.manual_date.isChecked():
             self.date_picker.setEnabled(True)
             
 
@@ -247,9 +247,9 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         msg_box_icon = QtGui.QIcon("gen_document.ico")
-        for row in range(self.tableDocument.rowCount()):
+        for row in range(self.table_document.rowCount()):
             if (
-                self.tableDocument.cellWidget(row, 1).text() == ""
+                self.table_document.cellWidget(row, 1).text() == ""
                 and self.GetValueFromLayout(row, "error_message") != ""
             ):
                 CreateInfoMessageBox(
@@ -278,14 +278,14 @@ class Gen_Document(QtWidgets.QWidget):
         Adds a new row to our tablewidget based on our json layout.
         """
 
-        index = self.tableDocument.rowCount()
+        index = self.table_document.rowCount()
         description_font = QtGui.QFont()
         description_font.setBold(True)
-        self.tableDocument.setRowCount(index + 1)
+        self.table_document.setRowCount(index + 1)
         item_description = QtWidgets.QTableWidgetItem(description)
         item_description.setFont(description_font)
         item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
-        self.tableDocument.setItem(index, 0, item_description)
+        self.table_document.setItem(index, 0, item_description)
         if row_type == "name":
             item_input = QtWidgets.QLineEdit()
             item_input.setPlaceholderText(placeholder)
@@ -293,19 +293,19 @@ class Gen_Document(QtWidgets.QWidget):
             item_input.textChanged.connect(self.SetLastName)
             if self.last_name != "":
                 item_input.setText(self.last_name)
-            self.tableDocument.setCellWidget(index, 1, item_input)
+            self.table_document.setCellWidget(index, 1, item_input)
         if row_type == "cpf":
             item_input = Cpf_Input()
             item_input.setPlaceholderText(placeholder)
             item_input.textChanged.connect(self.SetLastCPF)
             if self.last_cpf != "":
                 item_input.setText(self.last_cpf)
-            self.tableDocument.setCellWidget(index, 1, item_input)
+            self.table_document.setCellWidget(index, 1, item_input)
         if row_type not in ["name", "cpf"]: 
             item_input = QtWidgets.QLineEdit()
             item_input.setPlaceholderText(placeholder)
             item_input.setMaxLength(text_length)
-            self.tableDocument.setCellWidget(index, 1, item_input)
+            self.table_document.setCellWidget(index, 1, item_input)
 
     def SetLastName(self, text):
         self.last_name = text
@@ -335,7 +335,7 @@ class Gen_Document(QtWidgets.QWidget):
         of the table widget accordingly.
         """
 
-        self.tableDocument.setRowCount(0)
+        self.table_document.setRowCount(0)
 
         if self.print_type_combobox.currentText() != None:
             self.current_layout = self.layout_dict[
@@ -367,15 +367,15 @@ class Gen_Document(QtWidgets.QWidget):
 
         print_type = self.print_type_combobox.currentText()
 
-        for row in range(self.tableDocument.rowCount()):
+        for row in range(self.table_document.rowCount()):
             if self.GetValueFromLayout(row, "type") == "name":
-                name = self.tableDocument.cellWidget(row, 1).text()
+                name = self.table_document.cellWidget(row, 1).text()
 
         self.output_path = (
             f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
         )
 
-        if not self.devolucao.isChecked():
+        if not self.devolution.isChecked():
             self.output_path = (
                 f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
             )
@@ -389,7 +389,7 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         file_to_read = (
-            self.file_termo if not self.devolucao.isChecked() else self.file_termo_devol
+            self.file_termo if not self.devolution.isChecked() else self.file_termo_devol
         )
 
         with (
@@ -414,10 +414,10 @@ class Gen_Document(QtWidgets.QWidget):
         replace dictionary.
         """
 
-        for row in range(self.tableDocument.rowCount()):
+        for row in range(self.table_document.rowCount()):
             str_to_replace = self.GetValueFromLayout(row, "replace")
 
-            current_text = self.tableDocument.cellWidget(row, 1).text()
+            current_text = self.table_document.cellWidget(row, 1).text()
 
             if current_text != "":
                 prefix = self.GetValueFromLayout(row, "prefix")
@@ -443,12 +443,12 @@ class Gen_Document(QtWidgets.QWidget):
             html_file["termo_html"] = html_file["termo_html"].replace(old_string, new_string)
             html_file["footer_html"] = html_file["footer_html"].replace(old_string, new_string)
 
-        if self.data_manual.isChecked():
+        if self.manual_date.isChecked():
             html_file["footer_html"] = html_file["footer_html"].replace(
                 "$data$", self.date_picker.text()
             )
 
-        if not self.data_manual.isChecked():
+        if not self.manual_date.isChecked():
             data_atual: str = str(
                 datetime.datetime.now().strftime("%A, %d de %B de %Y")
             )
@@ -532,12 +532,12 @@ class Gen_Document(QtWidgets.QWidget):
             painter.drawImage(0, 0, image_from_pdf)
             painter.end()
 
-        if self.desativar_preview_impressao.isChecked():
+        if self.disable_printer_preview.isChecked():
             print_dialog = QtPrintSupport.QPrintDialog(printer)
             if print_dialog.exec() == print_dialog.DialogCode.Accepted:
                 PaintingDocument()
 
-        if not self.desativar_preview_impressao.isChecked():
+        if not self.disable_printer_preview.isChecked():
             print_preview_dialog = QtPrintSupport.QPrintPreviewDialog(printer)
             print_preview_dialog.setWindowTitle(
                 f"Imprimir Termo de {self.print_type_combobox.currentText()}"
@@ -571,5 +571,5 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.GeneratePDF(printer, painter)
 
-        if not self.desativar_impressao.isChecked():
+        if not self.disable_printer.isChecked():
             self.PrintDocument(printer, painter)
