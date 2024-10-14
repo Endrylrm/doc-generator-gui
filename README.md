@@ -4,7 +4,7 @@ Esse software tem a função de gerar termos em PDF para empresas usando HTML e 
 
 <b style="color: red;">Atenção:</b> Esse projeto que criei é com o intuito de estudar programação através da linguagem Python e me auxiliar com essa parte de termos onde estava trabalhando, não deve ser usado em produção, devido a possíveis falhas de seguranças ou bugs.
 
-## Usando o Gerador de Termos
+## 👨‍💻 Usando o Gerador de Termos
 
 Esse pequeno sistema foi pensado na simplicidade, através da sua interface gráfica e na facilidade de adicionar novos layouts de termos.
 
@@ -18,7 +18,7 @@ Após preencher e marcar as opções desejadas, é só clicar em "Gerar Document
 
 ![Visualizador de impressão](/assets/img/print-preview.png "Visualizador de impressão")
 
-## Extendendo
+## 💻 Extendendo
 
 Layouts de impressão são criados através do arquivo `layouts.json` e os dados da empresa ficam no arquivo `company.json`.
 
@@ -71,7 +71,7 @@ Exemplo - `layouts.json`:
 }
 ```
 
-## Build / Deploy
+## 🛠️ Build / Deploy
 
 se precisa criar um executável para seus usuários, usamos o [`PyInstaller`](https://pyinstaller.org/en/stable/) ou o [`Nuitka (Recomendado)`](https://nuitka.net/).
 
