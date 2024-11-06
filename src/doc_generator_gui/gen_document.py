@@ -14,6 +14,7 @@ from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
 
 from .cpf_input import Cpf_Input
 
+
 # Key Extractor Page/Frame Widget
 class Gen_Document(QtWidgets.QWidget):
     """
@@ -37,20 +38,18 @@ class Gen_Document(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.file_termo: str = ""
-        self.file_termo_devol: str = ""
         self.output_path: str = ""
 
-        self.last_name = ""
-        self.last_cpf = ""
+        # a dictionary to remember data from our inputs
+        self.old_input_data: dict = {}
 
         self.strings_to_replace: dict = {}
 
-        self.layout_dict: dict = {}
+        self.layouts_dict: dict = {}
         self.current_layout: dict = {}
 
         self.ReadConfigFiles()
-        
+
         # first create our widgets
         self.CreateWidgets(controller)
         # then set our grid layout and config
@@ -66,7 +65,7 @@ class Gen_Document(QtWidgets.QWidget):
             company_file_data = json.loads(company_file.read())
             layouts = json.loads(layout_file.read())
 
-        self.layout_dict = layouts
+        self.layouts_dict = layouts
 
         for key in company_file_data.keys():
             replace = company_file_data[key]["replace"]
@@ -98,7 +97,7 @@ class Gen_Document(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.print_type_combobox = QtWidgets.QComboBox(self)
-        for print_type in self.layout_dict.keys():
+        for print_type in self.layouts_dict.keys():
             self.print_type_combobox.addItem(print_type)
         self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
@@ -236,7 +235,7 @@ class Gen_Document(QtWidgets.QWidget):
 
         if not self.manual_date.isChecked():
             self.date_picker.setEnabled(False)
-            
+
     def CheckEmptyInputs(self) -> bool:
         """
         Function CheckEmptyInputs()
@@ -286,36 +285,32 @@ class Gen_Document(QtWidgets.QWidget):
         item_description.setFont(description_font)
         item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         self.table_document.setItem(index, 0, item_description)
-        
-        if row_type == "name":
-            item_input = QtWidgets.QLineEdit()
-            item_input.setPlaceholderText(placeholder)
-            item_input.setMaxLength(text_length)
-            item_input.textChanged.connect(self.SetLastName)
-            if self.last_name != "":
-                item_input.setText(self.last_name)
-            self.table_document.setCellWidget(index, 1, item_input)
 
         if row_type == "cpf":
             item_input = Cpf_Input()
             item_input.setPlaceholderText(placeholder)
-            item_input.textChanged.connect(self.SetLastCPF)
-            if self.last_cpf != "":
-                item_input.setText(self.last_cpf)
+            item_input.textEdited.connect(self.SetLastCPF)
+            # FIXIT: add remembering to a json file
+            if "cpf" in self.old_input_data and self.old_input_data["cpf"] != "":
+                item_input.setText(self.old_input_data["cpf"])
             self.table_document.setCellWidget(index, 1, item_input)
-
-        if row_type not in ["name", "cpf"]: 
+        else:
             item_input = QtWidgets.QLineEdit()
             item_input.setPlaceholderText(placeholder)
             item_input.setMaxLength(text_length)
+            if row_type == "name":
+                item_input.textEdited.connect(self.SetLastName)
+                # FIXIT: add remembering to a json file
+                if "name" in self.old_input_data and self.old_input_data["name"] != "":
+                    item_input.setText(self.old_input_data["name"])
             self.table_document.setCellWidget(index, 1, item_input)
 
     def SetLastName(self, text):
-        self.last_name = text
-    
+        self.old_input_data["name"] = text
+
     def SetLastCPF(self, text):
-        self.last_cpf = text
-        
+        self.old_input_data["cpf"] = text
+
     def GetValueFromLayout(self, index: int, key: str):
         """
         Function GetValueFromLayout(index, key)
@@ -323,7 +318,7 @@ class Gen_Document(QtWidgets.QWidget):
         key: the key we want the value.
 
         we convert our dictionary items in a list, then we returns the
-        data from the dictionary based on the index of a parent key, 
+        data from the dictionary based on the index of a parent key,
         by selecting the corresponding key.
         """
 
@@ -341,11 +336,9 @@ class Gen_Document(QtWidgets.QWidget):
         self.table_document.setRowCount(0)
 
         if self.print_type_combobox.currentText() != None:
-            self.current_layout = self.layout_dict[
+            self.current_layout = self.layouts_dict[
                 self.print_type_combobox.currentText()
             ]
-            self.file_termo = self.current_layout["Config"]["termo"]
-            self.file_termo_devol = self.current_layout["Config"]["termo_devol"]
             for key in self.current_layout.keys():
                 if key == "Config":
                     continue
@@ -379,9 +372,7 @@ class Gen_Document(QtWidgets.QWidget):
                 f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
             )
         if not self.devolution.isChecked():
-            self.output_path = (
-                f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
-            )
+            self.output_path = f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
 
     def ReadHtmlFiles(self) -> dict[str, str]:
         """
@@ -392,7 +383,9 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         file_to_read = (
-            self.file_termo if not self.devolution.isChecked() else self.file_termo_devol
+            self.current_layout["Config"]["termo"]
+            if not self.devolution.isChecked()
+            else self.current_layout["Config"]["termo_devol"]
         )
 
         with (
@@ -442,9 +435,15 @@ class Gen_Document(QtWidgets.QWidget):
         html_file = self.ReadHtmlFiles()
 
         for old_string, new_string in self.strings_to_replace.items():
-            html_file["header_html"] = html_file["header_html"].replace(old_string, new_string)
-            html_file["termo_html"] = html_file["termo_html"].replace(old_string, new_string)
-            html_file["footer_html"] = html_file["footer_html"].replace(old_string, new_string)
+            html_file["header_html"] = html_file["header_html"].replace(
+                old_string, new_string
+            )
+            html_file["termo_html"] = html_file["termo_html"].replace(
+                old_string, new_string
+            )
+            html_file["footer_html"] = html_file["footer_html"].replace(
+                old_string, new_string
+            )
 
         if self.manual_date.isChecked():
             html_file["footer_html"] = html_file["footer_html"].replace(
@@ -455,15 +454,11 @@ class Gen_Document(QtWidgets.QWidget):
             data_atual: str = str(
                 datetime.datetime.now().strftime("%A, %d de %B de %Y")
             )
-            html_file["footer_html"] = html_file["footer_html"].replace("$data$", str(data_atual))
+            html_file["footer_html"] = html_file["footer_html"].replace(
+                "$data$", str(data_atual)
+            )
 
-        cleaned_html_file: dict = {
-            "header_html": html_file["header_html"],
-            "termo_html": html_file["termo_html"],
-            "footer_html": html_file["footer_html"],
-        }
-
-        return cleaned_html_file
+        return html_file
 
     def GeneratePDF(
         self,

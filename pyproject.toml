@@ -8,10 +8,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-PySide6 = "^6.8.0.1"
+PySide6 = "^6.8.0.2"
 
 [tool.poetry.group.dev.dependencies]
-Nuitka = "^2.4.10"
+Nuitka = "^2.4.11"
 pyinstaller = "^6.11.0"
 pytest = "^8.3.3"
 
