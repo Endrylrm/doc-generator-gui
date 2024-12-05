@@ -3,14 +3,15 @@ __author_email__ = "Endrylrm@hotmail.com"
 
 import os
 import locale
-import datetime
 import json
 
-# utilities to help with creation of message boxes
-from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
+from datetime import datetime
 
 # PySide 6 stuff
 from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
+
+# utilities to help with creation of message boxes
+from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
 
 from .cpf_input import Cpf_Input
 
@@ -45,8 +46,8 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.strings_to_replace: dict = {}
 
-        self.layouts_dict: dict = {}
-        self.current_layout: dict = {}
+        self.layouts: dict = {}
+        self.cur_layout: dict = {}
 
         self.ReadConfigFiles()
 
@@ -65,7 +66,7 @@ class Gen_Document(QtWidgets.QWidget):
             company_file_data = json.loads(company_file.read())
             layouts = json.loads(layout_file.read())
 
-        self.layouts_dict = layouts
+        self.layouts = layouts
 
         for key in company_file_data.keys():
             replace = company_file_data[key]["replace"]
@@ -97,7 +98,7 @@ class Gen_Document(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.print_type_combobox = QtWidgets.QComboBox(self)
-        for print_type in self.layouts_dict.keys():
+        for print_type in self.layouts.keys():
             self.print_type_combobox.addItem(print_type)
         self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
@@ -260,56 +261,43 @@ class Gen_Document(QtWidgets.QWidget):
                 return False
         return True
 
-    def AddRowToTable(
-        self,
-        description: str,
-        placeholder: str,
-        text_length: int,
-        row_type: str,
-    ):
+    def CreateRowDescription(self, layout):
+        description_font = QtGui.QFont()
+        description_font.setBold(True)
+        row_description = QtWidgets.QTableWidgetItem(layout["description"])
+        row_description.setFont(description_font)
+        row_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
+        return row_description
+
+    def CreateRowInput(self, key, layout):
+        max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 500
+        row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else Cpf_Input()
+        row_input.setPlaceholderText(layout["placeholder"])
+        row_input.textEdited.connect(lambda: self.SetLastData(key, row_input.text()))
+        if key in self.old_input_data and self.old_input_data[key] != "":
+            row_input.setText(self.old_input_data[key])
+        if layout["type"] != "cpf":
+            row_input.setMaxLength(max_text_length)
+        return row_input
+
+    def SetLastData(self, key, text):
+        self.old_input_data[key] = text
+
+    def AddRowToTable(self, key: dict):
         """
-        Function AddRowToTable(description, description, placeholder, text_length, row_type)
-        description: description of the row.
-        placeholder: placeholder text for the line edit.
-        text_length: the max text length for our line edit.
-        row_type: type of row.
+        Function AddRowToTable(key)
+        key: the key to get the values from our current layout dictionary.
 
         Adds a new row to our tablewidget based on our json layout.
         """
 
         index = self.table_document.rowCount()
-        description_font = QtGui.QFont()
-        description_font.setBold(True)
+        row_layout = self.cur_layout[key]
         self.table_document.setRowCount(index + 1)
-        item_description = QtWidgets.QTableWidgetItem(description)
-        item_description.setFont(description_font)
-        item_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
-        self.table_document.setItem(index, 0, item_description)
-
-        if row_type == "cpf":
-            item_input = Cpf_Input()
-            item_input.setPlaceholderText(placeholder)
-            item_input.textEdited.connect(self.SetLastCPF)
-            # FIXIT: add remembering to a json file
-            if "cpf" in self.old_input_data and self.old_input_data["cpf"] != "":
-                item_input.setText(self.old_input_data["cpf"])
-            self.table_document.setCellWidget(index, 1, item_input)
-        else:
-            item_input = QtWidgets.QLineEdit()
-            item_input.setPlaceholderText(placeholder)
-            item_input.setMaxLength(text_length)
-            if row_type == "name":
-                item_input.textEdited.connect(self.SetLastName)
-                # FIXIT: add remembering to a json file
-                if "name" in self.old_input_data and self.old_input_data["name"] != "":
-                    item_input.setText(self.old_input_data["name"])
-            self.table_document.setCellWidget(index, 1, item_input)
-
-    def SetLastName(self, text):
-        self.old_input_data["name"] = text
-
-    def SetLastCPF(self, text):
-        self.old_input_data["cpf"] = text
+        row_description = self.CreateRowDescription(row_layout)
+        self.table_document.setItem(index, 0, row_description)
+        row_input = self.CreateRowInput(key, row_layout)
+        self.table_document.setCellWidget(index, 1, row_input)
 
     def GetValueFromLayout(self, index: int, key: str):
         """
@@ -322,7 +310,7 @@ class Gen_Document(QtWidgets.QWidget):
         by selecting the corresponding key.
         """
 
-        layout_data = list(self.current_layout.items())[index][1]
+        layout_data = list(self.cur_layout.items())[index][1]
         return layout_data[key] if key in layout_data else ""
 
     def MatchPrintType(self):
@@ -336,22 +324,9 @@ class Gen_Document(QtWidgets.QWidget):
         self.table_document.setRowCount(0)
 
         if self.print_type_combobox.currentText() != None:
-            self.current_layout = self.layouts_dict[
-                self.print_type_combobox.currentText()
-            ]
-            for key in self.current_layout.keys():
-                if key == "Config":
-                    continue
-                self.AddRowToTable(
-                    self.current_layout[key]["description"],
-                    self.current_layout[key]["placeholder"],
-                    (
-                        self.current_layout[key]["maxTextLength"]
-                        if "maxTextLength" in self.current_layout[key]
-                        else 500
-                    ),
-                    self.current_layout[key]["type"],
-                )
+            self.cur_layout = self.layouts[self.print_type_combobox.currentText()]
+            keys = [key for key in self.cur_layout.keys() if key != "config"]
+            table_rows = list(map(self.AddRowToTable, keys))
 
     def SetOutputPath(self) -> str:
         """
@@ -383,9 +358,9 @@ class Gen_Document(QtWidgets.QWidget):
         """
 
         file_to_read = (
-            self.current_layout["Config"]["termo"]
+            self.cur_layout["config"]["termo"]
             if not self.devolution.isChecked()
-            else self.current_layout["Config"]["termo_devol"]
+            else self.cur_layout["config"]["termo_devol"]
         )
 
         with (
@@ -394,13 +369,13 @@ class Gen_Document(QtWidgets.QWidget):
             open("./Templates/footer.html", "r", encoding="utf-8") as footer_file,
         ):
 
-            html_file = {
-                "header_html": header_file.read(),
-                "termo_html": termo_file.read(),
-                "footer_html": footer_file.read(),
+            html = {
+                "header": header_file.read(),
+                "termo": termo_file.read(),
+                "footer": footer_file.read(),
             }
 
-        return html_file
+        return html
 
     def GetDataFromInputs(self):
         """
@@ -432,33 +407,21 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.GetDataFromInputs()
 
-        html_file = self.ReadHtmlFiles()
+        html = self.ReadHtmlFiles()
 
         for old_string, new_string in self.strings_to_replace.items():
-            html_file["header_html"] = html_file["header_html"].replace(
-                old_string, new_string
-            )
-            html_file["termo_html"] = html_file["termo_html"].replace(
-                old_string, new_string
-            )
-            html_file["footer_html"] = html_file["footer_html"].replace(
-                old_string, new_string
-            )
+            html["header"] = html["header"].replace(old_string, new_string)
+            html["termo"] = html["termo"].replace(old_string, new_string)
+            html["footer"] = html["footer"].replace(old_string, new_string)
 
         if self.manual_date.isChecked():
-            html_file["footer_html"] = html_file["footer_html"].replace(
-                "$data$", self.date_picker.text()
-            )
+            html["footer"] = html["footer"].replace("$data$", self.date_picker.text())
 
         if not self.manual_date.isChecked():
-            data_atual: str = str(
-                datetime.datetime.now().strftime("%A, %d de %B de %Y")
-            )
-            html_file["footer_html"] = html_file["footer_html"].replace(
-                "$data$", str(data_atual)
-            )
+            data_atual: str = str(datetime.now().strftime("%A, %d de %B de %Y"))
+            html["footer"] = html["footer"].replace("$data$", str(data_atual))
 
-        return html_file
+        return html
 
     def GeneratePDF(
         self,
@@ -488,13 +451,13 @@ class Gen_Document(QtWidgets.QWidget):
         painter.begin(printer)
         painter.scale(8.5, 8.5)
         painter.translate(0, 5)
-        pdf_Doc.setHtml(html_data["header_html"])
+        pdf_Doc.setHtml(html_data["header"])
         pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
         painter.translate(30, 72)
-        pdf_Doc.setHtml(html_data["termo_html"])
+        pdf_Doc.setHtml(html_data["termo"])
         pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
         painter.translate(-30, 665)
-        pdf_Doc.setHtml(html_data["footer_html"])
+        pdf_Doc.setHtml(html_data["footer"])
         pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
         painter.end()
 

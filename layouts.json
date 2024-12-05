@@ -35,7 +35,7 @@
 			"type": "remark",
 			"replace": "$obs$"
 		},
-		"Config": {
+		"config": {
             "termo": "termo_cartucho.html",
             "termo_devol": "termo_cartucho_devol.html"
 		}
@@ -77,7 +77,7 @@
 			"type": "remark",
 			"replace": "$obs$"
 		},
-		"Config": {
+		"config": {
             "termo": "termo_celular.html",
             "termo_devol": "termo_celular_devol.html"
 		}
@@ -112,7 +112,7 @@
 			"type": "remark",
 			"replace": "$obs$"
 		},
-		"Config": {
+		"config": {
             "termo": "termo_ibutton.html",
             "termo_devol": "termo_ibutton_devol.html"
 		}
@@ -154,7 +154,7 @@
 			"type": "remark",
 			"replace": "$obs$"
 		},
-		"Config": {
+		"config": {
             "termo": "termo_impressora.html",
             "termo_devol": "termo_impressora_devol.html"
 		}
@@ -189,7 +189,7 @@
 			"type": "remark",
 			"replace": "$obs$"
 		},
-		"Config": {
+		"config": {
             "termo": "termo_inversor.html",
             "termo_devol": "termo_inversor_devol.html"
 		}
@@ -230,7 +230,7 @@
 			"type": "remark",
 			"replace": "$obs$"
 		},
-		"Config": {
+		"config": {
             "termo": "termo_impressora.html",
             "termo_devol": "termo_impressora_devol.html"
 		}
