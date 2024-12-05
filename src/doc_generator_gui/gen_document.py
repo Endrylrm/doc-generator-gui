@@ -270,7 +270,7 @@ class Gen_Document(QtWidgets.QWidget):
         return row_description
 
     def CreateRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | Cpf_Input:
-        max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 500
+        max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 900
         row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else Cpf_Input()
         row_input.setPlaceholderText(layout["placeholder"])
         row_input.textEdited.connect(lambda: self.SetLastData(key, row_input.text()))
