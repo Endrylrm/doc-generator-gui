@@ -261,7 +261,7 @@ class Gen_Document(QtWidgets.QWidget):
                 return False
         return True
 
-    def CreateRowDescription(self, layout):
+    def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
         description_font = QtGui.QFont()
         description_font.setBold(True)
         row_description = QtWidgets.QTableWidgetItem(layout["description"])
@@ -269,7 +269,7 @@ class Gen_Document(QtWidgets.QWidget):
         row_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         return row_description
 
-    def CreateRowInput(self, key, layout):
+    def CreateRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | Cpf_Input:
         max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 500
         row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else Cpf_Input()
         row_input.setPlaceholderText(layout["placeholder"])
@@ -280,10 +280,10 @@ class Gen_Document(QtWidgets.QWidget):
             row_input.setMaxLength(max_text_length)
         return row_input
 
-    def SetLastData(self, key, text):
+    def SetLastData(self, key: str, text: str):
         self.old_input_data[key] = text
 
-    def AddRowToTable(self, key: dict):
+    def AddRowToTable(self, key: str):
         """
         Function AddRowToTable(key)
         key: the key to get the values from our current layout dictionary.
@@ -397,7 +397,7 @@ class Gen_Document(QtWidgets.QWidget):
 
             self.strings_to_replace[str_to_replace] = current_text
 
-    def ReturnCleanHTML(self):
+    def ReturnCleanHTML(self) -> dict[str, str]:
         """
         Function ReturnCleanHTML()
 
