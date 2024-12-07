@@ -1,7 +1,6 @@
 __author__ = "Endryl Richard Monteiro"
 __author_email__ = "Endrylrm@hotmail.com"
 
-import os
 import locale
 import json
 
@@ -423,6 +422,14 @@ class Gen_Document(QtWidgets.QWidget):
 
         return html
 
+    def PaintHTML(
+        self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, coords: list, html: str
+    ):
+        doc_PaintCtx = doc.documentLayout().PaintContext()
+        painter.translate(coords[0], coords[1])
+        doc.setHtml(html)
+        doc.documentLayout().draw(painter, doc_PaintCtx)
+
     def GeneratePDF(
         self,
         printer: QtPrintSupport.QPrinter,
@@ -446,19 +453,12 @@ class Gen_Document(QtWidgets.QWidget):
         printer.setResolution(600)
         printer.setOutputFileName(self.output_path)
         pdf_Doc = QtGui.QTextDocument()
-        pdf_Doc_PaintCtx = pdf_Doc.documentLayout().PaintContext()
         pdf_Doc.setTextWidth(530)
         painter.begin(printer)
         painter.scale(8.5, 8.5)
-        painter.translate(0, 5)
-        pdf_Doc.setHtml(html_data["header"])
-        pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
-        painter.translate(30, 72)
-        pdf_Doc.setHtml(html_data["termo"])
-        pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
-        painter.translate(-30, 665)
-        pdf_Doc.setHtml(html_data["footer"])
-        pdf_Doc.documentLayout().draw(painter, pdf_Doc_PaintCtx)
+        self.PaintHTML(pdf_Doc, painter, [0, 5], html_data["header"])
+        self.PaintHTML(pdf_Doc, painter, [30, 72], html_data["termo"])
+        self.PaintHTML(pdf_Doc, painter, [-30, 665], html_data["footer"])
         painter.end()
 
     def PrintDocument(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
