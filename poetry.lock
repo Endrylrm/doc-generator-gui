@@ -165,12 +165,12 @@ altgraph = ">=0.17"
 
 [[package]]
 name = "nuitka"
-version = "2.5.4"
+version = "2.5.6"
 description = "Python compiler with full language support and CPython compatibility"
 optional = false
 python-versions = "*"
 files = [
-    {file = "Nuitka-2.5.4.tar.gz", hash = "sha256:52f3ec8df460d567362d3adf9e722534e07f4cc7bf51c2da874c86ba4103c6c1"},
+    {file = "Nuitka-2.5.6.tar.gz", hash = "sha256:14b859ae95a12021d72e016365354578bd73d3d4aa4430f1dd54d649352a1f79"},
 ]
 
 [package.dependencies]
@@ -582,4 +582,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "0eecf0be5b1b3e90b3b3ab1d603ffcb75f952dfa3d18c27a33a6812d7f506601"
+content-hash = "4a916324c334855600d66bc2646c439b173ab07c21fac59e72f54846b43baf9e"
