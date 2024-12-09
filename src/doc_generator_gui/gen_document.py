@@ -97,8 +97,7 @@ class Gen_Document(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.print_type_combobox = QtWidgets.QComboBox(self)
-        for print_type in self.layouts.keys():
-            self.print_type_combobox.addItem(print_type)
+        print_types = list(map(self.print_type_combobox.addItem, self.layouts.keys()))
         self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
         self.separator_combobox = QtWidgets.QFrame(self)
