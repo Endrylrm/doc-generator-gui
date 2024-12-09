@@ -111,10 +111,7 @@ class Gen_Document(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShape(QtWidgets.QFrame.HLine)
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
-        table_headers = [
-            "Descrição",
-            "Preencher",
-        ]
+        table_headers = ["Descrição", "Preencher"]
         self.table_document = QtWidgets.QTableWidget()
         self.table_document.setRowCount(0)
         self.table_document.setColumnCount(2)
@@ -131,7 +128,6 @@ class Gen_Document(QtWidgets.QWidget):
         self.table_document.setSelectionMode(
             self.table_document.selectionMode().SingleSelection
         )
-
         self.table_document.verticalHeader().setVisible(False)
         # CheckBox - Ativar Data Manual
         self.manual_date = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
