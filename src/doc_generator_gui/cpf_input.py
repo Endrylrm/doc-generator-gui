@@ -12,7 +12,6 @@ class Cpf_Input(QtWidgets.QLineEdit):
         self.setMaxLength(18)
 
     def format_text(self):
-        # Get the current text from the QLineEdit
         text = self.text()
 
         # Remove any non-digit characters
@@ -38,5 +37,4 @@ class Cpf_Input(QtWidgets.QLineEdit):
             if len(text) >= 16:
                 text = f"{text[:15]}-{text[15:]}"
 
-        # Set the formatted text back to the QLineEdit
         self.setText(text)

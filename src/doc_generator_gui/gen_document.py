@@ -27,11 +27,8 @@ class Gen_Document(QtWidgets.QWidget):
     def __init__(self, parent, controller):
         """
         Frame/Page Widget "Gerador de Termos de Responsabilidade":
-        Class Gen_Document(parent, controller):
-        parent: This widget parent, usually the container widget.
-        controller: QT Main window, to control changing pages.
 
-        Initialization of the Printer_Document Class page.
+        Initialization of the Gen_Document Class page.
         """
 
         super().__init__(parent=parent)
@@ -75,11 +72,9 @@ class Gen_Document(QtWidgets.QWidget):
     # Creation of widgets on screen
     def CreateWidgets(self, controller):
         """
-        Function CreateWidgets(controller)
-        controller: Our main window / controller widget.
-
         Used to create new widgets (labels, buttons, etc.),
-        controller is used in buttons to show another page/frame widget.
+        controller (main window / controller widget) is used in buttons
+        to show another page/frame widget.
         """
 
         # Label - Title
@@ -173,8 +168,6 @@ class Gen_Document(QtWidgets.QWidget):
     # Grid Configuration
     def GridConfigs(self):
         """
-        Function GridConfigs()
-
         Used to configure this frame grid (columns and rows) for our widgets.
         """
 
@@ -233,8 +226,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def CheckEmptyInputs(self) -> bool:
         """
-        Function CheckEmptyInputs()
-
         this just checks if out inputs are not empty and
         open a message box to tell the user if a required
         input is empty.
@@ -279,9 +270,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def AddRowToTable(self, key: str):
         """
-        Function AddRowToTable(key)
-        key: the key to get the values from our current layout dictionary.
-
         Adds a new row to our tablewidget based on our json layout.
         """
 
@@ -295,10 +283,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def GetValueFromLayout(self, index: int, key: str):
         """
-        Function GetValueFromLayout(index, key)
-        index: the index of the parent key.
-        key: the key we want the value.
-
         we convert our dictionary items in a list, then we returns the
         data from the dictionary based on the index of a parent key,
         by selecting the corresponding key.
@@ -309,8 +293,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def MatchPrintType(self):
         """
-        Function MatchPrintType()
-
         matches our selected Print layout, changes the text and layout
         of the table widget accordingly.
         """
@@ -324,8 +306,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def SetOutputPath(self) -> str:
         """
-        Function SetOutputPath()
-
         Sets the output path for our PDF files, by getting the
         name of the employee in our table and the current type.
         """
@@ -345,8 +325,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def ReadHtmlFiles(self) -> dict[str, str]:
         """
-        Function ReadHtmlFiles()
-
         this function read our terms html files, returning a dictionary
         containing all the html data.
         """
@@ -373,10 +351,8 @@ class Gen_Document(QtWidgets.QWidget):
 
     def GetDataFromInputs(self):
         """
-        Function GetDataFromInputs()
-
-        Gets the data from every input and adds to our string
-        replace dictionary.
+        Gets the data from every input and in our table widget
+        adds to our string replace dictionary.
         """
 
         for row in range(self.table_document.rowCount()):
@@ -393,8 +369,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def ReturnCleanHTML(self) -> dict[str, str]:
         """
-        Function ReturnCleanHTML()
-
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.
         """
@@ -427,10 +401,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def GeneratePDF(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
         """
-        Function GeneratePDF(printer, painter)
-        printer: the printer responsible to generate the PDF file.
-        painter: the painter responsible to paint out HTML to the PDF file.
-
         we use a QPrinter, QPainter and QTextdocument to generate a
         PDF file of our HTML, we scale our painter and begin painting
         by changing the html in our text document, also translating the
@@ -454,13 +424,9 @@ class Gen_Document(QtWidgets.QWidget):
 
     def PrintDocument(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
         """
-        Function PrintDocument(printer, painter)
-        printer: the printer responsible to send to our native printer.
-        painter: the painter responsible to paint out the PDF file to our native printer.
-
         this function is responsible to send our PDF file to a native
         printer, it uses a QPrinter to send to a native printer,
-        QPrintPreviewDialog to preview or QPrintDialog to a fast printing.
+        QPrintPreviewDialog to preview or QPrintDialog for fast printing.
         """
 
         printer.setOutputFormat(printer.OutputFormat.NativeFormat)
@@ -468,8 +434,6 @@ class Gen_Document(QtWidgets.QWidget):
 
         def PaintingDocument():
             """
-            Function PaintingDocument()
-
             this nested function is responsible to convert our pdf file
             in a image and then use a QPainter to paint to a native printer.
             """
@@ -501,8 +465,6 @@ class Gen_Document(QtWidgets.QWidget):
 
     def GenerateDocument(self):
         """
-        Function GenerateDocument()
-
         Responsible to start the PDF creation and sending to a
         printer (optional).
         """

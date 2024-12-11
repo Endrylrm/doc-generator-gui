@@ -26,11 +26,6 @@ class App(QtWidgets.QMainWindow):
     ):
         """
         Main Window Widget "Application":
-        Class App(app_title, app_width, app_height, app_icon):
-        app_title: Used to change the Application Window Title.
-        app_width: Used to change the Application Window Width.
-        app_height: Used to change the Application Window Height.
-        app_icon: Used to change the Application Icon.
 
         Initialization of Application (Main Window) Class.
         """
@@ -68,9 +63,6 @@ class App(QtWidgets.QMainWindow):
     # Initialization of pages/frames
     def InitPages(self, container):
         """
-        Function InitPages(container)
-        container: Our container module, to control our widget size.
-
         Initialization for our Frames/Pages, requires a container and
         we add each of our pages to our dictionary.
         """
@@ -87,9 +79,6 @@ class App(QtWidgets.QMainWindow):
     # Page/Frame to show function
     def ShowPage(self, page: str):
         """
-        Function ShowPage(page)
-        page: The string reference for the page in our pages Dictionary.
-
         The Switch logic uses a Dictionary, where the selected key show
         the specific page/frame.
         """
@@ -105,10 +94,6 @@ class App(QtWidgets.QMainWindow):
     # Center window function
     def CenterWindow(self, app_width: int = 300, app_height: int = 300):
         """
-        Function CenterWindow(app_width, app_height)
-        app_width: The width of our root/window widget.
-        app_height: the height of our root/window widget.
-
         Center our windows on screen and controls it's size.
         """
 
