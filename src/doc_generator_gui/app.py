@@ -6,7 +6,6 @@ from PySide6 import QtWidgets, QtGui
 from .gen_document import Gen_Document
 
 
-# Main Window Widget
 class App(QtWidgets.QMainWindow):
     """
     Main Window Widget "Application":

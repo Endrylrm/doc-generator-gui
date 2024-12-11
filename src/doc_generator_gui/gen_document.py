@@ -15,7 +15,6 @@ from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
 from .cpf_input import Cpf_Input
 
 
-# Key Extractor Page/Frame Widget
 class Gen_Document(QtWidgets.QWidget):
     """
     Frame/Page Widget "Gerador de Termos de Responsabilidade":
@@ -392,6 +391,12 @@ class Gen_Document(QtWidgets.QWidget):
     def PaintHTML(
         self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
     ):
+        """
+        begin painting by changing the html in our QTextDocument,
+        also translating the QPainter when necessary and call the draw
+        function of our DocumentLayout to start painting.
+        """
+
         doc_PaintCtx = doc.documentLayout().PaintContext()
         painter.translate(point[0], point[1])
         doc.setHtml(html)
@@ -400,10 +405,8 @@ class Gen_Document(QtWidgets.QWidget):
     def GeneratePDF(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
         """
         we use a QPrinter, QPainter and QTextdocument to generate a
-        PDF file of our HTML, we scale our painter and begin painting
-        by changing the html in our text document, also translating the
-        painter when necessary and call the draw function of our PaintContext
-        to start painting.
+        PDF file of our HTML, we scale our painter and use the function
+        PaintHTML to paint the html to a new PDF file.
         """
 
         html_data: dict = self.ReturnCleanHTML()
