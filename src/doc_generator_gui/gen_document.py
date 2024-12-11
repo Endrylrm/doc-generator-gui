@@ -418,18 +418,14 @@ class Gen_Document(QtWidgets.QWidget):
         return html
 
     def PaintHTML(
-        self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, coords: list, html: str
+        self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
     ):
         doc_PaintCtx = doc.documentLayout().PaintContext()
-        painter.translate(coords[0], coords[1])
+        painter.translate(point[0], point[1])
         doc.setHtml(html)
         doc.documentLayout().draw(painter, doc_PaintCtx)
 
-    def GeneratePDF(
-        self,
-        printer: QtPrintSupport.QPrinter,
-        painter: QtGui.QPainter,
-    ):
+    def GeneratePDF(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
         """
         Function GeneratePDF(printer, painter)
         printer: the printer responsible to generate the PDF file.
