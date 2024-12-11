@@ -69,7 +69,6 @@ class Gen_Document(QtWidgets.QWidget):
             value = company_file_data[key]["value"]
             self.strings_to_replace[replace] = value
 
-    # Creation of widgets on screen
     def CreateWidgets(self, controller):
         """
         Used to create new widgets (labels, buttons, etc.),
@@ -165,7 +164,6 @@ class Gen_Document(QtWidgets.QWidget):
         )
         self.button_gen_doc.clicked.connect(self.GenerateDocument)
 
-    # Grid Configuration
     def GridConfigs(self):
         """
         Used to configure this frame grid (columns and rows) for our widgets.

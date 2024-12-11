@@ -31,36 +31,22 @@ class App(QtWidgets.QMainWindow):
         """
 
         super().__init__(*args, **kwargs)
-        # Window Title
         if app_title is not None:
             self.setWindowTitle(app_title)
-        # window size
         if app_width and app_height is not None:
             self.CenterWindow(app_width, app_height)
-        # the Window icon
         if app_icon is not None:
             self.setWindowIcon(QtGui.QIcon(app_icon))
-        # a container for our pages widgets
         self.container = QtWidgets.QWidget(self)
-        # it's geometry is the size of our window
         self.container.setGeometry(0, 0, app_width, app_height)
-        # our container grid layout
         self.container_grid = QtWidgets.QGridLayout(self.container)
-        # set our container layout a grid layout
         self.container.setLayout(self.container_grid)
-        # our pages / frames / widgets Dictionary
         self.pages = {}
-        # current Page
         self.current_page: str = None
-        # init our pages
         self.InitPages(self.container)
-        # show the main page when we open our app
         self.ShowPage("Gen_Document")
-        # set our container as our central widget
-        # so our pages / frames resize with our window
         self.setCentralWidget(self.container)
 
-    # Initialization of pages/frames
     def InitPages(self, container):
         """
         Initialization for our Frames/Pages, requires a container and
@@ -71,33 +57,26 @@ class App(QtWidgets.QMainWindow):
         self.pages["Gen_Document"] = Gen_Document(container, self)
         self.pages["Gen_Document"].hide()
 
-        # for each of our pages
         for page in self.pages:
-            # Add our pages to Main Window container grid
             self.container_grid.addWidget(self.pages[page], 0, 0)
 
-    # Page/Frame to show function
     def ShowPage(self, page: str):
         """
         The Switch logic uses a Dictionary, where the selected key show
         the specific page/frame.
         """
 
-        # hide our current page
         if self.current_page is not None:
             self.pages[self.current_page].hide()
-        # show our new page
         self.pages[page].show()
-        # set our current page as our new page
         self.current_page = page
 
-    # Center window function
     def CenterWindow(self, app_width: int = 300, app_height: int = 300):
         """
         Center our windows on screen and controls it's size.
         """
 
-        # set the size
+        # set the size of our window
         self.setGeometry(0, 0, app_width, app_height)
         # get the frame geometry (size and position)
         app_geometry = self.frameGeometry()
