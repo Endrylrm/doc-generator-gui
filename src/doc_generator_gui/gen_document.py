@@ -164,7 +164,7 @@ class Gen_Document(QtWidgets.QWidget):
         Used to configure this frame grid (columns and rows) for our widgets.
         """
 
-        # Grid Creation
+        # Grid Layout
         widget_grid_layout = QtWidgets.QGridLayout(self)
         # Label - Título
         widget_grid_layout.addWidget(
@@ -205,7 +205,7 @@ class Gen_Document(QtWidgets.QWidget):
         widget_grid_layout.addWidget(self.button_gen_doc, 17, 0, 1, 2)
         # space between widgets
         widget_grid_layout.setSpacing(10)
-        # stretch last row
+        # stretch a specific row
         widget_grid_layout.setRowStretch(15, 1)
         # set this widget layout to the grid layout
         self.setLayout(widget_grid_layout)
