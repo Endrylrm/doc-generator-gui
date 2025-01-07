@@ -11,6 +11,7 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
 
     translator = QtCore.QTranslator()
+
     if translator.load(
         QtCore.QLocale().system(),
         f"qtbase_{QtCore.QLocale().system().name()}",
@@ -20,13 +21,8 @@ def main():
     ):
         app.installTranslator(translator)
 
-    # Our Main Window.
     window = App("Gerador de Termos", 800, 600, "gen_document.ico")
-
-    # all windows are hidden by default, so just show it.
     window.show()
-
-    # main event loop.
     sys.exit(app.exec())
 
 

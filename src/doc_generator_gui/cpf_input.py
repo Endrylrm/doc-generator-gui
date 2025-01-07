@@ -1,4 +1,3 @@
-# PySide 6 stuff
 from PySide6 import QtWidgets
 
 

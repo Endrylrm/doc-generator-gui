@@ -6,10 +6,8 @@ import json
 
 from datetime import datetime
 
-# PySide 6 stuff
 from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
 
-# utilities to help with creation of message boxes
 from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
 
 from .cpf_input import Cpf_Input
@@ -46,9 +44,7 @@ class Gen_Document(QtWidgets.QWidget):
 
         self.ReadConfigFiles()
 
-        # first create our widgets
         self.CreateWidgets(controller)
-        # then set our grid layout and config
         self.GridConfigs()
 
         self.MatchPrintType()

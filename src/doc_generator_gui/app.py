@@ -83,6 +83,6 @@ class App(QtWidgets.QMainWindow):
         screen = self.screen().availableGeometry().center()
         # Move the frame to the center of the screen
         app_geometry.moveCenter(screen)
-        # Also move our widget to the center of the screen
+        # move our widget to the center of the screen
         # based on the top left point
         self.move(app_geometry.topLeft())
