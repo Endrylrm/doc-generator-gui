@@ -8,12 +8,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-PySide6 = "^6.8.2.1"
+PySide6 = "^6.8.3"
 
 [tool.poetry.group.dev.dependencies]
-Nuitka = "^2.6.7"
+Nuitka = "^2.6.9"
 pyinstaller = "^6.12.0"
-pytest = "^8.3.4"
+pytest = "^8.3.5"
 
 [tool.poetry.scripts]
 build-nuitka = "build:Build_Nuitka"
