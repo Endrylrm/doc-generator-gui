@@ -155,7 +155,7 @@ class Gen_Document(QtWidgets.QWidget):
         self.separator_buttons.setFrameShadow(QtWidgets.QFrame.Sunken)
         # PushButton - Gerar Documento
         self.button_gen_doc = QtWidgets.QPushButton(
-            self, text="\N{Document} " + "Gerar Documento"
+            self, text="\N{DOCUMENT} " + "Gerar Documento"
         )
         self.button_gen_doc.clicked.connect(self.GenerateDocument)
 
@@ -297,7 +297,7 @@ class Gen_Document(QtWidgets.QWidget):
             keys = [key for key in self.cur_layout.keys() if key != "config"]
             table_rows = list(map(self.AddRowToTable, keys))
 
-    def SetOutputPath(self) -> str:
+    def SetOutputPath(self):
         """
         Sets the output path for our PDF files, by getting the
         name of the employee in our table and the current type.
