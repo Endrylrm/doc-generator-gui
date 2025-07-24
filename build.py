@@ -12,7 +12,7 @@ def Build_Nuitka():
             "nuitka",
             "--standalone",
             "--plugin-enable=upx",
-            "--upx-binary=./upx/upx.exe",
+            f"--upx-binary={os.getcwd()}/upx/upx.exe",
             "--enable-plugin=pyside6",
             "--windows-console-mode=disable",
             "--windows-icon-from-ico=gen_document.ico",
