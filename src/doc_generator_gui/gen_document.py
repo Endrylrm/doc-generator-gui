@@ -8,23 +8,24 @@ from datetime import datetime
 
 from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
 
-from .msgboxutils import CreateInfoMessageBox, CreateWarningMessageBox
+from .helpers.dialog_helpers import CreateInfoMessageBox, CreateWarningMessageBox
 
-from .cpf_input import Cpf_Input
+from .widgets.cpf_input import Cpf_Input
+
+from .contexts.document_context import DocumentContext
+from .handlers.html_template_handler import HTMLTemplateHandler
+from .services.pdf_service import PDFService
+from .services.printer_service import PrinterService
 
 
-class Gen_Document(QtWidgets.QWidget):
+class GenDocument(QtWidgets.QWidget):
     """
-    Frame/Page Widget "Gerador de Termos de Responsabilidade":
-
     This Frame Module is responsible for generating our
     statement of responsibility for our employees.
     """
 
     def __init__(self, parent, controller):
         """
-        Frame/Page Widget "Gerador de Termos de Responsabilidade":
-
         Initialization of the Gen_Document Class page.
         """
 
@@ -32,37 +33,30 @@ class Gen_Document(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.output_path: str = ""
+        self.doc_context = DocumentContext()
+
+        self.html_tmpl_handler = HTMLTemplateHandler(self.doc_context)
+        self.pdf_service = PDFService(self.doc_context)
+        self.printer_service = PrinterService(self.doc_context)
 
         # a dictionary to remember data from our inputs
-        self.old_input_data: dict = {}
-
-        self.strings_to_replace: dict = {}
+        self.input_history: dict = {}
 
         self.layouts: dict = {}
         self.cur_layout: dict = {}
 
-        self.ReadConfigFiles()
+        self.ReadLayouts()
 
         self.CreateWidgets(controller)
         self.GridConfigs()
 
         self.MatchPrintType()
 
-    def ReadConfigFiles(self):
-        with (
-            open("company.json", "r", encoding="utf-8") as company_file,
-            open("layouts.json", "r", encoding="utf-8") as layout_file,
-        ):
-            company_file_data = json.loads(company_file.read())
+    def ReadLayouts(self):
+        with open("layouts.json", "r", encoding="utf-8") as layout_file:
             layouts = json.loads(layout_file.read())
 
         self.layouts = layouts
-
-        for key in company_file_data.keys():
-            replace = company_file_data[key]["replace"]
-            value = company_file_data[key]["value"]
-            self.strings_to_replace[replace] = value
 
     def CreateWidgets(self, controller):
         """
@@ -211,11 +205,8 @@ class Gen_Document(QtWidgets.QWidget):
         self.setLayout(widget_grid_layout)
 
     def CheckManualDate(self):
-        if self.manual_date.isChecked():
-            self.date_picker.setEnabled(True)
-
-        if not self.manual_date.isChecked():
-            self.date_picker.setEnabled(False)
+        is_manual_date: bool = True if self.manual_date.isChecked() else False
+        self.date_picker.setEnabled(is_manual_date)
 
     def CheckEmptyInputs(self) -> bool:
         """
@@ -251,15 +242,17 @@ class Gen_Document(QtWidgets.QWidget):
         max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 900
         row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else Cpf_Input()
         row_input.setPlaceholderText(layout["placeholder"])
-        row_input.textEdited.connect(lambda: self.SetLastData(key, row_input.text()))
-        if key in self.old_input_data and self.old_input_data[key] != "":
-            row_input.setText(self.old_input_data[key])
+        row_input.textEdited.connect(
+            lambda: self.SetInputHistoryData(key, row_input.text())
+        )
+        if key in self.input_history and self.input_history[key] != "":
+            row_input.setText(self.input_history[key])
         if layout["type"] != "cpf":
             row_input.setMaxLength(max_text_length)
         return row_input
 
-    def SetLastData(self, key: str, text: str):
-        self.old_input_data[key] = text
+    def SetInputHistoryData(self, key: str, text: str):
+        self.input_history[key] = text
 
     def AddRowToTable(self, key: str):
         """
@@ -309,38 +302,11 @@ class Gen_Document(QtWidgets.QWidget):
             if self.GetValueFromLayout(row, "type") == "name":
                 name = self.table_document.cellWidget(row, 1).text()
 
-        if self.devolution.isChecked():
-            self.output_path = (
-                f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
-            )
-        if not self.devolution.isChecked():
-            self.output_path = f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
-
-    def ReadHtmlFiles(self) -> dict[str, str]:
-        """
-        this function read our terms html files, returning a dictionary
-        containing all the html data.
-        """
-
-        file_to_read = (
-            self.cur_layout["config"]["termo"]
-            if not self.devolution.isChecked()
-            else self.cur_layout["config"]["termo_devol"]
+        self.doc_context.output_path = (
+            f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
+            if self.devolution.isChecked()
+            else f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
         )
-
-        with (
-            open("./Templates/header.html", "r", encoding="utf-8") as header_file,
-            open(f"./Templates/{file_to_read}", "r", encoding="utf-8") as termo_file,
-            open("./Templates/footer.html", "r", encoding="utf-8") as footer_file,
-        ):
-
-            html = {
-                "header": header_file.read(),
-                "termo": termo_file.read(),
-                "footer": footer_file.read(),
-            }
-
-        return html
 
     def GetDataFromInputs(self):
         """
@@ -358,107 +324,7 @@ class Gen_Document(QtWidgets.QWidget):
                 suffix = self.GetValueFromLayout(row, "suffix")
                 current_text = prefix + current_text + suffix
 
-            self.strings_to_replace[str_to_replace] = current_text
-
-    def ReturnCleanHTML(self) -> dict[str, str]:
-        """
-        this function changes all the variables in our html with the correct data,
-        returning a dictionary containing all cleaned html data.
-        """
-
-        self.GetDataFromInputs()
-
-        html = self.ReadHtmlFiles()
-
-        for old_string, new_string in self.strings_to_replace.items():
-            html["header"] = html["header"].replace(old_string, new_string)
-            html["termo"] = html["termo"].replace(old_string, new_string)
-            html["footer"] = html["footer"].replace(old_string, new_string)
-
-        if self.manual_date.isChecked():
-            html["footer"] = html["footer"].replace("$data$", self.date_picker.text())
-
-        if not self.manual_date.isChecked():
-            data_atual: str = str(datetime.now().strftime("%A, %d de %B de %Y"))
-            html["footer"] = html["footer"].replace("$data$", str(data_atual))
-
-        return html
-
-    def PaintHTML(
-        self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
-    ):
-        """
-        begin painting by changing the html in our QTextDocument,
-        also translating the QPainter when necessary and call the draw
-        function of our DocumentLayout to start painting.
-        """
-
-        doc_PaintCtx = doc.documentLayout().PaintContext()
-        painter.translate(point[0], point[1])
-        doc.setHtml(html)
-        doc.documentLayout().draw(painter, doc_PaintCtx)
-
-    def GeneratePDF(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
-        """
-        we use a QPrinter, QPainter and QTextdocument to generate a
-        PDF file of our HTML, we scale our painter and use the function
-        PaintHTML to paint the html to a new PDF file.
-        """
-
-        html_data: dict = self.ReturnCleanHTML()
-
-        printer.setOutputFormat(printer.OutputFormat.PdfFormat)
-        printer.setResolution(600)
-        printer.setOutputFileName(self.output_path)
-        pdf_Doc = QtGui.QTextDocument()
-        pdf_Doc.setTextWidth(530)
-        painter.begin(printer)
-        painter.scale(8.5, 8.5)
-        self.PaintHTML(pdf_Doc, painter, [0, 5], html_data["header"])
-        self.PaintHTML(pdf_Doc, painter, [30, 72], html_data["termo"])
-        self.PaintHTML(pdf_Doc, painter, [-30, 665], html_data["footer"])
-        painter.end()
-
-    def PrintDocument(self, printer: QtPrintSupport.QPrinter, painter: QtGui.QPainter):
-        """
-        this function is responsible to send our PDF file to a native
-        printer, it uses a QPrinter to send to a native printer,
-        QPrintPreviewDialog to preview or QPrintDialog for fast printing.
-        """
-
-        printer.setOutputFormat(printer.OutputFormat.NativeFormat)
-        printer.setResolution(607)
-
-        def PaintingDocument():
-            """
-            this nested function is responsible to convert our pdf file
-            in a image and then use a QPainter to paint to a native printer.
-            """
-
-            pdf_file = QtPdf.QPdfDocument()
-            pdf_file.load(self.output_path)
-            size = QtGui.QPageSize.sizePixels(QtGui.QPageSize.PageSizeId.A4, 600)
-            image_from_pdf = pdf_file.render(0, size)
-            painter.begin(printer)
-            painter.scale(1, 1)
-            painter.translate(2, 0)
-            painter.drawImage(0, 0, image_from_pdf)
-            painter.end()
-
-        if self.disable_printer_preview.isChecked():
-            print_dialog = QtPrintSupport.QPrintDialog(printer)
-            if print_dialog.exec() == print_dialog.DialogCode.Accepted:
-                PaintingDocument()
-
-        if not self.disable_printer_preview.isChecked():
-            print_preview_dialog = QtPrintSupport.QPrintPreviewDialog(printer)
-            print_preview_dialog.setWindowTitle(
-                f"Imprimir Termo de {self.print_type_combobox.currentText()}"
-            )
-            print_preview_dialog_icon = QtGui.QIcon("gen_document.ico")
-            print_preview_dialog.setWindowIcon(print_preview_dialog_icon)
-            print_preview_dialog.paintRequested.connect(PaintingDocument)
-            print_preview_dialog.exec()
+            self.doc_context.strings_to_replace[str_to_replace] = current_text
 
     def GenerateDocument(self):
         """
@@ -469,18 +335,27 @@ class Gen_Document(QtWidgets.QWidget):
         if not self.CheckEmptyInputs():
             return
 
-        printer = QtPrintSupport.QPrinter(
-            QtPrintSupport.QPrinter.PrinterMode.HighResolution
-        )
-        printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
-        printer.setFullPage(True)
-        printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
-
-        painter = QtGui.QPainter()
-
+        self.GetDataFromInputs()
         self.SetOutputPath()
 
-        self.GeneratePDF(printer, painter)
+        file_to_read = (
+            self.cur_layout["config"]["termo"]
+            if not self.devolution.isChecked()
+            else self.cur_layout["config"]["termo_devol"]
+        )
+
+        cur_date = (
+            self.date_picker.text()
+            if self.manual_date.isChecked()
+            else str(datetime.now().strftime("%A, %d de %B de %Y"))
+        )
+
+        self.pdf_service.Generate(
+            self.html_tmpl_handler.Handle_HTML(file_to_read, cur_date)
+        )
 
         if not self.disable_printer.isChecked():
-            self.PrintDocument(printer, painter)
+            self.printer_service.PrintDocument(
+                self.disable_printer_preview.isChecked(),
+                self.print_type_combobox.currentText(),
+            )

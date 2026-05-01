@@ -16,7 +16,7 @@ def Build_Nuitka():
             "--enable-plugin=pyside6",
             "--windows-console-mode=disable",
             "--windows-icon-from-ico=gen_document.ico",
-            "./src/main.py",
+            "./src/doc_generator_gui/main.py",
         ]
     )
 
@@ -31,7 +31,7 @@ def Build_Nuitka():
 def Build_PyInstaller():
     PyInstaller.__main__.run(
         [
-            "./src/main.py",
+            "./src/doc_generator_gui/main.py",
             "--noconsole",
             "--icon",
             "gen_document.ico",

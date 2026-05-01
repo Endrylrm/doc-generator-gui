@@ -3,13 +3,11 @@ __author_email__ = "Endrylrm@hotmail.com"
 
 from PySide6 import QtWidgets, QtGui
 
-from .gen_document import Gen_Document
+from .gen_document import GenDocument
 
 
 class App(QtWidgets.QMainWindow):
     """
-    Main Window Widget "Application":
-
     This is our Main Window, it is responsible to Load, switch
     and show the frame that we want.
     """
@@ -24,8 +22,6 @@ class App(QtWidgets.QMainWindow):
         **kwargs
     ):
         """
-        Main Window Widget "Application":
-
         Initialization of Application (Main Window) Class.
         """
 
@@ -43,7 +39,7 @@ class App(QtWidgets.QMainWindow):
         self.pages = {}
         self.current_page: str = None
         self.InitPages(self.container)
-        self.ShowPage("Gen_Document")
+        self.ShowPage("GenDocument")
         self.setCentralWidget(self.container)
 
     def InitPages(self, container):
@@ -53,8 +49,8 @@ class App(QtWidgets.QMainWindow):
         """
 
         # Application Home Page
-        self.pages["Gen_Document"] = Gen_Document(container, self)
-        self.pages["Gen_Document"].hide()
+        self.pages["GenDocument"] = GenDocument(container, self)
+        self.pages["GenDocument"].hide()
 
         for page in self.pages:
             self.container_grid.addWidget(self.pages[page], 0, 0)

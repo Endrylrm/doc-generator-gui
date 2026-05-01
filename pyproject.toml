@@ -18,7 +18,7 @@ pytest = "^9.0.3"
 [tool.poetry.scripts]
 build-nuitka = "build:Build_Nuitka"
 build-pyinstaller = "build:Build_PyInstaller"
-main = "src.main:main"
+main = "src.doc_generator_gui.main:main"
 
 [build-system]
 requires = ["poetry-core"]
