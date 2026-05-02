@@ -11,6 +11,7 @@ class Cpf_Input(QtWidgets.QLineEdit):
         self.setMaxLength(18)
 
     def format_text(self):
+        cursor = self.cursorPosition()
         # Remove any non-digit characters
         text = "".join(filter(str.isdigit, self.text()))
 
@@ -20,6 +21,8 @@ class Cpf_Input(QtWidgets.QLineEdit):
         )
 
         self.setText(formatted)
+
+        self.setCursorPosition(cursor)
 
     def format_as_cpf(self, text: str) -> str:
         if len(text) >= 4:
