@@ -12,8 +12,11 @@ class Cpf_Input(QtWidgets.QLineEdit):
 
     def format_text(self):
         cursor = self.cursorPosition()
+
         # Remove any non-digit characters
         text = "".join(filter(str.isdigit, self.text()))
+
+        digits_before_cursor = len(text[:cursor])
 
         # Format as a common format for both CPF and CNPJ (e.g., 123.456.789-01 or 12.345.678/9012-34)
         formatted = (
@@ -22,7 +25,8 @@ class Cpf_Input(QtWidgets.QLineEdit):
 
         self.setText(formatted)
 
-        self.setCursorPosition(cursor)
+        new_cursor = self.cursor_from_digits(formatted, digits_before_cursor)
+        self.setCursorPosition(new_cursor)
 
     def format_as_cpf(self, text: str) -> str:
         if len(text) >= 4:
@@ -43,3 +47,16 @@ class Cpf_Input(QtWidgets.QLineEdit):
         if len(text) >= 16:
             text = f"{text[:15]}-{text[15:]}"
         return text
+
+    def cursor_from_digits(self, formatted: str, digits_count: int) -> int:
+        count = 0
+
+        for index, char in enumerate(formatted):
+            if char.isdigit():
+                count += 1
+            if digits_count == 0:
+                return index
+            if count >= digits_count:
+                return index + 1
+
+        return len(formatted)
