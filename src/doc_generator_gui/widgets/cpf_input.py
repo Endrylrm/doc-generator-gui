@@ -49,13 +49,14 @@ class Cpf_Input(QtWidgets.QLineEdit):
         return text
 
     def cursor_from_digits(self, formatted: str, digits_count: int) -> int:
+        if digits_count == 0:
+            return 0
+
         count = 0
 
         for index, char in enumerate(formatted):
             if char.isdigit():
                 count += 1
-            if digits_count == 0:
-                return index
             if count >= digits_count:
                 return index + 1
 
