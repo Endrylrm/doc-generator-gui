@@ -210,7 +210,7 @@ class GenDocument(QtWidgets.QWidget):
 
     def CheckEmptyInputs(self) -> bool:
         """
-        this just checks if out inputs are not empty and
+        this just checks if our inputs are not empty and
         open a message box to tell the user if a required
         input is empty.
         """
