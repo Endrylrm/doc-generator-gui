@@ -231,8 +231,8 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_impressora.html",
-            "termo_devol": "termo_impressora_devol.html"
+            "termo": "termo_notebook.html",
+            "termo_devol": "termo_notebook_devol.html"
 		}
     }	
 }
