@@ -55,7 +55,7 @@ class Cpf_Input(QtWidgets.QLineEdit):
         count = 0
 
         for index, char in enumerate(formatted):
-            if char.isdigit():
+            if char.isnumeric():
                 count += 1
             if count >= digits_count:
                 return index + 1
