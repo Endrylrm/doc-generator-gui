@@ -14,7 +14,7 @@ class Cpf_Input(QtWidgets.QLineEdit):
         cursor = self.cursorPosition()
 
         # Remove any non-digit characters
-        text = "".join(filter(str.isdigit, self.text()))
+        text = "".join(filter(str.isnumeric, self.text()))
 
         digits_before_cursor = len(text[:cursor])
 
