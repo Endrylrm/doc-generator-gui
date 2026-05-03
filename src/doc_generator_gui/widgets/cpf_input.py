@@ -49,7 +49,7 @@ class Cpf_Input(QtWidgets.QLineEdit):
         return text
 
     def cursor_from_digits(self, formatted: str, digits_count: int) -> int:
-        if digits_count == 0:
+        if digits_count <= 0:
             return 0
 
         count = 0
