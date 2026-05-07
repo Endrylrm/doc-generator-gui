@@ -13,9 +13,13 @@ from .helpers.dialog_helpers import CreateInfoMessageBox, CreateWarningMessageBo
 from .widgets.cpf_input import Cpf_Input
 
 from .contexts.document_context import DocumentContext
+
 from .handlers.html_template_handler import HTMLTemplateHandler
+
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
+
+from .loaders.company_data_loader import CompanyDataLoader
 
 
 class GenDocument(QtWidgets.QWidget):
@@ -38,6 +42,9 @@ class GenDocument(QtWidgets.QWidget):
         self.html_tmpl_handler = HTMLTemplateHandler(self.document_ctx)
         self.pdf_service = PDFService(self.document_ctx)
         self.printer_service = PrinterService(self.document_ctx)
+
+        self.company_loader = CompanyDataLoader("company.json", self.document_ctx)
+        self.company_loader.load()
 
         # a dictionary to remember data from our inputs
         self.input_history: dict = {}
