@@ -9,12 +9,12 @@ class PDFService:
     be printed physically.
     """
 
-    def __init__(self, doc_context: DocumentContext):
+    def __init__(self, document_ctx: DocumentContext):
         """
         Initialization of the PDF_Service Class page.
         """
 
-        self.doc_context = doc_context
+        self.document_ctx = document_ctx
 
         self.printer = QtPrintSupport.QPrinter(
             QtPrintSupport.QPrinter.PrinterMode.HighResolution
@@ -56,7 +56,7 @@ class PDFService:
 
         self.printer.setOutputFormat(QtPrintSupport.QPrinter.OutputFormat.PdfFormat)
         self.printer.setResolution(PDF_PRINTER_RESOLUTION)
-        self.printer.setOutputFileName(self.doc_context.output_path)
+        self.printer.setOutputFileName(self.document_ctx.output_path)
 
         pdf_Doc = QtGui.QTextDocument()
         pdf_Doc.setTextWidth(PDF_TEXT_WIDTH)

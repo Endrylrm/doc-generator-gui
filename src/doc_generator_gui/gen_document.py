@@ -33,11 +33,11 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.doc_context = DocumentContext()
+        self.document_ctx = DocumentContext()
 
-        self.html_tmpl_handler = HTMLTemplateHandler(self.doc_context)
-        self.pdf_service = PDFService(self.doc_context)
-        self.printer_service = PrinterService(self.doc_context)
+        self.html_tmpl_handler = HTMLTemplateHandler(self.document_ctx)
+        self.pdf_service = PDFService(self.document_ctx)
+        self.printer_service = PrinterService(self.document_ctx)
 
         # a dictionary to remember data from our inputs
         self.input_history: dict = {}
@@ -302,7 +302,7 @@ class GenDocument(QtWidgets.QWidget):
             if self.GetValueFromLayout(row, "type") == "name":
                 name = self.table_document.cellWidget(row, 1).text()
 
-        self.doc_context.output_path = (
+        self.document_ctx.output_path = (
             f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
             if self.devolution.isChecked()
             else f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
@@ -324,7 +324,7 @@ class GenDocument(QtWidgets.QWidget):
                 suffix = self.GetValueFromLayout(row, "suffix")
                 current_text = prefix + current_text + suffix
 
-            self.doc_context.strings_to_replace[str_to_replace] = current_text
+            self.document_ctx.strings_to_replace[str_to_replace] = current_text
 
     def GenerateDocument(self):
         """

@@ -9,12 +9,12 @@ class PrinterService:
     physically for our employees.
     """
 
-    def __init__(self, doc_context: DocumentContext):
+    def __init__(self, document_ctx: DocumentContext):
         """
         Initialization of the Printer_Service Class page.
         """
 
-        self.doc_context = doc_context
+        self.document_ctx = document_ctx
 
         self.printer = QtPrintSupport.QPrinter(
             QtPrintSupport.QPrinter.PrinterMode.HighResolution
@@ -34,7 +34,7 @@ class PrinterService:
         START_LOCATION: list[int] = [2, 0]
 
         pdf_file = QtPdf.QPdfDocument()
-        pdf_file.load(self.doc_context.output_path)
+        pdf_file.load(self.document_ctx.output_path)
 
         size = QtGui.QPageSize.sizePixels(
             QtGui.QPageSize.PageSizeId.A4, PDF_PRINTER_RESOLUTION
