@@ -283,12 +283,14 @@ class GenDocument(QtWidgets.QWidget):
         of the table widget accordingly.
         """
 
+        if self.print_type_combobox.currentText() == None:
+            return
+
         self.table_document.setRowCount(0)
 
-        if self.print_type_combobox.currentText() != None:
-            self.cur_layout = self.layouts[self.print_type_combobox.currentText()]
-            keys = [key for key in self.cur_layout.keys() if key != "config"]
-            table_rows = list(map(self.AddRowToTable, keys))
+        self.cur_layout = self.layouts[self.print_type_combobox.currentText()]
+        keys = [key for key in self.cur_layout.keys() if key != "config"]
+        table_rows = list(map(self.AddRowToTable, keys))
 
     def SetOutputPath(self):
         """
