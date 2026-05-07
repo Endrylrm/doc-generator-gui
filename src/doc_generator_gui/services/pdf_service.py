@@ -21,7 +21,7 @@ class PDFService:
 
         self.printer = PrinterFactory.create_pdf_printer()
 
-    def PaintHTML(
+    def PaintFromHTML(
         self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
     ):
         """
@@ -58,6 +58,10 @@ class PDFService:
 
         with PrintContext(self.printer) as ctx:
             ctx.painter.scale(PDF_PAINTER_SCALE, PDF_PAINTER_SCALE)
-            self.PaintHTML(pdf_Doc, ctx.painter, HEADER_LOCATION, html_data["header"])
-            self.PaintHTML(pdf_Doc, ctx.painter, MAIN_LOCATION, html_data["termo"])
-            self.PaintHTML(pdf_Doc, ctx.painter, FOOTER_LOCATION, html_data["footer"])
+            self.PaintFromHTML(
+                pdf_Doc, ctx.painter, HEADER_LOCATION, html_data["header"]
+            )
+            self.PaintFromHTML(pdf_Doc, ctx.painter, MAIN_LOCATION, html_data["termo"])
+            self.PaintFromHTML(
+                pdf_Doc, ctx.painter, FOOTER_LOCATION, html_data["footer"]
+            )
