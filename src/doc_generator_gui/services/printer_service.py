@@ -1,6 +1,9 @@
 from PySide6 import QtGui, QtCore, QtPdf, QtPrintSupport
 
 from ..contexts.document_context import DocumentContext
+from ..contexts.print_context import PrintContext
+
+from ..factories.printer_factory import PrinterFactory
 
 
 class PrinterService:
@@ -16,12 +19,7 @@ class PrinterService:
 
         self.document_ctx = document_ctx
 
-        self.printer = QtPrintSupport.QPrinter(
-            QtPrintSupport.QPrinter.PrinterMode.HighResolution
-        )
-        self.printer.setPageSize(QtGui.QPageSize.PageSizeId.A4)
-        self.printer.setFullPage(True)
-        self.printer.setPageMargins(QtCore.QMarginsF(0.5, 0.5, 0.5, 0.5))
+        self.printer = PrinterFactory.create_native_printer()
 
     def PaintDocument(self):
         """
@@ -42,12 +40,10 @@ class PrinterService:
 
         image_from_pdf = pdf_file.render(0, size)
 
-        painter = QtGui.QPainter()
-        painter.begin(self.printer)
-        painter.scale(PAINTER_SCALE, PAINTER_SCALE)
-        painter.translate(START_LOCATION[0], START_LOCATION[1])
-        painter.drawImage(0, 0, image_from_pdf)
-        painter.end()
+        with PrintContext(self.printer) as ctx:
+            ctx.painter.scale(PAINTER_SCALE, PAINTER_SCALE)
+            ctx.painter.translate(START_LOCATION[0], START_LOCATION[1])
+            ctx.painter.drawImage(0, 0, image_from_pdf)
 
     def PrintDialog(self, print_type: str):
         """
@@ -81,13 +77,8 @@ class PrinterService:
         QPrintPreviewDialog to preview or QPrintDialog for fast printing.
         """
 
-        PRINTER_RESOLUTION: int = 607
-
-        self.printer.setOutputFormat(QtPrintSupport.QPrinter.OutputFormat.NativeFormat)
-        self.printer.setResolution(PRINTER_RESOLUTION)
-
         if disable_print_preview:
             self.PrintDialog(print_type)
+            return
 
-        if not disable_print_preview:
-            self.PrintPreviewDialog(print_type)
+        self.PrintPreviewDialog(print_type)
