@@ -2,15 +2,6 @@ from PySide6 import QtGui, QtCore, QtPdf, QtPrintSupport
 
 from ..contexts.document_context import DocumentContext
 
-from ..constants import (
-    PDF_PAINTER_SCALE,
-    PDF_PRINTER_RESOLUTION,
-    PDF_TEXT_WIDTH,
-    HEADER_LOCATION,
-    MAIN_LOCATION,
-    FOOTER_LOCATION,
-)
-
 
 class PDFService:
     """
@@ -54,6 +45,14 @@ class PDFService:
         PDF file of our HTML, we scale our painter and use the function
         PaintHTML to paint the html to a new PDF file.
         """
+
+        PDF_PRINTER_RESOLUTION: int = 600
+        PDF_PAINTER_SCALE: float = 8.5
+        PDF_TEXT_WIDTH: int = 530
+
+        HEADER_LOCATION: list[int] = [0, 5]
+        MAIN_LOCATION: list[int] = [30, 72]
+        FOOTER_LOCATION: list[int] = [-30, 665]
 
         self.printer.setOutputFormat(QtPrintSupport.QPrinter.OutputFormat.PdfFormat)
         self.printer.setResolution(PDF_PRINTER_RESOLUTION)

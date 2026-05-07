@@ -2,13 +2,6 @@ from PySide6 import QtGui, QtCore, QtPdf, QtPrintSupport
 
 from ..contexts.document_context import DocumentContext
 
-from ..constants import (
-    PDF_PRINTER_RESOLUTION,
-    PAINTER_SCALE,
-    PRINTER_RESOLUTION,
-    START_LOCATION,
-)
-
 
 class PrinterService:
     """
@@ -35,6 +28,10 @@ class PrinterService:
         this function is responsible to convert our pdf file in a
         image and then use a QPainter to paint to a native printer.
         """
+
+        PDF_PRINTER_RESOLUTION: int = 600
+        PAINTER_SCALE: float = 1
+        START_LOCATION: list[int] = [2, 0]
 
         pdf_file = QtPdf.QPdfDocument()
         pdf_file.load(self.doc_context.output_path)
@@ -83,6 +80,8 @@ class PrinterService:
         printer, it uses a QPrinter to send to a native printer,
         QPrintPreviewDialog to preview or QPrintDialog for fast printing.
         """
+
+        PRINTER_RESOLUTION: int = 607
 
         self.printer.setOutputFormat(QtPrintSupport.QPrinter.OutputFormat.NativeFormat)
         self.printer.setResolution(PRINTER_RESOLUTION)
