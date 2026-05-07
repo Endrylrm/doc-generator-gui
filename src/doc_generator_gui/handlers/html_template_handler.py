@@ -34,7 +34,7 @@ class HTMLTemplateHandler:
 
         return html
 
-    def Handle_HTML(self, file: str, date_text: str = "") -> dict[str, str]:
+    def HandleHTML(self, file: str, date_text: str = "") -> dict[str, str]:
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.

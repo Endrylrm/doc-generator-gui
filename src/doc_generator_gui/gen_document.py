@@ -353,7 +353,7 @@ class GenDocument(QtWidgets.QWidget):
         )
 
         self.pdf_service.Generate(
-            self.html_tmpl_handler.Handle_HTML(file_to_read, cur_date)
+            self.html_tmpl_handler.HandleHTML(file_to_read, cur_date)
         )
 
         if not self.disable_printer.isChecked():
