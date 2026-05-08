@@ -46,9 +46,6 @@ class GenDocument(QtWidgets.QWidget):
 
         self.layout_store = LayoutStore("layouts.json")
 
-        # a dictionary to remember data from our inputs
-        self.input_history: dict = {}
-
         self.CreateWidgets(controller)
         self.GridConfigs()
 
@@ -95,7 +92,7 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         table_headers = ["Descrição", "Preencher"]
-        self.table_document = QtWidgets.QTableWidget()
+        self.table_document = QtWidgets.QTableWidget(self)
         self.table_document.setRowCount(0)
         self.table_document.setColumnCount(2)
         self.table_document.setHorizontalHeaderLabels(table_headers)
@@ -218,10 +215,11 @@ class GenDocument(QtWidgets.QWidget):
 
         msg_box_icon = QtGui.QIcon("gen_document.ico")
         for row in range(self.table_document.rowCount()):
-            if (
-                self.table_document.cellWidget(row, 1).text() == ""
-                and self.layout_store.GetValueFromLayout(row, "error_message") != ""
-            ):
+            is_empty_cell = self.table_document.cellWidget(row, 1).text() == ""
+            has_error_msg = (
+                self.layout_store.GetValueFromLayout(row, "error_message") != ""
+            )
+            if is_empty_cell and has_error_msg:
                 CreateInfoMessageBox(
                     f"Aviso - Campo {self.layout_store.GetValueFromLayout(row, "error_message")} está vazio!",
                     f"Sem {self.layout_store.GetValueFromLayout(row, "error_message")}!",
@@ -246,14 +244,14 @@ class GenDocument(QtWidgets.QWidget):
         row_input.textEdited.connect(
             lambda: self.SetInputHistoryData(key, row_input.text())
         )
-        if key in self.input_history and self.input_history[key] != "":
-            row_input.setText(self.input_history[key])
         if layout["type"] != "cpf":
             row_input.setMaxLength(max_text_length)
+        if key in self.doc_state.input_history:
+            row_input.setText(self.doc_state.input_history[key])
         return row_input
 
     def SetInputHistoryData(self, key: str, text: str):
-        self.input_history[key] = text
+        self.doc_state.input_history[key] = text
 
     def AddRowToTable(self, key: str):
         """
@@ -316,10 +314,12 @@ class GenDocument(QtWidgets.QWidget):
 
             current_text = self.table_document.cellWidget(row, 1).text()
 
-            if current_text != "":
-                prefix = self.layout_store.GetValueFromLayout(row, "prefix")
-                suffix = self.layout_store.GetValueFromLayout(row, "suffix")
-                current_text = prefix + current_text + suffix
+            if current_text == "":
+                continue
+
+            prefix = self.layout_store.GetValueFromLayout(row, "prefix")
+            suffix = self.layout_store.GetValueFromLayout(row, "suffix")
+            current_text = prefix + current_text + suffix
 
             self.doc_state.strings_to_replace[str_to_replace] = current_text
 
