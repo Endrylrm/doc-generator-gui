@@ -49,8 +49,6 @@ class GenDocument(QtWidgets.QWidget):
         # a dictionary to remember data from our inputs
         self.input_history: dict = {}
 
-        self.cur_layout: dict = {}
-
         self.CreateWidgets(controller)
         self.GridConfigs()
 
@@ -263,7 +261,7 @@ class GenDocument(QtWidgets.QWidget):
         """
 
         index = self.table_document.rowCount()
-        row_layout = self.cur_layout[key]
+        row_layout = self.layout_repo.GetCurrentLayout()[key]
         self.table_document.setRowCount(index + 1)
         row_description = self.CreateRowDescription(row_layout)
         self.table_document.setItem(index, 0, row_description)
@@ -281,10 +279,10 @@ class GenDocument(QtWidgets.QWidget):
 
         self.table_document.setRowCount(0)
 
-        self.cur_layout = self.layout_repo.GetLayout(
-            self.print_type_combobox.currentText()
-        )
-        keys = [key for key in self.cur_layout.keys() if key != "config"]
+        self.layout_repo.SetCurrentLayout(self.print_type_combobox.currentText())
+        keys = [
+            key for key in self.layout_repo.GetCurrentLayout().keys() if key != "config"
+        ]
         table_rows = list(map(self.AddRowToTable, keys))
 
     def SetOutputPath(self):
@@ -336,9 +334,9 @@ class GenDocument(QtWidgets.QWidget):
         self.SetOutputPath()
 
         file_to_read = (
-            self.cur_layout["config"]["termo"]
+            self.layout_repo.GetCurrentLayout()["config"]["termo"]
             if not self.devolution.isChecked()
-            else self.cur_layout["config"]["termo_devol"]
+            else self.layout_repo.GetCurrentLayout()["config"]["termo_devol"]
         )
 
         cur_date = (

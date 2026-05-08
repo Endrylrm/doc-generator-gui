@@ -9,6 +9,7 @@ class LayoutRepository:
 
     def __init__(self, path: str):
         self.__layouts = self.__LoadLayouts(path)
+        self.__cur_layout = {}
 
     def GetLayout(self, key: str):
         return self.__layouts[key]
@@ -25,6 +26,12 @@ class LayoutRepository:
 
         layout_data = list(cur_layout.items())[index][1]
         return layout_data[key] if key in layout_data else ""
+
+    def GetCurrentLayout(self) -> dict:
+        return self.__cur_layout
+
+    def SetCurrentLayout(self, key: str) -> dict:
+        self.__cur_layout = self.GetLayout(key)
 
     def __LoadLayouts(self, path: str) -> dict:
         with open(path, "r", encoding="utf-8") as f:
