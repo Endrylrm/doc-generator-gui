@@ -2,7 +2,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from .cpf_input import CpfInput
 
-from ..helpers.dialog_helpers import CreateInfoMessageBox
+from ..factories.dialog_factory import DialogFactory
 
 from ..states.document_state import DocumentState
 
@@ -80,7 +80,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             error_msg = self.layout_store.GetValueFromLayout(row, "error_message")
 
             if is_empty_cell and error_msg != "":
-                CreateInfoMessageBox(
+                DialogFactory.CreateInfoMessageBox(
                     f"Aviso - Campo {error_msg} está vazio!",
                     f"Sem {error_msg}!",
                     f"Por gentileza, coloque o {error_msg}.",

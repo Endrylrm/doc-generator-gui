@@ -1,6 +1,3 @@
-__author__ = "Endryl Richard Monteiro"
-__author_email__ = "Endrylrm@hotmail.com"
-
 import sys
 
 from PySide6 import QtWidgets, QtCore
