@@ -20,4 +20,4 @@ class CompanyDataLoader:
         for key in company_data.keys():
             replace = company_data[key]["replace"]
             value = company_data[key]["value"]
-            self.doc_state.strings_to_replace[replace] = value
+            self.doc_state.company_data[replace] = value

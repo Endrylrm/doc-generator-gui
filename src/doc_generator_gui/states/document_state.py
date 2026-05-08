@@ -9,5 +9,6 @@ class DocumentState:
     """
 
     output_path: str = ""
-    strings_to_replace: dict[str, str] = field(default_factory=dict)
+    input_data: dict[str, str] = field(default_factory=dict)
     input_history: dict[str, str] = field(default_factory=dict)
+    company_data: dict[str, str] = field(default_factory=dict)

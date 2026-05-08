@@ -145,7 +145,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             suffix = self.layout_store.GetValueFromLayout(row, "suffix")
             current_text = prefix + current_text + suffix
 
-            self.doc_state.strings_to_replace[str_to_replace] = current_text
+            self.doc_state.input_data[str_to_replace] = current_text
 
     def GetEmployeeName(self):
         for row in range(self.rowCount()):

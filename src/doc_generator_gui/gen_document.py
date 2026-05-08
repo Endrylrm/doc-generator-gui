@@ -198,24 +198,30 @@ class GenDocument(QtWidgets.QWidget):
         self.table_document.GetDataFromInputs()
         self.table_document.SetOutputPath(self.devolution.isChecked())
 
+        # append company data with input data
+        self.doc_state.input_data |= self.doc_state.company_data
+
         file_to_read = (
             self.layout_store.GetCurrentLayout()["config"]["termo"]
             if not self.devolution.isChecked()
             else self.layout_store.GetCurrentLayout()["config"]["termo_devol"]
         )
 
-        cur_date = (
+        date_text = (
             self.date_picker.text()
             if self.manual_date.isChecked()
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
-        self.pdf_service.Generate(
-            self.html_tmpl_handler.HandleHTML(file_to_read, cur_date)
-        )
+        self.doc_state.input_data["$data$"] = date_text
+
+        self.pdf_service.Generate(self.html_tmpl_handler.HandleHTML(file_to_read))
 
         if not self.disable_printer.isChecked():
             self.printer_service.PrintDocument(
                 self.disable_printer_preview.isChecked(),
                 self.layout_combobox.currentText(),
             )
+
+        # clear input_data after we use it
+        self.doc_state.input_data = {}

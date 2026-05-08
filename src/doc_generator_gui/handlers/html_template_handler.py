@@ -1,3 +1,5 @@
+import re
+
 from ..states.document_state import DocumentState
 
 
@@ -30,7 +32,16 @@ class HTMLTemplateHandler:
 
         return html
 
-    def HandleHTML(self, file: str, date_text: str = "") -> dict[str, str]:
+    def CleanHTML(self, html: dict[str, str]):
+        for key in html:
+            for old_string, new_string in self.doc_state.input_data.items():
+                html[key] = html[key].replace(old_string, new_string)
+
+    def RemoveUnusedTemplate(self, html: dict[str, str]):
+        for key in html:
+            html[key] = re.sub(r"\$([a-zA-Z0-9_]+)\$", "", html[key])
+
+    def HandleHTML(self, file: str) -> dict[str, str]:
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.
@@ -38,11 +49,9 @@ class HTMLTemplateHandler:
 
         html = self.ReadHTMLFiles(file)
 
-        for old_string, new_string in self.doc_state.strings_to_replace.items():
-            html["header"] = html["header"].replace(old_string, new_string)
-            html["termo"] = html["termo"].replace(old_string, new_string)
-            html["footer"] = html["footer"].replace(old_string, new_string)
+        self.CleanHTML(html)
 
-        html["footer"] = html["footer"].replace("$data$", date_text)
+        # clean any variable that didn't get used, such as remarks
+        self.RemoveUnusedTemplate(html)
 
         return html
