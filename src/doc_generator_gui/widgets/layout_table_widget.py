@@ -41,6 +41,27 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self.setSelectionMode(self.selectionMode().SingleSelection)
         self.verticalHeader().setVisible(False)
 
+    def SetTableLayout(self, layout_name: str = ""):
+        """
+        matches our selected Print layout, changes the text and layout
+        of the table widget accordingly.
+        """
+
+        if layout_name == None:
+            return
+
+        self.setRowCount(0)
+
+        self.layout_store.SetCurrentLayout(layout_name)
+
+        keys = [
+            key
+            for key in self.layout_store.GetCurrentLayout().keys()
+            if key != "config"
+        ]
+
+        table_rows = list(map(self.AddRowToTable, keys))
+
     def CheckEmptyInputs(self) -> bool:
         """
         this just checks if our inputs are not empty and

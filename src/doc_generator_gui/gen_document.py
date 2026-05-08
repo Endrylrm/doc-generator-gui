@@ -47,8 +47,6 @@ class GenDocument(QtWidgets.QWidget):
         self.CreateWidgets(controller)
         self.GridConfigs()
 
-        self.MatchPrintType()
-
     def CreateWidgets(self, controller):
         """
         Used to create new widgets (labels, buttons, etc.),
@@ -77,7 +75,6 @@ class GenDocument(QtWidgets.QWidget):
                 self.layout_store.GetAllLayouts().keys(),
             )
         )
-        self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
         self.separator_combobox = QtWidgets.QFrame(self)
         self.separator_combobox.setLineWidth(1)
@@ -90,6 +87,10 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         self.table_document = LayoutTableWidget(self, self.doc_state, self.layout_store)
+        self.table_document.SetTableLayout(self.print_type_combobox.currentText())
+        self.print_type_combobox.currentTextChanged.connect(
+            self.table_document.SetTableLayout
+        )
         # CheckBox - Ativar Data Manual
         self.manual_date = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
         self.manual_date.setToolTip(
@@ -186,25 +187,6 @@ class GenDocument(QtWidgets.QWidget):
     def CheckManualDate(self):
         is_manual_date: bool = True if self.manual_date.isChecked() else False
         self.date_picker.setEnabled(is_manual_date)
-
-    def MatchPrintType(self):
-        """
-        matches our selected Print layout, changes the text and layout
-        of the table widget accordingly.
-        """
-
-        if self.print_type_combobox.currentText() == None:
-            return
-
-        self.table_document.setRowCount(0)
-
-        self.layout_store.SetCurrentLayout(self.print_type_combobox.currentText())
-        keys = [
-            key
-            for key in self.layout_store.GetCurrentLayout().keys()
-            if key != "config"
-        ]
-        table_rows = list(map(self.table_document.AddRowToTable, keys))
 
     def GenerateDocument(self):
         """
