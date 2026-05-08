@@ -192,7 +192,10 @@ class GenDocument(QtWidgets.QWidget):
         self.table_document.SetOutputPath(self.devolution.isChecked())
 
         # append company data in input data
-        self.doc_state.input_data |= self.doc_state.company_data
+        for key in self.doc_state.company_data:
+            replace = self.doc_state.company_data[key]["replace"]
+            value = self.doc_state.company_data[key]["value"]
+            self.doc_state.input_data[replace] = value
 
         file_to_read = (
             self.layout_store.GetCurrentLayout()["config"]["termo"]
