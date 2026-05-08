@@ -2,7 +2,6 @@ __author__ = "Endryl Richard Monteiro"
 __author_email__ = "Endrylrm@hotmail.com"
 
 import locale
-import json
 
 from datetime import datetime
 
