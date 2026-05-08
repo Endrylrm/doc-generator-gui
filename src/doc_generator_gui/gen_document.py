@@ -19,7 +19,7 @@ from .handlers.html_template_handler import HTMLTemplateHandler
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
 
-from .Stores.layout_store import LayoutStore
+from .stores.layout_store import LayoutStore
 
 from .loaders.company_data_loader import CompanyDataLoader
 
