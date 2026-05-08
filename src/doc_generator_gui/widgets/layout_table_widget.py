@@ -1,0 +1,130 @@
+from PySide6 import QtCore, QtGui, QtWidgets
+
+from .cpf_input import CpfInput
+
+from ..helpers.dialog_helpers import CreateInfoMessageBox
+
+from ..states.document_state import DocumentState
+
+from ..stores.layout_store import LayoutStore
+
+
+class LayoutTableWidget(QtWidgets.QTableWidget):
+    """
+    This widget is responsible for the table widget
+    which changes depending on the selected layout.
+    """
+
+    def __init__(
+        self,
+        parent=None,
+        doc_state: DocumentState | None = None,
+        layout_store: LayoutStore | None = None,
+    ):
+        super().__init__(parent=parent)
+
+        self.doc_state = doc_state
+        self.layout_store = layout_store
+
+        table_headers = ["Descrição", "Preencher"]
+
+        self.setRowCount(0)
+        self.setColumnCount(2)
+        self.setHorizontalHeaderLabels(table_headers)
+        self.horizontalHeader().setSectionResizeMode(
+            0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents
+        )
+        self.horizontalHeader().setSectionResizeMode(
+            1, QtWidgets.QHeaderView.ResizeMode.Stretch
+        )
+        self.setSelectionBehavior(self.selectionBehavior().SelectItems)
+        self.setSelectionMode(self.selectionMode().SingleSelection)
+        self.verticalHeader().setVisible(False)
+
+    def CheckEmptyInputs(self) -> bool:
+        """
+        this just checks if our inputs are not empty and
+        open a message box to tell the user if a required
+        input is empty.
+        """
+
+        msg_box_icon = QtGui.QIcon("gen_document.ico")
+        for row in range(self.rowCount()):
+            is_empty_cell = self.cellWidget(row, 1).text() == ""
+            has_error_msg = (
+                self.layout_store.GetValueFromLayout(row, "error_message") != ""
+            )
+            if is_empty_cell and has_error_msg:
+                CreateInfoMessageBox(
+                    f"Aviso - Campo {self.layout_store.GetValueFromLayout(row, "error_message")} está vazio!",
+                    f"Sem {self.layout_store.GetValueFromLayout(row, "error_message")}!",
+                    f"Por gentileza, coloque o {self.layout_store.GetValueFromLayout(row, "error_message")}.",
+                    msg_win_icon=msg_box_icon,
+                )
+                return False
+        return True
+
+    def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
+        description_font = QtGui.QFont()
+        description_font.setBold(True)
+        row_description = QtWidgets.QTableWidgetItem(layout["description"])
+        row_description.setFont(description_font)
+        row_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
+        return row_description
+
+    def CreateRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | CpfInput:
+        max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 900
+        row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else CpfInput()
+        row_input.setPlaceholderText(layout["placeholder"])
+        row_input.textEdited.connect(
+            lambda: self.SetInputHistoryData(key, row_input.text())
+        )
+        if layout["type"] != "cpf":
+            row_input.setMaxLength(max_text_length)
+        if key in self.doc_state.input_history:
+            row_input.setText(self.doc_state.input_history[key])
+        return row_input
+
+    def SetInputHistoryData(self, key: str, text: str):
+        self.doc_state.input_history[key] = text
+
+    def AddRowToTable(self, key: str):
+        """
+        Adds a new row to our tablewidget based on our json layout.
+        """
+
+        index = self.rowCount()
+        row_layout = self.layout_store.GetCurrentLayout()[key]
+        self.setRowCount(index + 1)
+        row_description = self.CreateRowDescription(row_layout)
+        self.setItem(index, 0, row_description)
+        row_input = self.CreateRowInput(key, row_layout)
+        self.setCellWidget(index, 1, row_input)
+
+    def GetDataFromInputs(self):
+        """
+        Gets the data from every input and in our table widget
+        adds to our string replace dictionary.
+        """
+
+        for row in range(self.rowCount()):
+            str_to_replace = self.layout_store.GetValueFromLayout(row, "replace")
+
+            current_text = self.cellWidget(row, 1).text()
+
+            if current_text == "":
+                continue
+
+            prefix = self.layout_store.GetValueFromLayout(row, "prefix")
+            suffix = self.layout_store.GetValueFromLayout(row, "suffix")
+            current_text = prefix + current_text + suffix
+
+            self.doc_state.strings_to_replace[str_to_replace] = current_text
+
+    def GetEmployeeName(self):
+        for row in range(self.rowCount()):
+            if self.layout_store.GetValueFromLayout(row, "type") == "name":
+                name = self.cellWidget(row, 1).text()
+                return name
+
+        return ""

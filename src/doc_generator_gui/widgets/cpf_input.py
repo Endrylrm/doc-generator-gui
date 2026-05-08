@@ -1,9 +1,14 @@
 from PySide6 import QtWidgets
 
 
-class Cpf_Input(QtWidgets.QLineEdit):
+class CpfInput(QtWidgets.QLineEdit):
+    """
+    This widget is responsible for the CPF/CNPJ input
+    formatting while typing.
+    """
+
     def __init__(self, parent=None):
-        QtWidgets.QLineEdit.__init__(self, parent=parent)
+        super().__init__(parent=parent)
         self.setPlaceholderText(
             "Observação: Digite apenas os números do CPF, formatação automática."
         )

@@ -8,9 +8,7 @@ from datetime import datetime
 
 from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
 
-from .helpers.dialog_helpers import CreateInfoMessageBox, CreateWarningMessageBox
-
-from .widgets.cpf_input import Cpf_Input
+from .widgets.layout_table_widget import LayoutTableWidget
 
 from .states.document_state import DocumentState
 
@@ -91,24 +89,7 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShape(QtWidgets.QFrame.HLine)
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
-        table_headers = ["Descrição", "Preencher"]
-        self.table_document = QtWidgets.QTableWidget(self)
-        self.table_document.setRowCount(0)
-        self.table_document.setColumnCount(2)
-        self.table_document.setHorizontalHeaderLabels(table_headers)
-        self.table_document.horizontalHeader().setSectionResizeMode(
-            0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents
-        )
-        self.table_document.horizontalHeader().setSectionResizeMode(
-            1, QtWidgets.QHeaderView.ResizeMode.Stretch
-        )
-        self.table_document.setSelectionBehavior(
-            self.table_document.selectionBehavior().SelectItems
-        )
-        self.table_document.setSelectionMode(
-            self.table_document.selectionMode().SingleSelection
-        )
-        self.table_document.verticalHeader().setVisible(False)
+        self.table_document = LayoutTableWidget(self, self.doc_state, self.layout_store)
         # CheckBox - Ativar Data Manual
         self.manual_date = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
         self.manual_date.setToolTip(
@@ -206,66 +187,6 @@ class GenDocument(QtWidgets.QWidget):
         is_manual_date: bool = True if self.manual_date.isChecked() else False
         self.date_picker.setEnabled(is_manual_date)
 
-    def CheckEmptyInputs(self) -> bool:
-        """
-        this just checks if our inputs are not empty and
-        open a message box to tell the user if a required
-        input is empty.
-        """
-
-        msg_box_icon = QtGui.QIcon("gen_document.ico")
-        for row in range(self.table_document.rowCount()):
-            is_empty_cell = self.table_document.cellWidget(row, 1).text() == ""
-            has_error_msg = (
-                self.layout_store.GetValueFromLayout(row, "error_message") != ""
-            )
-            if is_empty_cell and has_error_msg:
-                CreateInfoMessageBox(
-                    f"Aviso - Campo {self.layout_store.GetValueFromLayout(row, "error_message")} está vazio!",
-                    f"Sem {self.layout_store.GetValueFromLayout(row, "error_message")}!",
-                    f"Por gentileza, coloque o {self.layout_store.GetValueFromLayout(row, "error_message")}.",
-                    msg_win_icon=msg_box_icon,
-                )
-                return False
-        return True
-
-    def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
-        description_font = QtGui.QFont()
-        description_font.setBold(True)
-        row_description = QtWidgets.QTableWidgetItem(layout["description"])
-        row_description.setFont(description_font)
-        row_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
-        return row_description
-
-    def CreateRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | Cpf_Input:
-        max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 900
-        row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else Cpf_Input()
-        row_input.setPlaceholderText(layout["placeholder"])
-        row_input.textEdited.connect(
-            lambda: self.SetInputHistoryData(key, row_input.text())
-        )
-        if layout["type"] != "cpf":
-            row_input.setMaxLength(max_text_length)
-        if key in self.doc_state.input_history:
-            row_input.setText(self.doc_state.input_history[key])
-        return row_input
-
-    def SetInputHistoryData(self, key: str, text: str):
-        self.doc_state.input_history[key] = text
-
-    def AddRowToTable(self, key: str):
-        """
-        Adds a new row to our tablewidget based on our json layout.
-        """
-
-        index = self.table_document.rowCount()
-        row_layout = self.layout_store.GetCurrentLayout()[key]
-        self.table_document.setRowCount(index + 1)
-        row_description = self.CreateRowDescription(row_layout)
-        self.table_document.setItem(index, 0, row_description)
-        row_input = self.CreateRowInput(key, row_layout)
-        self.table_document.setCellWidget(index, 1, row_input)
-
     def MatchPrintType(self):
         """
         matches our selected Print layout, changes the text and layout
@@ -283,7 +204,7 @@ class GenDocument(QtWidgets.QWidget):
             for key in self.layout_store.GetCurrentLayout().keys()
             if key != "config"
         ]
-        table_rows = list(map(self.AddRowToTable, keys))
+        table_rows = list(map(self.table_document.AddRowToTable, keys))
 
     def SetOutputPath(self):
         """
@@ -293,9 +214,7 @@ class GenDocument(QtWidgets.QWidget):
 
         print_type = self.print_type_combobox.currentText()
 
-        for row in range(self.table_document.rowCount()):
-            if self.layout_store.GetValueFromLayout(row, "type") == "name":
-                name = self.table_document.cellWidget(row, 1).text()
+        name = self.table_document.GetEmployeeName()
 
         self.doc_state.output_path = (
             f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
@@ -303,36 +222,16 @@ class GenDocument(QtWidgets.QWidget):
             else f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
         )
 
-    def GetDataFromInputs(self):
-        """
-        Gets the data from every input and in our table widget
-        adds to our string replace dictionary.
-        """
-
-        for row in range(self.table_document.rowCount()):
-            str_to_replace = self.layout_store.GetValueFromLayout(row, "replace")
-
-            current_text = self.table_document.cellWidget(row, 1).text()
-
-            if current_text == "":
-                continue
-
-            prefix = self.layout_store.GetValueFromLayout(row, "prefix")
-            suffix = self.layout_store.GetValueFromLayout(row, "suffix")
-            current_text = prefix + current_text + suffix
-
-            self.doc_state.strings_to_replace[str_to_replace] = current_text
-
     def GenerateDocument(self):
         """
         Responsible to start the PDF creation and sending to a
         printer (optional).
         """
 
-        if not self.CheckEmptyInputs():
+        if not self.table_document.CheckEmptyInputs():
             return
 
-        self.GetDataFromInputs()
+        self.table_document.GetDataFromInputs()
         self.SetOutputPath()
 
         file_to_read = (
