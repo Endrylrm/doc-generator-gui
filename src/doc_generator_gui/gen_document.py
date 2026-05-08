@@ -192,7 +192,7 @@ class GenDocument(QtWidgets.QWidget):
         printer (optional).
         """
 
-        if not self.table_document.CheckEmptyInputs():
+        if self.table_document.HasEmptyInputs():
             return
 
         self.table_document.GetDataFromInputs()

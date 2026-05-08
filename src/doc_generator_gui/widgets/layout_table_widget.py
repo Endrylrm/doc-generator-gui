@@ -66,7 +66,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         table_rows = list(map(self.AddRowToTable, keys))
 
-    def CheckEmptyInputs(self) -> bool:
+    def HasEmptyInputs(self) -> bool:
         """
         this just checks if our inputs are not empty and
         open a message box to tell the user if a required
@@ -86,8 +86,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
                     f"Por gentileza, coloque o {self.layout_store.GetValueFromLayout(row, "error_message")}.",
                     msg_win_icon=msg_box_icon,
                 )
-                return False
-        return True
+                return True
+        return False
 
     def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
         description_font = QtGui.QFont()
