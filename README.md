@@ -65,7 +65,9 @@ Exemplo - `layouts.json`:
 		},
 		"Config": {
             "termo": "termo_celular.html",
-            "termo_devol": "termo_celular_devol.html"
+            "termo_devol": "termo_celular_devol.html",
+			"output": "./Termos/Termo de Entrega de Celular",
+			"output_devol": "./Termos/Termo de Devolução de Celular"
 		}
     }
 }

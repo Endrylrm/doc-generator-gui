@@ -212,14 +212,16 @@ class GenDocument(QtWidgets.QWidget):
         name of the employee in our table and the current type.
         """
 
-        print_type = self.print_type_combobox.currentText()
+        cur_layout = self.layout_store.GetCurrentLayout(
+            self.print_type_combobox.currentText()
+        )
 
         name = self.table_document.GetEmployeeName()
 
         self.doc_state.output_path = (
-            f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
+            f"{cur_layout["config"]["output_devol"]} - {name}.pdf"
             if self.devolution.isChecked()
-            else f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
+            else f"{cur_layout["config"]["output"]} - {name}.pdf"
         )
 
     def GenerateDocument(self):
