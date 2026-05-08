@@ -74,19 +74,20 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         msg_box_icon = QtGui.QIcon("gen_document.ico")
+
         for row in range(self.rowCount()):
             is_empty_cell = self.cellWidget(row, 1).text() == ""
-            has_error_msg = (
-                self.layout_store.GetValueFromLayout(row, "error_message") != ""
-            )
-            if is_empty_cell and has_error_msg:
+            error_msg = self.layout_store.GetValueFromLayout(row, "error_message")
+
+            if is_empty_cell and error_msg != "":
                 CreateInfoMessageBox(
-                    f"Aviso - Campo {self.layout_store.GetValueFromLayout(row, "error_message")} está vazio!",
-                    f"Sem {self.layout_store.GetValueFromLayout(row, "error_message")}!",
-                    f"Por gentileza, coloque o {self.layout_store.GetValueFromLayout(row, "error_message")}.",
+                    f"Aviso - Campo {error_msg} está vazio!",
+                    f"Sem {error_msg}!",
+                    f"Por gentileza, coloque o {error_msg}.",
                     msg_win_icon=msg_box_icon,
                 )
                 return True
+
         return False
 
     def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
@@ -111,6 +112,14 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         return row_input
 
     def SetInputHistoryData(self, key: str, text: str):
+        if not text:
+            print("All text was deleted!")
+            print(self.doc_state.strings_to_replace)
+            print(self.doc_state.input_history)
+        else:
+            print(f"Current text: {text}")
+            print(self.doc_state.input_history)
+            print(self.doc_state.strings_to_replace)
         self.doc_state.input_history[key] = text
 
     def AddRowToTable(self, key: str):
