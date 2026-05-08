@@ -206,21 +206,6 @@ class GenDocument(QtWidgets.QWidget):
         ]
         table_rows = list(map(self.table_document.AddRowToTable, keys))
 
-    def SetOutputPath(self):
-        """
-        Sets the output path for our PDF files, by getting the
-        name of the employee in our table and the current type.
-        """
-        default_path = (
-            self.layout_store.GetCurrentLayout()["config"]["output_devol"]
-            if self.devolution.isChecked()
-            else self.layout_store.GetCurrentLayout()["config"]["output"]
-        )
-
-        name = self.table_document.GetEmployeeName()
-
-        self.doc_state.output_path = f"{default_path} - {name}.pdf"
-
     def GenerateDocument(self):
         """
         Responsible to start the PDF creation and sending to a
@@ -231,7 +216,7 @@ class GenDocument(QtWidgets.QWidget):
             return
 
         self.table_document.GetDataFromInputs()
-        self.SetOutputPath()
+        self.table_document.SetOutputPath(self.devolution.isChecked())
 
         file_to_read = (
             self.layout_store.GetCurrentLayout()["config"]["termo"]
