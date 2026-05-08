@@ -13,12 +13,7 @@ class PrinterService:
     """
 
     def __init__(self, document_ctx: DocumentContext):
-        """
-        Initialization of the Printer_Service Class page.
-        """
-
         self.document_ctx = document_ctx
-
         self.printer = PrinterFactory.create_native_printer()
 
     def PaintDocument(self):

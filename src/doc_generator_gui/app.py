@@ -21,10 +21,6 @@ class App(QtWidgets.QMainWindow):
         *args,
         **kwargs
     ):
-        """
-        Initialization of Application (Main Window) Class.
-        """
-
         super().__init__(*args, **kwargs)
         if app_title is not None:
             self.setWindowTitle(app_title)

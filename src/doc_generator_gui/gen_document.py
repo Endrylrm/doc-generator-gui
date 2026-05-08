@@ -19,6 +19,8 @@ from .handlers.html_template_handler import HTMLTemplateHandler
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
 
+from .repositories.layout_repository import LayoutRepository
+
 from .loaders.company_data_loader import CompanyDataLoader
 
 
@@ -29,10 +31,6 @@ class GenDocument(QtWidgets.QWidget):
     """
 
     def __init__(self, parent, controller):
-        """
-        Initialization of the Gen_Document Class page.
-        """
-
         super().__init__(parent=parent)
 
         locale.setlocale(locale.LC_ALL, "")
@@ -44,26 +42,19 @@ class GenDocument(QtWidgets.QWidget):
         self.printer_service = PrinterService(self.document_ctx)
 
         self.company_loader = CompanyDataLoader("company.json", self.document_ctx)
-        self.company_loader.load()
+        self.company_loader.Load()
+
+        self.layout_repo = LayoutRepository("layouts.json")
 
         # a dictionary to remember data from our inputs
         self.input_history: dict = {}
 
-        self.layouts: dict = {}
         self.cur_layout: dict = {}
-
-        self.ReadLayouts()
 
         self.CreateWidgets(controller)
         self.GridConfigs()
 
         self.MatchPrintType()
-
-    def ReadLayouts(self):
-        with open("layouts.json", "r", encoding="utf-8") as layout_file:
-            layouts = json.loads(layout_file.read())
-
-        self.layouts = layouts
 
     def CreateWidgets(self, controller):
         """
@@ -87,7 +78,12 @@ class GenDocument(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.print_type_combobox = QtWidgets.QComboBox(self)
-        print_types = list(map(self.print_type_combobox.addItem, self.layouts.keys()))
+        print_types = list(
+            map(
+                self.print_type_combobox.addItem,
+                self.layout_repo.GetAllLayouts().keys(),
+            )
+        )
         self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
         # separator - ComboBox
         self.separator_combobox = QtWidgets.QFrame(self)
@@ -226,12 +222,12 @@ class GenDocument(QtWidgets.QWidget):
         for row in range(self.table_document.rowCount()):
             if (
                 self.table_document.cellWidget(row, 1).text() == ""
-                and self.GetValueFromLayout(row, "error_message") != ""
+                and self.layout_repo.GetValueFromLayout(row, "error_message") != ""
             ):
                 CreateInfoMessageBox(
-                    f"Aviso - Campo {self.GetValueFromLayout(row, "error_message")} está vazio!",
-                    f"Sem {self.GetValueFromLayout(row, "error_message")}!",
-                    f"Por gentileza, coloque o {self.GetValueFromLayout(row, "error_message")}.",
+                    f"Aviso - Campo {self.layout_repo.GetValueFromLayout(row, "error_message")} está vazio!",
+                    f"Sem {self.layout_repo.GetValueFromLayout(row, "error_message")}!",
+                    f"Por gentileza, coloque o {self.layout_repo.GetValueFromLayout(row, "error_message")}.",
                     msg_win_icon=msg_box_icon,
                 )
                 return False
@@ -274,16 +270,6 @@ class GenDocument(QtWidgets.QWidget):
         row_input = self.CreateRowInput(key, row_layout)
         self.table_document.setCellWidget(index, 1, row_input)
 
-    def GetValueFromLayout(self, index: int, key: str):
-        """
-        we convert our dictionary items in a list, then we returns the
-        data from the dictionary based on the index of a parent key,
-        by selecting the corresponding key.
-        """
-
-        layout_data = list(self.cur_layout.items())[index][1]
-        return layout_data[key] if key in layout_data else ""
-
     def MatchPrintType(self):
         """
         matches our selected Print layout, changes the text and layout
@@ -295,7 +281,9 @@ class GenDocument(QtWidgets.QWidget):
 
         self.table_document.setRowCount(0)
 
-        self.cur_layout = self.layouts[self.print_type_combobox.currentText()]
+        self.cur_layout = self.layout_repo.GetLayout(
+            self.print_type_combobox.currentText()
+        )
         keys = [key for key in self.cur_layout.keys() if key != "config"]
         table_rows = list(map(self.AddRowToTable, keys))
 
@@ -308,7 +296,7 @@ class GenDocument(QtWidgets.QWidget):
         print_type = self.print_type_combobox.currentText()
 
         for row in range(self.table_document.rowCount()):
-            if self.GetValueFromLayout(row, "type") == "name":
+            if self.layout_repo.GetValueFromLayout(row, "type") == "name":
                 name = self.table_document.cellWidget(row, 1).text()
 
         self.document_ctx.output_path = (
@@ -324,13 +312,13 @@ class GenDocument(QtWidgets.QWidget):
         """
 
         for row in range(self.table_document.rowCount()):
-            str_to_replace = self.GetValueFromLayout(row, "replace")
+            str_to_replace = self.layout_repo.GetValueFromLayout(row, "replace")
 
             current_text = self.table_document.cellWidget(row, 1).text()
 
             if current_text != "":
-                prefix = self.GetValueFromLayout(row, "prefix")
-                suffix = self.GetValueFromLayout(row, "suffix")
+                prefix = self.layout_repo.GetValueFromLayout(row, "prefix")
+                suffix = self.layout_repo.GetValueFromLayout(row, "suffix")
                 current_text = prefix + current_text + suffix
 
             self.document_ctx.strings_to_replace[str_to_replace] = current_text

@@ -13,12 +13,7 @@ class PDFService:
     """
 
     def __init__(self, document_ctx: DocumentContext):
-        """
-        Initialization of the PDF_Service Class page.
-        """
-
         self.document_ctx = document_ctx
-
         self.printer = PrinterFactory.create_pdf_printer()
 
     def PaintFromHTML(

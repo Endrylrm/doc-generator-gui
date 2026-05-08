@@ -8,10 +8,6 @@ class HTMLTemplateHandler:
     """
 
     def __init__(self, doc_context: DocumentContext):
-        """
-        Initialization of the HTMLTemplateHandler Class page.
-        """
-
         self.doc_context = doc_context
 
     def ReadHTMLFiles(self, file_to_read: str) -> dict[str, str]:
