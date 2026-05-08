@@ -20,6 +20,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         parent=None,
         doc_state: DocumentState | None = None,
         layout_store: LayoutStore | None = None,
+        layout_combobox: QtWidgets.QComboBox | None = None,
     ):
         super().__init__(parent=parent)
 
@@ -40,6 +41,9 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self.setSelectionBehavior(self.selectionBehavior().SelectItems)
         self.setSelectionMode(self.selectionMode().SingleSelection)
         self.verticalHeader().setVisible(False)
+
+        layout_combobox.currentTextChanged.connect(self.SetTableLayout)
+        self.SetTableLayout(layout_combobox.currentText())
 
     def SetTableLayout(self, layout_name: str = ""):
         """

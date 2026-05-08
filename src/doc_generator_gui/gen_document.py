@@ -64,14 +64,14 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_title.setFrameShape(QtWidgets.QFrame.HLine)
         self.separator_title.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Label - Print Type
-        self.label_print_type_combobox = QtWidgets.QLabel(
+        self.label_layout_combobox = QtWidgets.QLabel(
             self, text="<b>Layout de Impressão</b>"
         )
         # ComboBox - Print Type
-        self.print_type_combobox = QtWidgets.QComboBox(self)
+        self.layout_combobox = QtWidgets.QComboBox(self)
         print_types = list(
             map(
-                self.print_type_combobox.addItem,
+                self.layout_combobox.addItem,
                 self.layout_store.GetAllLayouts().keys(),
             )
         )
@@ -86,10 +86,8 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShape(QtWidgets.QFrame.HLine)
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
-        self.table_document = LayoutTableWidget(self, self.doc_state, self.layout_store)
-        self.table_document.SetTableLayout(self.print_type_combobox.currentText())
-        self.print_type_combobox.currentTextChanged.connect(
-            self.table_document.SetTableLayout
+        self.table_document = LayoutTableWidget(
+            self, self.doc_state, self.layout_store, self.layout_combobox
         )
         # CheckBox - Ativar Data Manual
         self.manual_date = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
@@ -148,7 +146,7 @@ class GenDocument(QtWidgets.QWidget):
         widget_grid_layout.addWidget(self.separator_title, 1, 0, 1, 2)
         # Label - Tipo de impressão
         widget_grid_layout.addWidget(
-            self.label_print_type_combobox,
+            self.label_layout_combobox,
             2,
             0,
             1,
@@ -156,7 +154,7 @@ class GenDocument(QtWidgets.QWidget):
             QtGui.Qt.AlignmentFlag.AlignCenter,
         )
         # ComboBox - Tipo de impressão
-        widget_grid_layout.addWidget(self.print_type_combobox, 3, 0, 1, 2)
+        widget_grid_layout.addWidget(self.layout_combobox, 3, 0, 1, 2)
         # separator - Tipo de impressão ComboBox
         widget_grid_layout.addWidget(self.separator_combobox, 4, 0, 1, 2)
         # Table - Data Layouts
@@ -219,5 +217,5 @@ class GenDocument(QtWidgets.QWidget):
         if not self.disable_printer.isChecked():
             self.printer_service.PrintDocument(
                 self.disable_printer_preview.isChecked(),
-                self.print_type_combobox.currentText(),
+                self.layout_combobox.currentText(),
             )
