@@ -191,7 +191,7 @@ class GenDocument(QtWidgets.QWidget):
         self.table_document.GetDataFromInputs()
         self.table_document.SetOutputPath(self.devolution.isChecked())
 
-        # append company data with input data
+        # append company data in input data
         self.doc_state.input_data |= self.doc_state.company_data
 
         file_to_read = (
