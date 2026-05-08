@@ -1,4 +1,4 @@
-from PySide6 import QtGui, QtCore, QtPdf, QtPrintSupport
+from PySide6 import QtGui
 
 from ..contexts.print_context import PrintContext
 
