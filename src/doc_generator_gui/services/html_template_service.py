@@ -3,7 +3,7 @@ import re
 from ..states.document_state import DocumentState
 
 
-class HTMLTemplateHandler:
+class HTMLTemplateService:
     """
     This class is responsible for working with the html template
     and cleaning our html for creation of PDFs.
@@ -41,7 +41,7 @@ class HTMLTemplateHandler:
         for key in html:
             html[key] = re.sub(r"\$([a-zA-Z0-9_]+)\$", "", html[key])
 
-    def HandleHTML(self, file: str) -> dict[str, str]:
+    def Generate(self, file: str) -> dict[str, str]:
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.

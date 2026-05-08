@@ -8,8 +8,7 @@ from .widgets.layout_table_widget import LayoutTableWidget
 
 from .states.document_state import DocumentState
 
-from .handlers.html_template_handler import HTMLTemplateHandler
-
+from .services.html_template_service import HTMLTemplateService
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
 from .services.json_reader import JsonReader
@@ -30,7 +29,7 @@ class GenDocument(QtWidgets.QWidget):
 
         self.doc_state = DocumentState()
 
-        self.html_tmpl_handler = HTMLTemplateHandler(self.doc_state)
+        self.html_tmpl_service = HTMLTemplateService(self.doc_state)
         self.pdf_service = PDFService(self.doc_state)
         self.printer_service = PrinterService(self.doc_state)
 
@@ -209,7 +208,8 @@ class GenDocument(QtWidgets.QWidget):
 
         self.doc_state.input_data["$data$"] = date_text
 
-        self.pdf_service.Generate(self.html_tmpl_handler.HandleHTML(file_to_read))
+        clean_html = self.html_tmpl_service.Generate(file_to_read)
+        self.pdf_service.Generate(clean_html)
 
         if not self.disable_printer.isChecked():
             self.printer_service.PrintDocument(
