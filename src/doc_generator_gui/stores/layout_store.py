@@ -1,5 +1,7 @@
 import json
 
+from ..readers.json_reader import JsonReader
+
 
 class LayoutStore:
     """
@@ -8,7 +10,7 @@ class LayoutStore:
     """
 
     def __init__(self, path: str):
-        self.__layouts = self.__LoadLayouts(path)
+        self.__layouts = JsonReader.Load(path)
         self.__cur_layout = {}
 
     def GetLayout(self, key: str):
@@ -32,7 +34,3 @@ class LayoutStore:
 
     def SetCurrentLayout(self, key: str) -> dict:
         self.__cur_layout = self.GetLayout(key)
-
-    def __LoadLayouts(self, path: str) -> dict:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)

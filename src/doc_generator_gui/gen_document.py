@@ -15,7 +15,7 @@ from .services.printer_service import PrinterService
 
 from .stores.layout_store import LayoutStore
 
-from .loaders.company_data_loader import CompanyDataLoader
+from .readers.json_reader import JsonReader
 
 
 class GenDocument(QtWidgets.QWidget):
@@ -35,8 +35,7 @@ class GenDocument(QtWidgets.QWidget):
         self.pdf_service = PDFService(self.doc_state)
         self.printer_service = PrinterService(self.doc_state)
 
-        self.company_loader = CompanyDataLoader("company.json", self.doc_state)
-        self.company_loader.Load()
+        self.doc_state.company_data = JsonReader.Load("company.json")
 
         self.layout_store = LayoutStore("layouts.json")
 
