@@ -1,12 +1,11 @@
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6 import QtWidgets
 
 
 class DialogFactory:
     @classmethod
     def EditMessageBoxProps(
         cls,
-        msg: QMessageBox,
+        msg: QtWidgets.QMessageBox,
         msg_win_title=None,
         msg_text=None,
         msg_info_text=None,
@@ -63,12 +62,12 @@ class DialogFactory:
         msg_text=None,
         msg_info_text=None,
         msg_detail_text=None,
-        msg_icon=QMessageBox.Information,
-        msg_buttons=QMessageBox.Ok,
+        msg_icon=QtWidgets.QMessageBox.Information,
+        msg_buttons=QtWidgets.QMessageBox.Ok,
         msg_default_button=None,
         msg_escape_button=None,
         msg_win_icon=None,
-    ) -> QMessageBox:
+    ) -> QtWidgets.QMessageBox:
         """
         msg_win_title: Message box window title.
         msg_text: The text in our message box.
@@ -84,7 +83,7 @@ class DialogFactory:
         returns a QMessageBox object.
         """
 
-        msg = QMessageBox()
+        msg = QtWidgets.QMessageBox()
 
         if msg_win_title is not None:
             msg.setWindowTitle(msg_win_title)
@@ -116,7 +115,7 @@ class DialogFactory:
         msg_text,
         msg_info_text,
         msg_detail_text=None,
-        msg_buttons=QMessageBox.Ok,
+        msg_buttons=QtWidgets.QMessageBox.Ok,
         msg_default_button=None,
         msg_escape_button=None,
         msg_win_icon=None,
@@ -139,7 +138,7 @@ class DialogFactory:
             msg_text=msg_text,
             msg_info_text=msg_info_text,
             msg_detail_text=msg_detail_text,
-            msg_icon=QMessageBox.Information,
+            msg_icon=QtWidgets.QMessageBox.Information,
             msg_buttons=msg_buttons,
             msg_default_button=msg_default_button,
             msg_escape_button=msg_escape_button,
@@ -155,7 +154,7 @@ class DialogFactory:
         msg_text,
         msg_info_text,
         msg_detail_text=None,
-        msg_buttons=QMessageBox.Ok,
+        msg_buttons=QtWidgets.QMessageBox.Ok,
         msg_default_button=None,
         msg_escape_button=None,
         msg_win_icon=None,
@@ -178,7 +177,7 @@ class DialogFactory:
             msg_text=msg_text,
             msg_info_text=msg_info_text,
             msg_detail_text=msg_detail_text,
-            msg_icon=QMessageBox.Warning,
+            msg_icon=QtWidgets.QMessageBox.Warning,
             msg_buttons=msg_buttons,
             msg_default_button=msg_default_button,
             msg_escape_button=msg_escape_button,
@@ -194,7 +193,7 @@ class DialogFactory:
         msg_text,
         msg_info_text,
         msg_detail_text=None,
-        msg_buttons=QMessageBox.Ok,
+        msg_buttons=QtWidgets.QMessageBox.Ok,
         msg_default_button=None,
         msg_escape_button=None,
         msg_win_icon=None,
@@ -217,7 +216,7 @@ class DialogFactory:
             msg_text=msg_text,
             msg_info_text=msg_info_text,
             msg_detail_text=msg_detail_text,
-            msg_icon=QMessageBox.Critical,
+            msg_icon=QtWidgets.QMessageBox.Critical,
             msg_buttons=msg_buttons,
             msg_default_button=msg_default_button,
             msg_escape_button=msg_escape_button,
@@ -233,11 +232,11 @@ class DialogFactory:
         msg_text,
         msg_info_text,
         msg_detail_text=None,
-        msg_buttons=QMessageBox.Ok,
+        msg_buttons=QtWidgets.QMessageBox.Ok,
         msg_default_button=None,
         msg_escape_button=None,
         msg_win_icon=None,
-    ) -> QMessageBox:
+    ) -> QtWidgets.QMessageBox:
         """
         msg_win_title: Message box window title.
         msg_text: The text in our message box.
@@ -256,7 +255,7 @@ class DialogFactory:
             msg_text=msg_text,
             msg_info_text=msg_info_text,
             msg_detail_text=msg_detail_text,
-            msg_icon=QMessageBox.Question,
+            msg_icon=QtWidgets.QMessageBox.Question,
             msg_buttons=msg_buttons,
             msg_default_button=msg_default_button,
             msg_escape_button=msg_escape_button,
