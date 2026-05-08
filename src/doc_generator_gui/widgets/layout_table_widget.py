@@ -112,14 +112,6 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         return row_input
 
     def SetInputHistoryData(self, key: str, text: str):
-        if not text:
-            print("All text was deleted!")
-            print(self.doc_state.strings_to_replace)
-            print(self.doc_state.input_history)
-        else:
-            print(f"Current text: {text}")
-            print(self.doc_state.input_history)
-            print(self.doc_state.strings_to_replace)
         self.doc_state.input_history[key] = text
 
     def AddRowToTable(self, key: str):
