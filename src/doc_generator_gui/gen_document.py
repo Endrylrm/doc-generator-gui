@@ -12,7 +12,7 @@ from .helpers.dialog_helpers import CreateInfoMessageBox, CreateWarningMessageBo
 
 from .widgets.cpf_input import Cpf_Input
 
-from .contexts.document_context import DocumentContext
+from .states.document_state import DocumentState
 
 from .handlers.html_template_handler import HTMLTemplateHandler
 
@@ -35,13 +35,13 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.document_ctx = DocumentContext()
+        self.doc_state = DocumentState()
 
-        self.html_tmpl_handler = HTMLTemplateHandler(self.document_ctx)
-        self.pdf_service = PDFService(self.document_ctx)
-        self.printer_service = PrinterService(self.document_ctx)
+        self.html_tmpl_handler = HTMLTemplateHandler(self.doc_state)
+        self.pdf_service = PDFService(self.doc_state)
+        self.printer_service = PrinterService(self.doc_state)
 
-        self.company_loader = CompanyDataLoader("company.json", self.document_ctx)
+        self.company_loader = CompanyDataLoader("company.json", self.doc_state)
         self.company_loader.Load()
 
         self.layout_store = LayoutStore("layouts.json")
@@ -299,7 +299,7 @@ class GenDocument(QtWidgets.QWidget):
             if self.layout_store.GetValueFromLayout(row, "type") == "name":
                 name = self.table_document.cellWidget(row, 1).text()
 
-        self.document_ctx.output_path = (
+        self.doc_state.output_path = (
             f"./Termos/Termo de Devolução de {print_type} - {name}.pdf"
             if self.devolution.isChecked()
             else f"./Termos/Termo de Entrega de {print_type} - {name}.pdf"
@@ -321,7 +321,7 @@ class GenDocument(QtWidgets.QWidget):
                 suffix = self.layout_store.GetValueFromLayout(row, "suffix")
                 current_text = prefix + current_text + suffix
 
-            self.document_ctx.strings_to_replace[str_to_replace] = current_text
+            self.doc_state.strings_to_replace[str_to_replace] = current_text
 
     def GenerateDocument(self):
         """

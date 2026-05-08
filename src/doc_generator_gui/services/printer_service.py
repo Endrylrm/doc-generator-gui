@@ -1,7 +1,8 @@
 from PySide6 import QtGui, QtCore, QtPdf, QtPrintSupport
 
-from ..contexts.document_context import DocumentContext
 from ..contexts.print_context import PrintContext
+
+from ..states.document_state import DocumentState
 
 from ..factories.printer_factory import PrinterFactory
 
@@ -12,8 +13,8 @@ class PrinterService:
     physically for our employees.
     """
 
-    def __init__(self, document_ctx: DocumentContext):
-        self.document_ctx = document_ctx
+    def __init__(self, doc_state: DocumentState):
+        self.doc_state = doc_state
         self.printer = PrinterFactory.create_native_printer()
 
     def PaintDocument(self):
@@ -27,7 +28,7 @@ class PrinterService:
         START_LOCATION: list[int] = [2, 0]
 
         pdf_file = QtPdf.QPdfDocument()
-        pdf_file.load(self.document_ctx.output_path)
+        pdf_file.load(self.doc_state.output_path)
 
         size = QtGui.QPageSize.sizePixels(
             QtGui.QPageSize.PageSizeId.A4, PDF_PRINTER_RESOLUTION

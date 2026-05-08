@@ -1,7 +1,8 @@
 from PySide6 import QtGui, QtCore, QtPdf, QtPrintSupport
 
-from ..contexts.document_context import DocumentContext
 from ..contexts.print_context import PrintContext
+
+from ..states.document_state import DocumentState
 
 from ..factories.printer_factory import PrinterFactory
 
@@ -12,8 +13,8 @@ class PDFService:
     be printed physically.
     """
 
-    def __init__(self, document_ctx: DocumentContext):
-        self.document_ctx = document_ctx
+    def __init__(self, doc_state: DocumentState):
+        self.doc_state = doc_state
         self.printer = PrinterFactory.create_pdf_printer()
 
     def PaintFromHTML(
@@ -46,7 +47,7 @@ class PDFService:
         MAIN_LOCATION: list[int] = [30, 72]
         FOOTER_LOCATION: list[int] = [-30, 665]
 
-        self.printer.setOutputFileName(self.document_ctx.output_path)
+        self.printer.setOutputFileName(self.doc_state.output_path)
 
         pdf_Doc = QtGui.QTextDocument()
         pdf_Doc.setTextWidth(PDF_TEXT_WIDTH)

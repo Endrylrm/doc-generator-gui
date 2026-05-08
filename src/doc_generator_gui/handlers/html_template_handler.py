@@ -1,4 +1,4 @@
-from ..contexts.document_context import DocumentContext
+from ..states.document_state import DocumentState
 
 
 class HTMLTemplateHandler:
@@ -7,8 +7,8 @@ class HTMLTemplateHandler:
     and cleaning our html for creation of PDFs.
     """
 
-    def __init__(self, doc_context: DocumentContext):
-        self.doc_context = doc_context
+    def __init__(self, doc_state: DocumentState):
+        self.doc_state = doc_state
 
     def ReadHTMLFiles(self, file_to_read: str) -> dict[str, str]:
         """
@@ -38,7 +38,7 @@ class HTMLTemplateHandler:
 
         html = self.ReadHTMLFiles(file)
 
-        for old_string, new_string in self.doc_context.strings_to_replace.items():
+        for old_string, new_string in self.doc_state.strings_to_replace.items():
             html["header"] = html["header"].replace(old_string, new_string)
             html["termo"] = html["termo"].replace(old_string, new_string)
             html["footer"] = html["footer"].replace(old_string, new_string)
