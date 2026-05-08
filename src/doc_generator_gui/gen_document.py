@@ -19,7 +19,7 @@ from .handlers.html_template_handler import HTMLTemplateHandler
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
 
-from .repositories.layout_repository import LayoutRepository
+from .Stores.layout_store import LayoutStore
 
 from .loaders.company_data_loader import CompanyDataLoader
 
@@ -44,7 +44,7 @@ class GenDocument(QtWidgets.QWidget):
         self.company_loader = CompanyDataLoader("company.json", self.document_ctx)
         self.company_loader.Load()
 
-        self.layout_repo = LayoutRepository("layouts.json")
+        self.layout_store = LayoutStore("layouts.json")
 
         # a dictionary to remember data from our inputs
         self.input_history: dict = {}
@@ -79,7 +79,7 @@ class GenDocument(QtWidgets.QWidget):
         print_types = list(
             map(
                 self.print_type_combobox.addItem,
-                self.layout_repo.GetAllLayouts().keys(),
+                self.layout_store.GetAllLayouts().keys(),
             )
         )
         self.print_type_combobox.currentTextChanged.connect(self.MatchPrintType)
@@ -220,12 +220,12 @@ class GenDocument(QtWidgets.QWidget):
         for row in range(self.table_document.rowCount()):
             if (
                 self.table_document.cellWidget(row, 1).text() == ""
-                and self.layout_repo.GetValueFromLayout(row, "error_message") != ""
+                and self.layout_store.GetValueFromLayout(row, "error_message") != ""
             ):
                 CreateInfoMessageBox(
-                    f"Aviso - Campo {self.layout_repo.GetValueFromLayout(row, "error_message")} está vazio!",
-                    f"Sem {self.layout_repo.GetValueFromLayout(row, "error_message")}!",
-                    f"Por gentileza, coloque o {self.layout_repo.GetValueFromLayout(row, "error_message")}.",
+                    f"Aviso - Campo {self.layout_store.GetValueFromLayout(row, "error_message")} está vazio!",
+                    f"Sem {self.layout_store.GetValueFromLayout(row, "error_message")}!",
+                    f"Por gentileza, coloque o {self.layout_store.GetValueFromLayout(row, "error_message")}.",
                     msg_win_icon=msg_box_icon,
                 )
                 return False
@@ -261,7 +261,7 @@ class GenDocument(QtWidgets.QWidget):
         """
 
         index = self.table_document.rowCount()
-        row_layout = self.layout_repo.GetCurrentLayout()[key]
+        row_layout = self.layout_store.GetCurrentLayout()[key]
         self.table_document.setRowCount(index + 1)
         row_description = self.CreateRowDescription(row_layout)
         self.table_document.setItem(index, 0, row_description)
@@ -279,9 +279,11 @@ class GenDocument(QtWidgets.QWidget):
 
         self.table_document.setRowCount(0)
 
-        self.layout_repo.SetCurrentLayout(self.print_type_combobox.currentText())
+        self.layout_store.SetCurrentLayout(self.print_type_combobox.currentText())
         keys = [
-            key for key in self.layout_repo.GetCurrentLayout().keys() if key != "config"
+            key
+            for key in self.layout_store.GetCurrentLayout().keys()
+            if key != "config"
         ]
         table_rows = list(map(self.AddRowToTable, keys))
 
@@ -294,7 +296,7 @@ class GenDocument(QtWidgets.QWidget):
         print_type = self.print_type_combobox.currentText()
 
         for row in range(self.table_document.rowCount()):
-            if self.layout_repo.GetValueFromLayout(row, "type") == "name":
+            if self.layout_store.GetValueFromLayout(row, "type") == "name":
                 name = self.table_document.cellWidget(row, 1).text()
 
         self.document_ctx.output_path = (
@@ -310,13 +312,13 @@ class GenDocument(QtWidgets.QWidget):
         """
 
         for row in range(self.table_document.rowCount()):
-            str_to_replace = self.layout_repo.GetValueFromLayout(row, "replace")
+            str_to_replace = self.layout_store.GetValueFromLayout(row, "replace")
 
             current_text = self.table_document.cellWidget(row, 1).text()
 
             if current_text != "":
-                prefix = self.layout_repo.GetValueFromLayout(row, "prefix")
-                suffix = self.layout_repo.GetValueFromLayout(row, "suffix")
+                prefix = self.layout_store.GetValueFromLayout(row, "prefix")
+                suffix = self.layout_store.GetValueFromLayout(row, "suffix")
                 current_text = prefix + current_text + suffix
 
             self.document_ctx.strings_to_replace[str_to_replace] = current_text
@@ -334,9 +336,9 @@ class GenDocument(QtWidgets.QWidget):
         self.SetOutputPath()
 
         file_to_read = (
-            self.layout_repo.GetCurrentLayout()["config"]["termo"]
+            self.layout_store.GetCurrentLayout()["config"]["termo"]
             if not self.devolution.isChecked()
-            else self.layout_repo.GetCurrentLayout()["config"]["termo_devol"]
+            else self.layout_store.GetCurrentLayout()["config"]["termo_devol"]
         )
 
         cur_date = (

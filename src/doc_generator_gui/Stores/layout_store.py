@@ -1,7 +1,7 @@
 import json
 
 
-class LayoutRepository:
+class LayoutStore:
     """
     This class is responsible for providing information on
     the layouts of our UI.
