@@ -211,18 +211,15 @@ class GenDocument(QtWidgets.QWidget):
         Sets the output path for our PDF files, by getting the
         name of the employee in our table and the current type.
         """
-
-        cur_layout = self.layout_store.GetCurrentLayout(
-            self.print_type_combobox.currentText()
+        default_path = (
+            self.layout_store.GetCurrentLayout()["config"]["output_devol"]
+            if self.devolution.isChecked()
+            else self.layout_store.GetCurrentLayout()["config"]["output"]
         )
 
         name = self.table_document.GetEmployeeName()
 
-        self.doc_state.output_path = (
-            f"{cur_layout["config"]["output_devol"]} - {name}.pdf"
-            if self.devolution.isChecked()
-            else f"{cur_layout["config"]["output"]} - {name}.pdf"
-        )
+        self.doc_state.output_path = f"{default_path} - {name}.pdf"
 
     def GenerateDocument(self):
         """
