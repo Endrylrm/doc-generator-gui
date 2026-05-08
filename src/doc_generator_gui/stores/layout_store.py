@@ -1,6 +1,6 @@
 import json
 
-from ..readers.json_reader import JsonReader
+from ..services.json_reader import JsonReader
 
 
 class LayoutStore:

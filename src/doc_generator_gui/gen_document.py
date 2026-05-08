@@ -12,10 +12,9 @@ from .handlers.html_template_handler import HTMLTemplateHandler
 
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
+from .services.json_reader import JsonReader
 
 from .stores.layout_store import LayoutStore
-
-from .readers.json_reader import JsonReader
 
 
 class GenDocument(QtWidgets.QWidget):
