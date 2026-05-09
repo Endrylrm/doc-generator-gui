@@ -18,11 +18,8 @@ class CpfInput(QtWidgets.QLineEdit):
     def format_text(self):
         cursor = self.cursorPosition()
 
-        # Remove any non-digit characters
-        text = "".join(filter(str.isdecimal, self.text()))
-
-        # limit to 14 digits
-        text = text[:14]
+        # Remove any non-digit characters and limit to 14 characters
+        text = "".join(filter(str.isdecimal, self.text()))[:14]
 
         # correct cursor position, slice before filtering
         digits_before_cursor = len("".join(filter(str.isdecimal, self.text()[:cursor])))
