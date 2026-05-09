@@ -19,9 +19,10 @@ class CpfInput(QtWidgets.QLineEdit):
         cursor = self.cursorPosition()
 
         # Remove any non-digit characters
-        text = "".join(filter(str.isnumeric, self.text()))
+        text = "".join(filter(str.isdecimal, self.text()))
 
-        digits_before_cursor = len(text[:cursor])
+        # correct cursor position, slice before filtering
+        digits_before_cursor = len("".join(filter(str.isdecimal, self.text()[:cursor])))
 
         # Format as a common format for both CPF and CNPJ (e.g., 123.456.789-01 or 12.345.678/9012-34)
         formatted = (
@@ -60,7 +61,7 @@ class CpfInput(QtWidgets.QLineEdit):
         count = 0
 
         for index, char in enumerate(formatted):
-            if char.isnumeric():
+            if char.isdecimal():
                 count += 1
             if count >= digits_count:
                 return index + 1
