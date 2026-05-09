@@ -2,7 +2,7 @@ import locale
 
 from datetime import datetime
 
-from PySide6 import QtWidgets, QtGui, QtCore, QtPdf, QtPrintSupport
+from PySide6 import QtWidgets, QtGui, QtCore
 
 from .widgets.layout_table_widget import LayoutTableWidget
 
