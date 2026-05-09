@@ -2,6 +2,11 @@ from PySide6 import QtWidgets
 
 
 class DialogFactory:
+    """
+    This class is responsible for creating our Message boxes
+    or dialogs in the application
+    """
+
     @classmethod
     def EditMessageBoxProps(
         cls,
