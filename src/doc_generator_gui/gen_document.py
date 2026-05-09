@@ -34,6 +34,7 @@ class GenDocument(QtWidgets.QWidget):
         self.printer_service = PrinterService(self.doc_state)
 
         self.doc_state.company_data = JsonReader.Load("company.json")
+        self.doc_state.SetDefaultInputData()
 
         self.layout_store = LayoutStore("layouts.json")
 
@@ -191,12 +192,6 @@ class GenDocument(QtWidgets.QWidget):
         self.table_document.GetDataFromInputs()
         self.table_document.SetOutputPath(self.devolution.isChecked())
 
-        # append company data in input data
-        for key in self.doc_state.company_data:
-            replace = self.doc_state.company_data[key]["replace"]
-            value = self.doc_state.company_data[key]["value"]
-            self.doc_state.input_data[replace] = value
-
         file_to_read = (
             self.layout_store.GetCurrentLayout()["config"]["termo"]
             if not self.devolution.isChecked()
@@ -220,5 +215,5 @@ class GenDocument(QtWidgets.QWidget):
                 self.layout_combobox.currentText(),
             )
 
-        # clear input_data after we use it
-        self.doc_state.input_data = {}
+        # set the default data in the input_data after using it
+        self.doc_state.SetDefaultInputData()
