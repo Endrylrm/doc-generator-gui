@@ -34,12 +34,16 @@ class PrinterService:
             QtGui.QPageSize.PageSizeId.A4, PDF_PRINTER_RESOLUTION
         )
 
-        image_from_pdf = pdf_file.render(0, size)
-
         with PrintContext(self.printer) as ctx:
-            ctx.painter.scale(PAINTER_SCALE, PAINTER_SCALE)
-            ctx.painter.translate(START_LOCATION[0], START_LOCATION[1])
-            ctx.painter.drawImage(0, 0, image_from_pdf)
+            for cur_page in range(pdf_file.pageCount()):
+                if cur_page > 0:
+                    self.printer.newPage()
+
+                page_image_from_pdf = pdf_file.render(cur_page, size)
+
+                ctx.painter.scale(PAINTER_SCALE, PAINTER_SCALE)
+                ctx.painter.translate(START_LOCATION[0], START_LOCATION[1])
+                ctx.painter.drawImage(0, 0, page_image_from_pdf)
 
     def PrintDialog(self, print_type: str):
         """
