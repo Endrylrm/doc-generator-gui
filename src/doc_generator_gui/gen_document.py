@@ -35,10 +35,10 @@ class GenDocument(QtWidgets.QWidget):
         self.pdf_service = PDFService(self.doc_state)
         self.printer_service = PrinterService(self.doc_state)
 
-        self.doc_state.company_data = JsonReaderService.Load("company.json")
+        self.doc_state.company_data = JsonReaderService.Load("data/company.json")
         self.doc_state.SetDefaultInputData()
 
-        self.layout_store = LayoutStore("layouts.json")
+        self.layout_store = LayoutStore("data/layouts.json")
 
         self.CreateWidgets(controller)
         self.GridConfigs()
