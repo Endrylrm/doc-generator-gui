@@ -53,7 +53,8 @@ class HTMLTemplateService:
 
         self.CleanHTML(html)
 
-        # clean any variable that didn't get used, such as remarks
+        # clean any variable that didn't get used
+        # mostly those we put as not required
         self.RemoveUnusedTemplate(html)
 
         return html
