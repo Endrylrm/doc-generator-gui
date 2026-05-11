@@ -148,7 +148,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         return ""
 
-    def SetOutputPath(self, is_devolution: bool = False) -> str:
+    def SetOutputPath(self, is_device_return: bool = False) -> str:
         """
         Sets the output path for our PDF files, by getting the
         name of the employee in our table and the current type.
@@ -156,7 +156,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         default_path = (
             self.layout_store.GetCurrentLayout()["config"]["output_devol"]
-            if is_devolution
+            if is_device_return
             else self.layout_store.GetCurrentLayout()["config"]["output"]
         )
 

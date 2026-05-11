@@ -92,8 +92,10 @@ class GenDocument(QtWidgets.QWidget):
         )
         self.enable_date_picker.stateChanged.connect(self.EnableDatePicker)
         # CheckBox - Devolução
-        self.devolution = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
-        self.devolution.setToolTip(
+        self.is_device_return = QtWidgets.QCheckBox(
+            self, text="Devolução de Dispositivo."
+        )
+        self.is_device_return.setToolTip(
             "<b>Devolução de Dispositivo.:</b>\nAtive para gerar os termos de devolução."
         )
         # CheckBox - Desativar Visualização de Impressão
@@ -162,7 +164,7 @@ class GenDocument(QtWidgets.QWidget):
         # DateTimeEdit - Data Manual
         widget_grid_layout.addWidget(self.date_picker, 12, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widget_grid_layout.addWidget(self.devolution, 13, 0, 1, 1)
+        widget_grid_layout.addWidget(self.is_device_return, 13, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
         widget_grid_layout.addWidget(self.disable_printer_preview, 13, 1, 1, 1)
         # CheckBox - Desativar Impressão
@@ -205,12 +207,12 @@ class GenDocument(QtWidgets.QWidget):
 
         self.table_document.GetDataFromInputs()
 
-        is_devolution = self.devolution.isChecked()
-        self.doc_state.output_path = self.table_document.SetOutputPath(is_devolution)
+        is_device_ret = self.is_device_return.isChecked()
+        self.doc_state.output_path = self.table_document.SetOutputPath(is_device_ret)
 
         file_to_read = (
             self.layout_store.GetCurrentLayout()["config"]["termo"]
-            if not self.devolution.isChecked()
+            if not self.is_device_return.isChecked()
             else self.layout_store.GetCurrentLayout()["config"]["termo_devol"]
         )
 
