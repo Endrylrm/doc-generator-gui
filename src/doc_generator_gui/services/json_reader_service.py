@@ -1,7 +1,7 @@
 import json
 
 
-class JsonReader:
+class JsonReaderService:
     """
     This class is responsible for loading the company
     data to our State.

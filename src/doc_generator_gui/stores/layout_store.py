@@ -1,6 +1,6 @@
 import json
 
-from ..services.json_reader import JsonReader
+from ..services.json_reader_service import JsonReaderService
 
 
 class LayoutStore:
@@ -10,7 +10,7 @@ class LayoutStore:
     """
 
     def __init__(self, path: str):
-        self.__layouts = JsonReader.Load(path)
+        self.__layouts = JsonReaderService.Load(path)
         self.__cur_layout = {}
 
     def GetLayout(self, key: str):

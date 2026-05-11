@@ -11,7 +11,7 @@ from .states.document_state import DocumentState
 from .services.html_template_service import HTMLTemplateService
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
-from .services.json_reader import JsonReader
+from .services.json_reader_service import JsonReaderService
 
 from .stores.layout_store import LayoutStore
 
@@ -33,7 +33,7 @@ class GenDocument(QtWidgets.QWidget):
         self.pdf_service = PDFService(self.doc_state)
         self.printer_service = PrinterService(self.doc_state)
 
-        self.doc_state.company_data = JsonReader.Load("company.json")
+        self.doc_state.company_data = JsonReaderService.Load("company.json")
         self.doc_state.SetDefaultInputData()
 
         self.layout_store = LayoutStore("layouts.json")
