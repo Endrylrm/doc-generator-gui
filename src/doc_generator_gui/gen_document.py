@@ -41,7 +41,7 @@ class GenDocument(QtWidgets.QWidget):
         self.layout_store = LayoutStore("data/layouts.json")
 
         self.CreateWidgets(controller)
-        self.GridConfigs()
+        self.GridConfiguration()
 
     def CreateWidgets(self, controller):
         """
@@ -129,7 +129,7 @@ class GenDocument(QtWidgets.QWidget):
         )
         self.button_gen_doc.clicked.connect(self.GenerateDocument)
 
-    def GridConfigs(self):
+    def GridConfiguration(self):
         """
         Used to configure this frame grid (columns and rows) for our widgets.
         """
