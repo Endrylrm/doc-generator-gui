@@ -192,9 +192,9 @@ class GenDocument(QtWidgets.QWidget):
         printer (optional).
         """
 
-        is_empty_inputs, error_msg = self.table_document.HasEmptyInputs()
+        validated, error_msg = self.table_document.ValidateRequiredInputs()
 
-        if is_empty_inputs:
+        if not validated:
             msg_box_icon = QtGui.QIcon("gen_document.ico")
 
             DialogFactory.CreateInfoMessageBox(
