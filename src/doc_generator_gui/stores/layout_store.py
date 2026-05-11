@@ -1,5 +1,7 @@
 import json
 
+from typing import Any
+
 from ..services.json_reader_service import JsonReaderService
 
 
@@ -13,13 +15,13 @@ class LayoutStore:
         self.__layouts = JsonReaderService.Load(path)
         self.__cur_layout = {}
 
-    def GetLayout(self, key: str):
+    def GetLayout(self, key: str) -> dict:
         return self.__layouts[key]
 
-    def GetAllLayouts(self):
+    def GetAllLayouts(self) -> dict[str, str]:
         return self.__layouts
 
-    def GetValueFromLayout(self, index: int, key: str):
+    def GetValueFromLayout(self, index: int, key: str) -> Any | str:
         """
         we convert our dictionary items in a list, then we returns the
         data from the dictionary based on the index of a parent key,

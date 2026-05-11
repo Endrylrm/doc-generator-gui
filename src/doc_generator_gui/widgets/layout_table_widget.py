@@ -140,7 +140,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
             self.doc_state.input_data[str_to_replace] = current_text
 
-    def GetEmployeeName(self):
+    def GetEmployeeName(self) -> str:
         for row in range(self.rowCount()):
             if self.layout_store.GetValueFromLayout(row, "type") == "name":
                 name = self.cellWidget(row, 1).text()
@@ -148,7 +148,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         return ""
 
-    def SetOutputPath(self, is_devolution: bool = False):
+    def SetOutputPath(self, is_devolution: bool = False) -> str:
         """
         Sets the output path for our PDF files, by getting the
         name of the employee in our table and the current type.
@@ -162,4 +162,6 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         name = self.GetEmployeeName()
 
-        self.doc_state.output_path = f"{default_path} - {name}.pdf"
+        output_path = f"{default_path} - {name}.pdf"
+
+        return output_path

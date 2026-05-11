@@ -204,7 +204,9 @@ class GenDocument(QtWidgets.QWidget):
             return
 
         self.table_document.GetDataFromInputs()
-        self.table_document.SetOutputPath(self.devolution.isChecked())
+
+        is_devolution = self.devolution.isChecked()
+        self.doc_state.output_path = self.table_document.SetOutputPath(is_devolution)
 
         file_to_read = (
             self.layout_store.GetCurrentLayout()["config"]["termo"]
