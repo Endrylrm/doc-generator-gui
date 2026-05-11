@@ -64,14 +64,12 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         table_rows = list(map(self.AddRowToTable, keys))
 
-    def ValidateRequiredInputs(self) -> tuple[bool, str]:
+    def ValidateRequiredInputs(self) -> tuple[bool, str | None]:
         """
         this just checks if our inputs are not empty
         and returns the check and the error message,
         if a input is required.
         """
-
-        error_msg = ""
 
         for row in range(self.rowCount()):
             is_empty_cell = self.cellWidget(row, 1).text() == ""
@@ -81,7 +79,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             if is_empty_cell and is_required:
                 return False, error_msg
 
-        return True, error_msg
+        return True, None
 
     def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
         description_font = QtGui.QFont()
