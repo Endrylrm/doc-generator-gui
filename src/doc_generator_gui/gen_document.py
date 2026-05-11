@@ -15,6 +15,8 @@ from .services.json_reader_service import JsonReaderService
 
 from .stores.layout_store import LayoutStore
 
+from .factories.dialog_factory import DialogFactory
+
 
 class GenDocument(QtWidgets.QWidget):
     """
@@ -188,7 +190,17 @@ class GenDocument(QtWidgets.QWidget):
         printer (optional).
         """
 
-        if self.table_document.HasEmptyInputs():
+        is_empty_inputs, error_msg = self.table_document.HasEmptyInputs()
+
+        if is_empty_inputs:
+            msg_box_icon = QtGui.QIcon("gen_document.ico")
+
+            DialogFactory.CreateInfoMessageBox(
+                f"Aviso - Campo {error_msg} está vazio!",
+                f"Sem {error_msg}!",
+                f"Por gentileza, coloque o {error_msg}.",
+                msg_win_icon=msg_box_icon,
+            )
             return
 
         self.table_document.GetDataFromInputs()

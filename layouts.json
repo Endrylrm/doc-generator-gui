@@ -1,6 +1,7 @@
 {
     "Cartucho": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -8,6 +9,7 @@
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -15,6 +17,7 @@
 			"replace": "$cpf$"
 		},
 		"cartucho": {
+			"required": true,
 			"description": "Cartucho de Impressora do Funcionário (Obrigatório):",
 			"placeholder": "Digite o cartucho de impressora a ser entregue ao funcionário...",
 			"type": "normal",
@@ -22,6 +25,7 @@
 			"replace": "$cartucho$"
 		},
 		"impressora": {
+			"required": true,
 			"description": "Modelo de impressora do Funcionário (Obrigatório):",
 			"placeholder": "Digite o modelo de impressora que será usado esse cartucho...",
 			"type": "normal",
@@ -29,10 +33,12 @@
 			"replace": "$impressora$"
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a esse cartucho de impressora...",
 			"prefix": "<b>Observação:</b> ",
 			"type": "remark",
+			"error_message": "Observação do Cartucho de impressora do Funcionário",
 			"replace": "$obs$"
 		},
 		"config": {
@@ -44,6 +50,7 @@
     },
     "Celular": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -51,6 +58,7 @@
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -58,6 +66,7 @@
 			"replace": "$cpf$"
 		},
 		"celular": {
+			"required": true,
 			"description": "Celular do Funcionário (Obrigatório):",
 			"placeholder": "Digite o Celular a ser entregue ao funcionário...",
 			"type": "normal",
@@ -65,6 +74,7 @@
 			"replace": "$celular$"
 		},
 		"imei": {
+			"required": true,
 			"description": "IMEI do Celular do Funcionário (Obrigatório):",
 			"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
 			"replace": "$imei$",
@@ -73,10 +83,12 @@
 			"maxTextLength": 33
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a esse celular...",
 			"prefix": "<b>Observação:</b> ",
 			"type": "remark",
+			"error_message": "Observação do Celular do Funcionário",
 			"replace": "$obs$"
 		},
 		"config": {
@@ -88,6 +100,7 @@
     },
 	"iButton": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -95,6 +108,7 @@
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -102,6 +116,7 @@
 			"replace": "$cpf$"
 		},
 		"ibutton": {
+			"required": true,
 			"description": "Código do iButton (Obrigatório):",
 			"placeholder": "Digite o código do iButton a ser entregue ao funcionário...",
 			"type": "normal",
@@ -110,10 +125,12 @@
 			"maxTextLength": 12
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a esse iButton...",
 			"prefix": "<b>Observação:</b> ",
 			"type": "remark",
+			"error_message": "Observação do iButton do Funcionário",
 			"replace": "$obs$"
 		},
 		"config": {
@@ -125,6 +142,7 @@
     },
 	"Impressora": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -132,6 +150,7 @@
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -139,6 +158,7 @@
 			"replace": "$cpf$"
 		},
 		"impressora": {
+			"required": true,
 			"description": "Impressora do Funcionário (Obrigatório):",
 			"placeholder": "Digite a impressora a ser entregue ao funcionário...",
 			"type": "normal",
@@ -146,6 +166,7 @@
 			"replace": "$impressora$"
 		},
 		"serial": {
+			"required": true,
 			"description": "Serial da impressora do Funcionário (Obrigatório):",
 			"placeholder": "Digite o Serial da impressora a ser entregue ao funcionário...",
 			"type": "normal",
@@ -154,10 +175,12 @@
 			"maxTextLength": 10
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a essa impressora...",
 			"prefix": "<b>Observação:</b> ",
 			"type": "remark",
+			"error_message": "Observação da impressora do Funcionário",
 			"replace": "$obs$"
 		},
 		"config": {
@@ -169,6 +192,7 @@
     },
 	"Inversor": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -176,6 +200,7 @@
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -183,6 +208,7 @@
 			"replace": "$cpf$"
 		},
 		"inversor": {
+			"required": true,
 			"description": "Marca/Modelo do inversor (Obrigatório):",
 			"placeholder": "Digite o inversor a ser entregue ao funcionário...",
 			"type": "normal",
@@ -191,10 +217,12 @@
 			"maxTextLength": 12
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a esse inversor...",
 			"prefix": "<b>Observação:</b> ",
 			"type": "remark",
+			"error_message": "Observação do Inversor de Energia do Funcionário",
 			"replace": "$obs$"
 		},
 		"config": {
@@ -206,6 +234,7 @@
     },
 	"Notebook": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -213,6 +242,7 @@
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -220,6 +250,7 @@
 			"replace": "$cpf$"
 		},
 		"notebook": {
+			"required": true,
 			"description": "Notebook do Funcionário (Obrigatório):",
 			"placeholder": "Digite o Notebook a ser entregue ao funcionário...",
 			"type": "normal",
@@ -227,6 +258,7 @@
 			"replace": "$notebook$"
 		},
 		"serial": {
+			"required": true,
 			"description": "Serial do Notebook do Funcionário (Obrigatório):",
 			"placeholder": "Digite o Serial do Notebook a ser entregue ao funcionário...",
 			"type": "normal",
@@ -234,10 +266,12 @@
 			"replace": "$serial$"
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a esse Notebook...",
 			"prefix": "<b>Observação:</b> ",
 			"type": "remark",
+			"error_message": "Observação do Notebook do Funcionário",
 			"replace": "$obs$"
 		},
 		"config": {

@@ -2,8 +2,6 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from .cpf_input import CpfInput
 
-from ..factories.dialog_factory import DialogFactory
-
 from ..states.document_state import DocumentState
 
 from ..stores.layout_store import LayoutStore
@@ -66,29 +64,24 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         table_rows = list(map(self.AddRowToTable, keys))
 
-    def HasEmptyInputs(self) -> bool:
+    def HasEmptyInputs(self) -> tuple[bool, str]:
         """
-        this just checks if our inputs are not empty and
-        open a message box to tell the user if a required
-        input is empty.
+        this just checks if our inputs are not empty
+        and returns the check and the error message,
+        if a input is required.
         """
 
-        msg_box_icon = QtGui.QIcon("gen_document.ico")
+        error_msg = ""
 
         for row in range(self.rowCount()):
             is_empty_cell = self.cellWidget(row, 1).text() == ""
+            is_required = self.layout_store.GetValueFromLayout(row, "required")
             error_msg = self.layout_store.GetValueFromLayout(row, "error_message")
 
-            if is_empty_cell and error_msg != "":
-                DialogFactory.CreateInfoMessageBox(
-                    f"Aviso - Campo {error_msg} está vazio!",
-                    f"Sem {error_msg}!",
-                    f"Por gentileza, coloque o {error_msg}.",
-                    msg_win_icon=msg_box_icon,
-                )
-                return True
+            if is_empty_cell and is_required:
+                return True, error_msg
 
-        return False
+        return False, error_msg
 
     def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
         description_font = QtGui.QFont()

@@ -28,6 +28,7 @@ Exemplo - `layouts.json`:
 {
     "Celular": {
         "nome": {
+			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
 			"placeholder": "Digite o nome do funcionário...",
 			"type": "name",
@@ -35,6 +36,7 @@ Exemplo - `layouts.json`:
             "replace": "$name$"
         },
         "cpf": {
+			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
 			"type": "cpf",
@@ -42,6 +44,7 @@ Exemplo - `layouts.json`:
 			"replace": "$cpf$"
 		},
 		"celular": {
+			"required": true,
 			"description": "Celular do Funcionário (Obrigatório):",
 			"placeholder": "Digite o Celular a ser entregue ao funcionário...",
 			"type": "normal",
@@ -49,6 +52,7 @@ Exemplo - `layouts.json`:
 			"replace": "$celular$"
 		},
 		"imei": {
+			"required": true,
 			"description": "IMEI do Celular do Funcionário (Obrigatório):",
 			"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
 			"replace": "$imei$",
@@ -57,6 +61,7 @@ Exemplo - `layouts.json`:
 			"maxTextLength": 33
 		},
 		"remark": {
+			"required": false,
 			"description": "Observação (Opcional):",
 			"placeholder": "Digite uma observação referente a esse celular...",
 			"prefix": "<b>Observação:</b> ",
