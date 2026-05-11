@@ -84,11 +84,11 @@ class GenDocument(QtWidgets.QWidget):
             self, self.doc_state, self.layout_store, self.layout_combobox
         )
         # CheckBox - Ativar Data Manual
-        self.manual_date = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
-        self.manual_date.setToolTip(
+        self.enable_date_picker = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
+        self.enable_date_picker.setToolTip(
             "<b>Ativar Data Manual:</b>\nDesativa a data automâtica e permite a seleção de datas."
         )
-        self.manual_date.stateChanged.connect(self.CheckManualDate)
+        self.enable_date_picker.stateChanged.connect(self.EnableDatePicker)
         # CheckBox - Devolução
         self.devolution = QtWidgets.QCheckBox(self, text="Devolução de Dispositivo.")
         self.devolution.setToolTip(
@@ -156,7 +156,7 @@ class GenDocument(QtWidgets.QWidget):
         # separator - CheckBox
         widget_grid_layout.addWidget(self.separator_checkbox, 11, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widget_grid_layout.addWidget(self.manual_date, 12, 0, 1, 1)
+        widget_grid_layout.addWidget(self.enable_date_picker, 12, 0, 1, 1)
         # DateTimeEdit - Data Manual
         widget_grid_layout.addWidget(self.date_picker, 12, 1, 1, 1)
         # CheckBox - Ativar Devolução
@@ -176,9 +176,11 @@ class GenDocument(QtWidgets.QWidget):
         # set this widget layout to the grid layout
         self.setLayout(widget_grid_layout)
 
-    def CheckManualDate(self):
-        is_manual_date: bool = True if self.manual_date.isChecked() else False
-        self.date_picker.setEnabled(is_manual_date)
+    def EnableDatePicker(self):
+        is_date_selectable: bool = (
+            True if self.enable_date_picker.isChecked() else False
+        )
+        self.date_picker.setEnabled(is_date_selectable)
 
     def GenerateDocument(self):
         """
@@ -200,7 +202,7 @@ class GenDocument(QtWidgets.QWidget):
 
         date_text = (
             self.date_picker.text()
-            if self.manual_date.isChecked()
+            if self.enable_date_picker.isChecked()
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
