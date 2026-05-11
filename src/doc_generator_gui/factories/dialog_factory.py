@@ -8,59 +8,6 @@ class DialogFactory:
     """
 
     @classmethod
-    def EditMessageBoxProps(
-        cls,
-        msg: QtWidgets.QMessageBox,
-        msg_win_title=None,
-        msg_text=None,
-        msg_info_text=None,
-        msg_detail_text=None,
-        msg_icon=None,
-        msg_buttons=None,
-        msg_default_button=None,
-        msg_escape_button=None,
-        msg_win_icon=None,
-    ):
-        """
-        msg: The message box created previously.
-        msg_win_title: the window title of our message box.
-        msg_text: the text in our message box.
-        msg_info_text: the information text in our message box.
-        msg_detail_text: the detailed text of our message box.
-        msg_icon: the icon on our message box.
-        msg_buttons: the button on our message box.
-        msg_default_button: the confirmation button/key, defaults to enter.
-        msg_escape_button: the escape button/key, defaults to esc.
-        msg_win_icon: used to add a icon to the window of our message box.
-
-        Used to edit properties in our message Box.
-        """
-
-        if msg is None:
-            print("no MessageBox to Edit!")
-            return
-
-        if msg_win_title is not None:
-            msg.setWindowTitle(msg_win_title)
-        if msg_text is not None:
-            msg.setText(msg_text)
-        if msg_info_text is not None:
-            msg.setInformativeText(msg_info_text)
-        if msg_detail_text is not None:
-            msg.setDetailedText(msg_detail_text)
-        if msg_icon is not None:
-            msg.setIcon(msg_icon)
-        if msg_buttons is not None:
-            msg.setStandardButtons(msg_buttons)
-        if msg_default_button is not None:
-            msg.setDefaultButton(msg_default_button)
-        if msg_escape_button is not None:
-            msg.setEscapeButton(msg_escape_button)
-
-        if msg_win_icon is not None:
-            msg.setWindowIcon(msg_win_icon)
-
-    @classmethod
     def __CreateMessageBox(
         cls,
         msg_win_title=None,
