@@ -192,9 +192,9 @@ class GenDocument(QtWidgets.QWidget):
         printer (optional).
         """
 
-        validated, error_msg = self.table_document.ValidateRequiredInputs()
+        is_valid, error_msg = self.table_document.ValidateRequiredInputs()
 
-        if not validated:
+        if not is_valid:
             msg_box_icon = QtGui.QIcon("gen_document.ico")
 
             DialogFactory.CreateInfoMessageBox(
