@@ -18,12 +18,12 @@ class HTMLTemplateService:
         containing all the html data.
         """
 
+        tmpl_path = "./data/Templates"
+
         with (
-            open("./data/Templates/header.html", "r", encoding="utf-8") as header_file,
-            open(
-                f"./data/Templates/{file_to_read}", "r", encoding="utf-8"
-            ) as termo_file,
-            open("./data/Templates/footer.html", "r", encoding="utf-8") as footer_file,
+            open(f"{tmpl_path}/header.html", "r", encoding="utf-8") as header_file,
+            open(f"{tmpl_path}/{file_to_read}", "r", encoding="utf-8") as termo_file,
+            open(f"{tmpl_path}/footer.html", "r", encoding="utf-8") as footer_file,
         ):
 
             html = {
