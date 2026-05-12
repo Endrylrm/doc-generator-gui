@@ -34,7 +34,7 @@ class HTMLTemplateService:
 
         return html
 
-    def CleanHTML(self, html: dict[str, str]):
+    def BuildCleanHTML(self, html: dict[str, str]):
         for key in html:
             for old_str, new_str in self.doc_controller.GetInputData().items():
                 html[key] = html[key].replace(old_str, new_str)
@@ -51,7 +51,7 @@ class HTMLTemplateService:
 
         html = self.ReadHTMLFiles(file)
 
-        self.CleanHTML(html)
+        self.BuildCleanHTML(html)
 
         # clean any variable that didn't get used
         # mostly those we put as not required
