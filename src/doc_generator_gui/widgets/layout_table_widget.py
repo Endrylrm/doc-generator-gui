@@ -2,9 +2,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from .cpf_input import CpfInput
 
-from ..states.document_state import DocumentState
-
-from ..stores.layout_store import LayoutStore
+from ..controllers.document_controller import DocumentController
 
 from ..validations.results import InputValidationResult
 
@@ -18,14 +16,12 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
     def __init__(
         self,
         parent=None,
-        doc_state: DocumentState | None = None,
-        layout_store: LayoutStore | None = None,
+        doc_controller: DocumentController | None = None,
         layout_combobox: QtWidgets.QComboBox | None = None,
     ):
         super().__init__(parent=parent)
 
-        self.doc_state = doc_state
-        self.layout_store = layout_store
+        self.doc_controller = doc_controller
 
         table_headers = ["Descrição", "Preencher"]
 
@@ -56,11 +52,11 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self.setRowCount(0)
 
-        self.layout_store.SetCurrentLayout(layout_name)
+        self.doc_controller.SetCurrentLayout(layout_name)
 
         keys = [
             key
-            for key in self.layout_store.GetCurrentLayout().keys()
+            for key in self.doc_controller.GetCurrentLayout().keys()
             if key != "config"
         ]
 
@@ -75,8 +71,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         for row in range(self.rowCount()):
             is_empty_cell = self.cellWidget(row, 1).text() == ""
-            is_required = self.layout_store.GetValueFromLayout(row, "required")
-            error_msg = self.layout_store.GetValueFromLayout(row, "error_message")
+            is_required = self.doc_controller.GetValueFromLayout(row, "required")
+            error_msg = self.doc_controller.GetValueFromLayout(row, "error_message")
 
             if is_empty_cell and is_required:
                 return InputValidationResult(False, error_msg)
@@ -100,12 +96,12 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         )
         if layout["type"] != "cpf":
             row_input.setMaxLength(max_text_length)
-        if key in self.doc_state.input_history:
-            row_input.setText(self.doc_state.input_history[key])
+        if key in self.doc_controller.GetInputHistory():
+            row_input.setText(self.doc_controller.GetInputHistory()[key])
         return row_input
 
     def SetInputHistoryData(self, key: str, text: str):
-        self.doc_state.input_history[key] = text
+        self.doc_controller.UpdateInputHistory(key, text)
 
     def AddRowToTable(self, key: str):
         """
@@ -113,7 +109,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         index = self.rowCount()
-        row_layout = self.layout_store.GetCurrentLayout()[key]
+        row_layout = self.doc_controller.GetCurrentLayout()[key]
         self.setRowCount(index + 1)
         row_description = self.CreateRowDescription(row_layout)
         self.setItem(index, 0, row_description)
@@ -127,41 +123,23 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         for row in range(self.rowCount()):
-            str_to_replace = self.layout_store.GetValueFromLayout(row, "replace")
+            template = self.doc_controller.GetValueFromLayout(row, "replace")
 
             current_text = self.cellWidget(row, 1).text()
 
             if current_text == "":
                 continue
 
-            prefix = self.layout_store.GetValueFromLayout(row, "prefix")
-            suffix = self.layout_store.GetValueFromLayout(row, "suffix")
+            prefix = self.doc_controller.GetValueFromLayout(row, "prefix")
+            suffix = self.doc_controller.GetValueFromLayout(row, "suffix")
             current_text = prefix + current_text + suffix
 
-            self.doc_state.input_data[str_to_replace] = current_text
+            self.doc_controller.UpdateInputData(template, current_text)
 
     def GetEmployeeName(self) -> str:
         for row in range(self.rowCount()):
-            if self.layout_store.GetValueFromLayout(row, "type") == "name":
+            if self.doc_controller.GetValueFromLayout(row, "type") == "name":
                 name = self.cellWidget(row, 1).text()
                 return name
 
         return ""
-
-    def SetOutputPath(self, is_device_return: bool = False) -> str:
-        """
-        Sets the output path for our PDF files, by getting the
-        name of the employee in our table and the current type.
-        """
-
-        default_path = (
-            self.layout_store.GetCurrentLayout()["config"]["output_devol"]
-            if is_device_return
-            else self.layout_store.GetCurrentLayout()["config"]["output"]
-        )
-
-        name = self.GetEmployeeName()
-
-        output_path = f"{default_path} - {name}.pdf"
-
-        return output_path

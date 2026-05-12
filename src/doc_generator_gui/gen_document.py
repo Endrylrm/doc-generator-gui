@@ -6,14 +6,16 @@ from PySide6 import QtWidgets, QtGui, QtCore
 
 from .widgets.layout_table_widget import LayoutTableWidget
 
-from .states.document_state import DocumentState
+from .controllers.document_controller import DocumentController
 
 from .services.html_template_service import HTMLTemplateService
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
-from .services.json_reader_service import JsonReaderService
+from .services.readers.layout_service import LayoutService
+from .services.readers.company_data_service import CompanyDataService
 
 from .stores.layout_store import LayoutStore
+from .stores.company_data_store import CompanyDataStore
 
 from .factories.dialog_factory import DialogFactory
 
@@ -29,16 +31,11 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.doc_state = DocumentState()
+        self.doc_controller = DocumentController(LayoutStore(), CompanyDataStore())
 
-        self.html_tmpl_service = HTMLTemplateService(self.doc_state)
-        self.pdf_service = PDFService(self.doc_state)
-        self.printer_service = PrinterService(self.doc_state)
-
-        self.doc_state.company_data = JsonReaderService.Load("data/company.json")
-        self.doc_state.SetDefaultInputData()
-
-        self.layout_store = LayoutStore("data/layouts.json")
+        self.html_tmpl_service = HTMLTemplateService(self.doc_controller)
+        self.pdf_service = PDFService(self.doc_controller)
+        self.printer_service = PrinterService(self.doc_controller)
 
         self.CreateWidgets(controller)
         self.GridConfiguration()
@@ -68,7 +65,7 @@ class GenDocument(QtWidgets.QWidget):
         print_types = list(
             map(
                 self.layout_combobox.addItem,
-                self.layout_store.GetAllLayouts().keys(),
+                self.doc_controller.GetAllLayouts().keys(),
             )
         )
         # separator - ComboBox
@@ -83,7 +80,7 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         self.table_document = LayoutTableWidget(
-            self, self.doc_state, self.layout_store, self.layout_combobox
+            self, self.doc_controller, self.layout_combobox
         )
         # CheckBox - Ativar Data Manual
         self.enable_date_picker = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
@@ -207,13 +204,14 @@ class GenDocument(QtWidgets.QWidget):
 
         self.table_document.GetDataFromInputs()
 
-        is_device_ret = self.is_device_return.isChecked()
-        self.doc_state.output_path = self.table_document.SetOutputPath(is_device_ret)
+        employee_name = self.table_document.GetEmployeeName()
+        is_device_return = self.is_device_return.isChecked()
+        self.doc_controller.SetOutputPath(employee_name, is_device_return)
 
         file_to_read = (
-            self.layout_store.GetCurrentLayout()["config"]["termo"]
+            self.doc_controller.GetCurrentLayout()["config"]["termo"]
             if not self.is_device_return.isChecked()
-            else self.layout_store.GetCurrentLayout()["config"]["termo_devol"]
+            else self.doc_controller.GetCurrentLayout()["config"]["termo_devol"]
         )
 
         date_text = (
@@ -222,7 +220,7 @@ class GenDocument(QtWidgets.QWidget):
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
-        self.doc_state.input_data["$data$"] = date_text
+        self.doc_controller.GetInputData()["$data$"] = date_text
 
         clean_html = self.html_tmpl_service.Generate(file_to_read)
         self.pdf_service.Generate(clean_html)
@@ -233,5 +231,5 @@ class GenDocument(QtWidgets.QWidget):
                 self.layout_combobox.currentText(),
             )
 
-        # set the default data in the input_data after using it
-        self.doc_state.SetDefaultInputData()
+        # set the state to it's default value after using it
+        self.doc_controller.SetDefaultState()

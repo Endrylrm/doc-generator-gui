@@ -2,10 +2,10 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class DocumentState:
+class LayoutState:
     """
     This class is responsible for maintaining the state
-    data between our printing services.
+    of our UI Layout.
     """
 
-    output_path: str = ""
+    cur_layout: dict[str, str] = field(default_factory=dict)

@@ -1,6 +1,6 @@
 import re
 
-from ..states.document_state import DocumentState
+from ..controllers.document_controller import DocumentController
 
 
 class HTMLTemplateService:
@@ -9,8 +9,8 @@ class HTMLTemplateService:
     and cleaning our html for creation of PDFs.
     """
 
-    def __init__(self, doc_state: DocumentState):
-        self.doc_state = doc_state
+    def __init__(self, doc_controller: DocumentController):
+        self.doc_controller = doc_controller
 
     def ReadHTMLFiles(self, file_to_read: str) -> dict[str, str]:
         """
@@ -36,8 +36,8 @@ class HTMLTemplateService:
 
     def CleanHTML(self, html: dict[str, str]):
         for key in html:
-            for old_string, new_string in self.doc_state.input_data.items():
-                html[key] = html[key].replace(old_string, new_string)
+            for old_str, new_str in self.doc_controller.GetInputData().items():
+                html[key] = html[key].replace(old_str, new_str)
 
     def RemoveUnusedTemplate(self, html: dict[str, str]):
         for key in html:
