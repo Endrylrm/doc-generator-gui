@@ -1,4 +1,3 @@
-import re
 from typing import Any
 
 from ..states.document_state import DocumentState
