@@ -1,4 +1,4 @@
-from ..services.readers.company_data_service import CompanyDataService
+from ..services.readers import CompanyDataService
 
 
 class CompanyDataStore:

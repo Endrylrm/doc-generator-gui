@@ -1,4 +1,4 @@
-from ..services.readers.layout_service import LayoutService
+from ..services.readers import LayoutService
 
 
 class LayoutStore:
