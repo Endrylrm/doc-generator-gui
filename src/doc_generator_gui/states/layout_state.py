@@ -5,7 +5,8 @@ from dataclasses import dataclass, field
 class LayoutState:
     """
     This class is responsible for maintaining the state
-    of our UI Layout.
+    of our table widget Layout, so our controller can easily
+    change the table layout.
     """
 
     cur_layout: dict[str, str] = field(default_factory=dict)
