@@ -11,8 +11,6 @@ from .controllers.document_controller import DocumentController
 from .services.html_template_service import HTMLTemplateService
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
-from .services.readers.layout_service import LayoutService
-from .services.readers.company_data_service import CompanyDataService
 
 from .stores.layout_store import LayoutStore
 from .stores.company_data_store import CompanyDataStore
