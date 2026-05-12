@@ -6,7 +6,7 @@ from ..states.document_state import DocumentState
 
 from ..stores.layout_store import LayoutStore
 
-from ..validators.input_validation_result import InputValidationResult
+from ..validators.results import InputValidationResult
 
 
 class LayoutTableWidget(QtWidgets.QTableWidget):
