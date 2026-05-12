@@ -7,8 +7,8 @@ from ..stores.layout_store import LayoutStore
 
 class LayoutController:
     """
-    This class is responsible for controlling our states
-    that we use when printing.
+    This class is responsible for controlling the layout
+    our table widget uses.
     """
 
     def __init__(self, layout_store: LayoutStore):
