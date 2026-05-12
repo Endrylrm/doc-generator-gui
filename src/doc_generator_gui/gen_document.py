@@ -25,7 +25,7 @@ class GenDocument(QtWidgets.QWidget):
     statement of responsibility for our employees.
     """
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent):
         super().__init__(parent=parent)
 
         locale.setlocale(locale.LC_ALL, "")
@@ -37,7 +37,7 @@ class GenDocument(QtWidgets.QWidget):
         self.pdfService = PDFService(self.documentController)
         self.printerService = PrinterService(self.documentController)
 
-        self.createWidgets(controller)
+        self.createWidgets(parent)
         self.setGridConfiguration()
 
         # start with a loaded layout

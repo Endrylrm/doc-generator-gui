@@ -19,45 +19,45 @@ class Application(QtWidgets.QMainWindow):
         **kwargs
     ):
         super().__init__(*args, **kwargs)
+
         if title is not None:
             self.setWindowTitle(title)
         if width and height is not None:
             self.centerWindow(width, height)
         if icon is not None:
             self.setWindowIcon(QtGui.QIcon(icon))
+
+        self.stack = QtWidgets.QStackedWidget(self)
+
         self.container = QtWidgets.QWidget(self)
         self.container.setGeometry(0, 0, width, height)
         self.containerGrid = QtWidgets.QGridLayout(self.container)
+        self.containerGrid.addWidget(self.stack)
         self.container.setLayout(self.containerGrid)
-        self.pages = {}
-        self.currentPage: str = None
-        self.initPages(self.container)
-        self.showPage("GenDocument")
         self.setCentralWidget(self.container)
 
-    def initPages(self, container):
+        self.pages = {}
+
+        self.initPages()
+
+        self.showPage("GenDocument")
+
+    def initPages(self):
         """
         Initialization for our Frames/Pages, requires a container and
         we add each of our pages to our dictionary.
         """
 
         # Application Home Page
-        self.pages["GenDocument"] = GenDocument(container, self)
-        self.pages["GenDocument"].hide()
-
-        for page in self.pages:
-            self.containerGrid.addWidget(self.pages[page], 0, 0)
+        self.stack.addWidget(GenDocument(self))
+        self.pages["GenDocument"] = 0
 
     def showPage(self, page: str):
         """
-        The Switch logic uses a Dictionary, where the selected key show
-        the specific page/frame.
+        Switch to a specific page/frame.
         """
 
-        if self.currentPage is not None:
-            self.pages[self.currentPage].hide()
-        self.pages[page].show()
-        self.currentPage = page
+        self.stack.setCurrentIndex(self.pages[page])
 
     def centerWindow(self, width: int = 300, height: int = 300):
         """
