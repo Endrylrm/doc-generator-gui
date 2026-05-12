@@ -131,6 +131,9 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
             current_text = self.cellWidget(row, 1).text()
 
+            if current_text == "":
+                continue
+
             prefix = self.layout_store.GetValueFromLayout(row, "prefix")
             suffix = self.layout_store.GetValueFromLayout(row, "suffix")
             current_text = prefix + current_text + suffix
