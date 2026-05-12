@@ -43,7 +43,7 @@ class HTMLTemplateService:
         for key in html:
             html[key] = re.sub(r"\$([a-zA-Z0-9_]+)\$", "", html[key])
 
-    def Generate(self, file: str) -> dict[str, str]:
+    def Parse(self, file: str) -> dict[str, str]:
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.

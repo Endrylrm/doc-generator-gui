@@ -222,7 +222,7 @@ class GenDocument(QtWidgets.QWidget):
 
         self.doc_controller.GetInputData()["$data$"] = date_text
 
-        clean_html = self.html_tmpl_service.Generate(file_to_read)
+        clean_html = self.html_tmpl_service.Parse(file_to_read)
         self.pdf_service.Generate(clean_html)
 
         if not self.disable_printer.isChecked():
