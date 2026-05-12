@@ -203,7 +203,7 @@ class GenDocument(QtWidgets.QWidget):
                 f"Aviso - Campo {result.errorMessage} está vazio!",
                 f"Sem {result.errorMessage}!",
                 f"Por gentileza, coloque o {result.errorMessage}.",
-                msgBoxIcon=msgBoxIcon,
+                msgWinIcon=msgBoxIcon,
             )
             return
 

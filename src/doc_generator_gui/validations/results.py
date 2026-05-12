@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from typing import NamedTuple
 
 
-@dataclass(frozen=True)
-class InputValidationResult:
+class InputValidationResult(NamedTuple):
     isValid: bool
     errorMessage: str | None = None
