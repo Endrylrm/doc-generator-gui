@@ -3,6 +3,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from .cpf_input import CpfInput
 
 from ..controllers.document_controller import DocumentController
+from ..controllers.layout_controller import LayoutController
 
 from ..validations.results import InputValidationResult
 
@@ -17,11 +18,13 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self,
         parent=None,
         doc_controller: DocumentController | None = None,
+        layout_controller: LayoutController | None = None,
         layout_combobox: QtWidgets.QComboBox | None = None,
     ):
         super().__init__(parent=parent)
 
         self.doc_controller = doc_controller
+        self.layout_controller = layout_controller
 
         table_headers = ["Descrição", "Preencher"]
 
@@ -52,11 +55,11 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self.setRowCount(0)
 
-        self.doc_controller.SetCurrentLayout(layout_name)
+        self.layout_controller.SetCurrentLayout(layout_name)
 
         keys = [
             key
-            for key in self.doc_controller.GetCurrentLayout().keys()
+            for key in self.layout_controller.GetCurrentLayout().keys()
             if key != "config"
         ]
 
@@ -71,8 +74,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         for row in range(self.rowCount()):
             is_empty_cell = self.cellWidget(row, 1).text() == ""
-            is_required = self.doc_controller.GetValueFromLayout(row, "required")
-            error_msg = self.doc_controller.GetValueFromLayout(row, "error_message")
+            is_required = self.layout_controller.GetValueFromLayout(row, "required")
+            error_msg = self.layout_controller.GetValueFromLayout(row, "error_message")
 
             if is_empty_cell and is_required:
                 return InputValidationResult(False, error_msg)
@@ -109,7 +112,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         index = self.rowCount()
-        row_layout = self.doc_controller.GetCurrentLayout()[key]
+        row_layout = self.layout_controller.GetCurrentLayout()[key]
         self.setRowCount(index + 1)
         row_description = self.CreateRowDescription(row_layout)
         self.setItem(index, 0, row_description)
@@ -123,22 +126,22 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         for row in range(self.rowCount()):
-            template = self.doc_controller.GetValueFromLayout(row, "replace")
+            template = self.layout_controller.GetValueFromLayout(row, "replace")
 
             current_text = self.cellWidget(row, 1).text()
 
             if current_text == "":
                 continue
 
-            prefix = self.doc_controller.GetValueFromLayout(row, "prefix")
-            suffix = self.doc_controller.GetValueFromLayout(row, "suffix")
+            prefix = self.layout_controller.GetValueFromLayout(row, "prefix")
+            suffix = self.layout_controller.GetValueFromLayout(row, "suffix")
             current_text = prefix + current_text + suffix
 
             self.doc_controller.UpdateInputData(template, current_text)
 
     def GetEmployeeName(self) -> str:
         for row in range(self.rowCount()):
-            if self.doc_controller.GetValueFromLayout(row, "type") == "name":
+            if self.layout_controller.GetValueFromLayout(row, "type") == "name":
                 name = self.cellWidget(row, 1).text()
                 return name
 

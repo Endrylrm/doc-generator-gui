@@ -7,6 +7,7 @@ from PySide6 import QtWidgets, QtGui, QtCore
 from .widgets.layout_table_widget import LayoutTableWidget
 
 from .controllers.document_controller import DocumentController
+from .controllers.layout_controller import LayoutController
 
 from .services.html_template_service import HTMLTemplateService
 from .services.pdf_service import PDFService
@@ -29,7 +30,8 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.doc_controller = DocumentController(LayoutStore(), CompanyDataStore())
+        self.layout_controller = LayoutController(LayoutStore())
+        self.doc_controller = DocumentController(CompanyDataStore())
 
         self.html_tmpl_service = HTMLTemplateService(self.doc_controller)
         self.pdf_service = PDFService(self.doc_controller)
@@ -63,7 +65,7 @@ class GenDocument(QtWidgets.QWidget):
         print_types = list(
             map(
                 self.layout_combobox.addItem,
-                self.doc_controller.GetAllLayouts().keys(),
+                self.layout_controller.GetAllLayouts().keys(),
             )
         )
         # separator - ComboBox
@@ -78,7 +80,7 @@ class GenDocument(QtWidgets.QWidget):
         self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         self.table_document = LayoutTableWidget(
-            self, self.doc_controller, self.layout_combobox
+            self, self.doc_controller, self.layout_controller, self.layout_combobox
         )
         # CheckBox - Ativar Data Manual
         self.enable_date_picker = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
@@ -203,13 +205,17 @@ class GenDocument(QtWidgets.QWidget):
         self.table_document.GetDataFromInputs()
 
         employee_name = self.table_document.GetEmployeeName()
-        is_device_return = self.is_device_return.isChecked()
-        self.doc_controller.SetOutputPath(employee_name, is_device_return)
+        default_path = (
+            self.layout_controller.GetCurrentLayout()["config"]["output_devol"]
+            if self.is_device_return.isChecked()
+            else self.layout_controller.GetCurrentLayout()["config"]["output"]
+        )
+        self.doc_controller.SetOutputPath(employee_name, default_path)
 
         file_to_read = (
-            self.doc_controller.GetCurrentLayout()["config"]["termo"]
+            self.layout_controller.GetCurrentLayout()["config"]["termo"]
             if not self.is_device_return.isChecked()
-            else self.doc_controller.GetCurrentLayout()["config"]["termo_devol"]
+            else self.layout_controller.GetCurrentLayout()["config"]["termo_devol"]
         )
 
         date_text = (
