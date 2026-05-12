@@ -3,7 +3,7 @@ from PySide6 import QtWidgets, QtGui
 from .gen_document import GenDocument
 
 
-class App(QtWidgets.QMainWindow):
+class Application(QtWidgets.QMainWindow):
     """
     This is our Main Window, it is responsible to Load, switch
     and show the frame that we want.
@@ -11,31 +11,31 @@ class App(QtWidgets.QMainWindow):
 
     def __init__(
         self,
-        app_title: str = None,
-        app_width: int = None,
-        app_height: int = None,
-        app_icon: str = None,
+        title: str = None,
+        width: int = None,
+        height: int = None,
+        icon: str = None,
         *args,
         **kwargs
     ):
         super().__init__(*args, **kwargs)
-        if app_title is not None:
-            self.setWindowTitle(app_title)
-        if app_width and app_height is not None:
-            self.CenterWindow(app_width, app_height)
-        if app_icon is not None:
-            self.setWindowIcon(QtGui.QIcon(app_icon))
+        if title is not None:
+            self.setWindowTitle(title)
+        if width and height is not None:
+            self.centerWindow(width, height)
+        if icon is not None:
+            self.setWindowIcon(QtGui.QIcon(icon))
         self.container = QtWidgets.QWidget(self)
-        self.container.setGeometry(0, 0, app_width, app_height)
-        self.container_grid = QtWidgets.QGridLayout(self.container)
-        self.container.setLayout(self.container_grid)
+        self.container.setGeometry(0, 0, width, height)
+        self.containerGrid = QtWidgets.QGridLayout(self.container)
+        self.container.setLayout(self.containerGrid)
         self.pages = {}
-        self.current_page: str = None
-        self.InitPages(self.container)
-        self.ShowPage("GenDocument")
+        self.currentPage: str = None
+        self.initPages(self.container)
+        self.showPage("GenDocument")
         self.setCentralWidget(self.container)
 
-    def InitPages(self, container):
+    def initPages(self, container):
         """
         Initialization for our Frames/Pages, requires a container and
         we add each of our pages to our dictionary.
@@ -46,32 +46,32 @@ class App(QtWidgets.QMainWindow):
         self.pages["GenDocument"].hide()
 
         for page in self.pages:
-            self.container_grid.addWidget(self.pages[page], 0, 0)
+            self.containerGrid.addWidget(self.pages[page], 0, 0)
 
-    def ShowPage(self, page: str):
+    def showPage(self, page: str):
         """
         The Switch logic uses a Dictionary, where the selected key show
         the specific page/frame.
         """
 
-        if self.current_page is not None:
-            self.pages[self.current_page].hide()
+        if self.currentPage is not None:
+            self.pages[self.currentPage].hide()
         self.pages[page].show()
-        self.current_page = page
+        self.currentPage = page
 
-    def CenterWindow(self, app_width: int = 300, app_height: int = 300):
+    def centerWindow(self, width: int = 300, height: int = 300):
         """
         Center our windows on screen and controls it's size.
         """
 
         # set the size of our window
-        self.setGeometry(0, 0, app_width, app_height)
+        self.setGeometry(0, 0, width, height)
         # get the frame geometry (size and position)
-        app_geometry = self.frameGeometry()
+        appGeometry = self.frameGeometry()
         # get the center of the screen
         screen = self.screen().availableGeometry().center()
         # Move the frame to the center of the screen
-        app_geometry.moveCenter(screen)
+        appGeometry.moveCenter(screen)
         # move our widget to the center of the screen
         # based on the top left point
-        self.move(app_geometry.topLeft())
+        self.move(appGeometry.topLeft())

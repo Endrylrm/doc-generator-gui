@@ -3,11 +3,11 @@ from ..services.readers import CompanyDataService
 
 class CompanyDataStore:
     def __init__(self):
-        self.__company_data_service = CompanyDataService("data/company.json")
-        self.__company_data = None
+        self.__companyDataService = CompanyDataService("data/company.json")
+        self.__companyData = None
 
-    def GetCompanyData(self) -> dict:
-        if self.__company_data is None:
-            self.__company_data = self.__company_data_service.Load()
+    def getCompanyData(self) -> dict:
+        if self.__companyData is None:
+            self.__companyData = self.__companyDataService.load()
 
-        return self.__company_data
+        return self.__companyData

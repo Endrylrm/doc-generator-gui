@@ -12,64 +12,67 @@ class DocumentController:
     that we use when printing.
     """
 
-    def __init__(self, company_data_store: CompanyDataStore):
-        self.__doc_state = DocumentState()
-        self.__input_state = InputState()
+    def __init__(self, companyDataStore: CompanyDataStore):
+        self.__documentState = DocumentState()
+        self.__inputState = InputState()
 
-        self.__company_data_store = company_data_store
+        self.__companyDataStore = companyDataStore
 
-        self.SetDefaultState()
+        self.setDefaultState()
 
-    def GetInputData(self) -> dict[str, str]:
-        return self.__input_state.input_data
+    def getInputData(self) -> dict[str, str]:
+        return self.__inputState.inputData
 
-    def GetInputHistory(self) -> dict[str, str]:
-        return self.__input_state.input_history
+    def getInputHistory(self) -> dict[str, str]:
+        return self.__inputState.inputHistory
 
-    def GetOutputPath(self) -> str:
-        return self.__doc_state.output_path
+    def getOutputPath(self) -> str:
+        return self.__documentState.outputPath
 
-    def GetCompanyData(self) -> dict[str, str]:
-        return self.__company_data_store.GetCompanyData()
+    def getCompanyData(self) -> dict[str, str]:
+        return self.__companyDataStore.getCompanyData()
 
-    def UpdateInputData(self, key: str, value: str):
-        self.__input_state.input_data[key] = value
+    def updateInputData(self, key: str, value: str):
+        self.__inputState.inputData[key] = value
 
-    def UpdateInputHistory(self, key: str, value: str):
-        self.__input_state.input_history[key] = value
+    def updateInputHistory(self, key: str, value: str):
+        self.__inputState.inputHistory[key] = value
 
-    def MergeToInputData(self, dict_to_merge: dict[str, str]):
-        self.__input_state.input_history.update(dict_to_merge)
+    def mergeToInputData(self, dictToMerge: dict[str, str]):
+        self.__inputState.inputData.update(dictToMerge)
 
-    def SetOutputPath(self, employee_name: str, path: str):
+    def mergeToInputHistory(self, dictToMerge: dict[str, str]):
+        self.__inputState.inputHistory.update(dictToMerge)
+
+    def setOutputPath(self, employeeName: str, path: str):
         """
         Sets the output path for our PDF files, by getting the
         name of the employee in our table and the current type.
         """
 
-        self.__doc_state.output_path = f"{path} - {employee_name}.pdf"
+        self.__documentState.outputPath = f"{path} - {employeeName}.pdf"
 
-    def SetDefaultState(self):
+    def setDefaultState(self):
         """
         Sets input_data with only the company data resetting
         the state to it's default value.
         """
 
-        self.__input_state.input_data = {}
+        self.__inputState.inputData = {}
 
-        company_data = {
-            data["replace"]: data["value"] for data in self.GetCompanyData().values()
+        companyData = {
+            data["replace"]: data["value"] for data in self.getCompanyData().values()
         }
 
-        self.__input_state.input_data.update(company_data)
+        self.__inputState.inputData.update(companyData)
 
-    def ClearInputState(self):
-        self.__input_state.input_data = {}
-        self.__input_state.input_history = {}
+    def clearInputState(self):
+        self.__inputState.inputData = {}
+        self.__inputState.inputHistory = {}
 
-    def ClearDocumentState(self):
-        self.__doc_state.output_path = ""
+    def clearDocumentState(self):
+        self.__documentState.outputPath = ""
 
-    def ClearAllStates(self):
-        self.ClearDocumentState()
-        self.ClearInputState()
+    def clearAllStates(self):
+        self.clearDocumentState()
+        self.clearInputState()

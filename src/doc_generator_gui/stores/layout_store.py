@@ -3,11 +3,11 @@ from ..services.readers import LayoutService
 
 class LayoutStore:
     def __init__(self):
-        self._layout_service = LayoutService("data/layouts.json")
-        self._layouts = None
+        self.__layoutService = LayoutService("data/layouts.json")
+        self.__layouts = None
 
-    def GetAllLayouts(self):
-        if self._layouts is None:
-            self._layouts = self._layout_service.Load()
+    def getAllLayouts(self):
+        if self.__layouts is None:
+            self.__layouts = self.__layoutService.load()
 
-        return self._layouts
+        return self.__layouts

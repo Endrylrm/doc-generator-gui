@@ -17,14 +17,13 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
     def __init__(
         self,
         parent=None,
-        doc_controller: DocumentController | None = None,
-        layout_controller: LayoutController | None = None,
-        layout_combobox: QtWidgets.QComboBox | None = None,
+        documentController: DocumentController | None = None,
+        layoutController: LayoutController | None = None,
     ):
         super().__init__(parent=parent)
 
-        self.doc_controller = doc_controller
-        self.layout_controller = layout_controller
+        self.documentController = documentController
+        self.layoutController = layoutController
 
         table_headers = ["Descrição", "Preencher"]
 
@@ -41,10 +40,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self.setSelectionMode(self.selectionMode().SingleSelection)
         self.verticalHeader().setVisible(False)
 
-        layout_combobox.currentTextChanged.connect(self.SetTableLayout)
-        self.SetTableLayout(layout_combobox.currentText())
-
-    def SetTableLayout(self, layout_name: str = ""):
+    def setTableLayout(self, layout_name: str = ""):
         """
         matches our selected Print layout, changes the text and layout
         of the table widget accordingly.
@@ -55,17 +51,17 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self.setRowCount(0)
 
-        self.layout_controller.SetCurrentLayout(layout_name)
+        self.layoutController.setCurrentLayout(layout_name)
 
         keys = [
             key
-            for key in self.layout_controller.GetCurrentLayout().keys()
+            for key in self.layoutController.getCurrentLayout().keys()
             if key != "config"
         ]
 
-        table_rows = list(map(self.AddRowToTable, keys))
+        tableRows = list(map(self.addRowToTable, keys))
 
-    def ValidateRequiredInputs(self) -> InputValidationResult:
+    def validateRequiredInputs(self) -> InputValidationResult:
         """
         this just checks if our inputs are not empty
         and returns the check and the error message,
@@ -73,75 +69,77 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         for row in range(self.rowCount()):
-            is_empty_cell = self.cellWidget(row, 1).text() == ""
-            is_required = self.layout_controller.GetValueFromLayout(row, "required")
-            error_msg = self.layout_controller.GetValueFromLayout(row, "error_message")
+            isEmptyCell = self.cellWidget(row, 1).text() == ""
+            isRequired = self.layoutController.getValueFromLayout(row, "required")
+            errorMsg = self.layoutController.getValueFromLayout(row, "error_message")
 
-            if is_empty_cell and is_required:
-                return InputValidationResult(False, error_msg)
+            if isEmptyCell and isRequired:
+                return InputValidationResult(False, errorMsg)
 
         return InputValidationResult(True)
 
-    def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
-        description_font = QtGui.QFont()
-        description_font.setBold(True)
-        row_description = QtWidgets.QTableWidgetItem(layout["description"])
-        row_description.setFont(description_font)
-        row_description.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
-        return row_description
+    def createRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
+        descriptionFont = QtGui.QFont()
+        descriptionFont.setBold(True)
+        rowDescription = QtWidgets.QTableWidgetItem(layout["description"])
+        rowDescription.setFont(descriptionFont)
+        rowDescription.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
+        return rowDescription
 
-    def CreateRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | CpfInput:
-        max_text_length = layout["maxTextLength"] if "maxTextLength" in layout else 900
-        row_input = QtWidgets.QLineEdit() if layout["type"] != "cpf" else CpfInput()
-        row_input.setPlaceholderText(layout["placeholder"])
-        row_input.textEdited.connect(
-            lambda: self.SetInputHistoryData(key, row_input.text())
+    def createRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | CpfInput:
+        maxTextLength = (
+            layout["max_text_length"] if "max_text_length" in layout else 900
+        )
+        rowInput = QtWidgets.QLineEdit() if layout["type"] != "cpf" else CpfInput()
+        rowInput.setPlaceholderText(layout["placeholder"])
+        rowInput.textEdited.connect(
+            lambda: self.setInputHistoryData(key, rowInput.text())
         )
         if layout["type"] != "cpf":
-            row_input.setMaxLength(max_text_length)
-        if key in self.doc_controller.GetInputHistory():
-            row_input.setText(self.doc_controller.GetInputHistory()[key])
-        return row_input
+            rowInput.setMaxLength(maxTextLength)
+        if key in self.documentController.getInputHistory():
+            rowInput.setText(self.documentController.getInputHistory()[key])
+        return rowInput
 
-    def SetInputHistoryData(self, key: str, text: str):
-        self.doc_controller.UpdateInputHistory(key, text)
+    def setInputHistoryData(self, key: str, text: str):
+        self.documentController.updateInputHistory(key, text)
 
-    def AddRowToTable(self, key: str):
+    def addRowToTable(self, key: str):
         """
         Adds a new row to our tablewidget based on our json layout.
         """
 
         index = self.rowCount()
-        row_layout = self.layout_controller.GetCurrentLayout()[key]
+        rowLayout = self.layoutController.getCurrentLayout()[key]
         self.setRowCount(index + 1)
-        row_description = self.CreateRowDescription(row_layout)
-        self.setItem(index, 0, row_description)
-        row_input = self.CreateRowInput(key, row_layout)
-        self.setCellWidget(index, 1, row_input)
+        rowDescription = self.createRowDescription(rowLayout)
+        self.setItem(index, 0, rowDescription)
+        rowInput = self.createRowInput(key, rowLayout)
+        self.setCellWidget(index, 1, rowInput)
 
-    def GetDataFromInputs(self):
+    def getDataFromInputs(self):
         """
         Gets the data from every input and in our table widget
         adds to our string replace dictionary.
         """
 
         for row in range(self.rowCount()):
-            template = self.layout_controller.GetValueFromLayout(row, "replace")
+            template = self.layoutController.getValueFromLayout(row, "replace")
 
-            current_text = self.cellWidget(row, 1).text()
+            currentText = self.cellWidget(row, 1).text()
 
-            if current_text == "":
+            if currentText == "":
                 continue
 
-            prefix = self.layout_controller.GetValueFromLayout(row, "prefix")
-            suffix = self.layout_controller.GetValueFromLayout(row, "suffix")
-            current_text = prefix + current_text + suffix
+            prefix = self.layoutController.getValueFromLayout(row, "prefix")
+            suffix = self.layoutController.getValueFromLayout(row, "suffix")
+            currentText = prefix + currentText + suffix
 
-            self.doc_controller.UpdateInputData(template, current_text)
+            self.documentController.updateInputData(template, currentText)
 
-    def GetEmployeeName(self) -> str:
+    def getEmployeeName(self) -> str:
         for row in range(self.rowCount()):
-            if self.layout_controller.GetValueFromLayout(row, "type") == "name":
+            if self.layoutController.getValueFromLayout(row, "type") == "name":
                 name = self.cellWidget(row, 1).text()
                 return name
 

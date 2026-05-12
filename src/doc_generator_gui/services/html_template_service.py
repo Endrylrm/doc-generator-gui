@@ -9,52 +9,52 @@ class HTMLTemplateService:
     and cleaning our html for creation of PDFs.
     """
 
-    def __init__(self, doc_controller: DocumentController):
-        self.doc_controller = doc_controller
+    def __init__(self, documentController: DocumentController):
+        self.documentController = documentController
 
-    def ReadHTMLFiles(self, file_to_read: str) -> dict[str, str]:
+    def readHTMLFiles(self, fileToRead: str) -> dict[str, str]:
         """
         this function reads our terms html files, returning a dictionary
         containing all the html data.
         """
 
-        tmpl_path = "./data/Templates"
+        tmplPath = "./data/Templates"
 
         with (
-            open(f"{tmpl_path}/header.html", "r", encoding="utf-8") as header_file,
-            open(f"{tmpl_path}/{file_to_read}", "r", encoding="utf-8") as termo_file,
-            open(f"{tmpl_path}/footer.html", "r", encoding="utf-8") as footer_file,
+            open(f"{tmplPath}/header.html", "r", encoding="utf-8") as headerFile,
+            open(f"{tmplPath}/{fileToRead}", "r", encoding="utf-8") as termoFile,
+            open(f"{tmplPath}/footer.html", "r", encoding="utf-8") as footerFile,
         ):
 
             html = {
-                "header": header_file.read(),
-                "termo": termo_file.read(),
-                "footer": footer_file.read(),
+                "header": headerFile.read(),
+                "termo": termoFile.read(),
+                "footer": footerFile.read(),
             }
 
         return html
 
-    def BuildCleanHTML(self, html: dict[str, str]):
+    def buildCleanHTML(self, html: dict[str, str]):
         for key in html:
-            for old_str, new_str in self.doc_controller.GetInputData().items():
-                html[key] = html[key].replace(old_str, new_str)
+            for oldString, newString in self.documentController.getInputData().items():
+                html[key] = html[key].replace(oldString, newString)
 
-    def RemoveUnusedTemplate(self, html: dict[str, str]):
+    def removeUnusedTemplate(self, html: dict[str, str]):
         for key in html:
             html[key] = re.sub(r"\$([a-zA-Z0-9_]+)\$", "", html[key])
 
-    def Parse(self, file: str) -> dict[str, str]:
+    def parse(self, file: str) -> dict[str, str]:
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.
         """
 
-        html = self.ReadHTMLFiles(file)
+        html = self.readHTMLFiles(file)
 
-        self.BuildCleanHTML(html)
+        self.buildCleanHTML(html)
 
         # clean any variable that didn't get used
         # mostly those we put as not required
-        self.RemoveUnusedTemplate(html)
+        self.removeUnusedTemplate(html)
 
         return html

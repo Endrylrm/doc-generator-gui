@@ -13,11 +13,11 @@ class PrinterService:
     physically for our employees.
     """
 
-    def __init__(self, doc_controller: DocumentController):
-        self.doc_controller = doc_controller
-        self.printer = PrinterFactory.create_native_printer()
+    def __init__(self, documentController: DocumentController):
+        self.documentController = documentController
+        self.printer = PrinterFactory.createPrinterToNative()
 
-    def PaintDocument(self):
+    def paintDocument(self):
         """
         this function is responsible to convert our pdf file in a
         image and then use a QPainter to paint to a native printer.
@@ -27,58 +27,58 @@ class PrinterService:
         PAINTER_SCALE: float = 1
         START_LOCATION: list[int] = [2, 0]
 
-        pdf_file = QtPdf.QPdfDocument()
-        pdf_file.load(self.doc_controller.GetOutputPath())
+        pdfFile = QtPdf.QPdfDocument()
+        pdfFile.load(self.documentController.getOutputPath())
 
         size = QtGui.QPageSize.sizePixels(
             QtGui.QPageSize.PageSizeId.A4, PDF_PRINTER_RESOLUTION
         )
 
         with PrintContext(self.printer) as ctx:
-            for cur_page in range(pdf_file.pageCount()):
-                if cur_page > 0:
+            for curPage in range(pdfFile.pageCount()):
+                if curPage > 0:
                     self.printer.newPage()
 
-                page_image_from_pdf = pdf_file.render(cur_page, size)
+                pageImageFromPDF = pdfFile.render(curPage, size)
 
                 ctx.painter.scale(PAINTER_SCALE, PAINTER_SCALE)
                 ctx.painter.translate(START_LOCATION[0], START_LOCATION[1])
-                ctx.painter.drawImage(0, 0, page_image_from_pdf)
+                ctx.painter.drawImage(0, 0, pageImageFromPDF)
 
-    def PrintDialog(self, print_type: str):
+    def printDialog(self, printType: str):
         """
         this function is responsible for creating a print dialog.
         """
 
-        print_dialog = QtPrintSupport.QPrintDialog(self.printer)
-        print_dialog.setWindowTitle(f"Imprimir Termo de {print_type}")
-        print_dialog_icon = QtGui.QIcon("gen_document.ico")
-        print_dialog.setWindowIcon(print_dialog_icon)
-        if print_dialog.exec() == print_dialog.DialogCode.Accepted:
-            self.PaintDocument()
+        printDialog = QtPrintSupport.QPrintDialog(self.printer)
+        printDialog.setWindowTitle(f"Imprimir Termo de {printType}")
+        printDialogIcon = QtGui.QIcon("gen_document.ico")
+        printDialog.setWindowIcon(printDialogIcon)
+        if printDialog.exec() == printDialog.DialogCode.Accepted:
+            self.paintDocument()
 
-    def PrintPreviewDialog(self, print_type: str):
+    def printPreviewDialog(self, printType: str):
         """
         this function is responsible for creating a print dialog
         with preview.
         """
 
-        print_preview_dialog = QtPrintSupport.QPrintPreviewDialog(self.printer)
-        print_preview_dialog.setWindowTitle(f"Imprimir Termo de {print_type}")
-        print_preview_dialog_icon = QtGui.QIcon("gen_document.ico")
-        print_preview_dialog.setWindowIcon(print_preview_dialog_icon)
-        print_preview_dialog.paintRequested.connect(self.PaintDocument)
-        print_preview_dialog.exec()
+        printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(self.printer)
+        printPreviewDialog.setWindowTitle(f"Imprimir Termo de {printType}")
+        printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
+        printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
+        printPreviewDialog.paintRequested.connect(self.paintDocument)
+        printPreviewDialog.exec()
 
-    def PrintDocument(self, disable_print_preview: bool = False, print_type: str = ""):
+    def print(self, printType: str = "", disablePrintPreview: bool = False):
         """
         this function is responsible to send our PDF file to a native
         printer, it uses a QPrinter to send to a native printer,
         QPrintPreviewDialog to preview or QPrintDialog for fast printing.
         """
 
-        if disable_print_preview:
-            self.PrintDialog(print_type)
+        if disablePrintPreview:
+            self.printDialog(printType)
             return
 
-        self.PrintPreviewDialog(print_type)
+        self.printPreviewDialog(printType)

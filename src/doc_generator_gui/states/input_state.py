@@ -9,5 +9,5 @@ class InputState:
     our printing services.
     """
 
-    input_data: dict[str, str] = field(default_factory=dict)
-    input_history: dict[str, str] = field(default_factory=dict)
+    inputData: dict[str, str] = field(default_factory=dict)
+    inputHistory: dict[str, str] = field(default_factory=dict)

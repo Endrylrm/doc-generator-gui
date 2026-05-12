@@ -11,29 +11,29 @@ class LayoutController:
     our table widget uses.
     """
 
-    def __init__(self, layout_store: LayoutStore):
-        self.__layout_state = LayoutState()
+    def __init__(self, layoutStore: LayoutStore):
+        self.__layoutState = LayoutState()
 
-        self.__layout_store = layout_store
+        self.__layoutStore = layoutStore
 
-    def GetValueFromLayout(self, index: int, key: str) -> Any | str:
+    def getValueFromLayout(self, index: int, key: str) -> Any | str:
         """
         we convert our dictionary items in a list, then we returns the
         data from the dictionary based on the index of a parent key,
         by selecting the corresponding key.
         """
 
-        layout_data = list(self.__layout_state.cur_layout.items())[index][1]
-        return layout_data[key] if key in layout_data else ""
+        layoutData = list(self.__layoutState.curLayout.items())[index][1]
+        return layoutData[key] if key in layoutData else ""
 
-    def GetCurrentLayout(self) -> dict:
-        return self.__layout_state.cur_layout
+    def getCurrentLayout(self) -> dict:
+        return self.__layoutState.curLayout
 
-    def SetCurrentLayout(self, key: str) -> dict:
-        self.__layout_state.cur_layout = self.GetAllLayouts()[key]
+    def setCurrentLayout(self, key: str) -> dict:
+        self.__layoutState.curLayout = self.getAllLayouts()[key]
 
-    def GetAllLayouts(self) -> dict[str, str]:
-        return self.__layout_store.GetAllLayouts()
+    def getAllLayouts(self) -> dict[str, str]:
+        return self.__layoutStore.getAllLayouts()
 
-    def ClearLayoutState(self):
-        self.__layout_state.cur_layout = {}
+    def clearLayoutState(self):
+        self.__layoutState.curLayout = {}

@@ -13,11 +13,11 @@ class PDFService:
     be printed physically.
     """
 
-    def __init__(self, doc_controller: DocumentController):
-        self.doc_controller = doc_controller
-        self.printer = PrinterFactory.create_pdf_printer()
+    def __init__(self, documentController: DocumentController):
+        self.documentController = documentController
+        self.printer = PrinterFactory.createPrinterToPDF()
 
-    def PaintFromHTML(
+    def paintFromHTML(
         self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
     ):
         """
@@ -26,14 +26,14 @@ class PDFService:
         function of our DocumentLayout to start painting.
         """
 
-        doc_PaintCtx = doc.documentLayout().PaintContext()
+        documentPaintCtx = doc.documentLayout().PaintContext()
 
         painter.translate(point[0], point[1])
 
         doc.setHtml(html)
-        doc.documentLayout().draw(painter, doc_PaintCtx)
+        doc.documentLayout().draw(painter, documentPaintCtx)
 
-    def Generate(self, html_data: dict):
+    def generate(self, htmlData: dict):
         """
         we use a QPrinter, QPainter and QTextdocument to generate a
         PDF file of our HTML, we scale our painter and use the function
@@ -47,17 +47,19 @@ class PDFService:
         MAIN_LOCATION: list[int] = [30, 72]
         FOOTER_LOCATION: list[int] = [-30, 665]
 
-        self.printer.setOutputFileName(self.doc_controller.GetOutputPath())
+        self.printer.setOutputFileName(self.documentController.getOutputPath())
 
-        pdf_Doc = QtGui.QTextDocument()
-        pdf_Doc.setTextWidth(PDF_TEXT_WIDTH)
+        pdfDocument = QtGui.QTextDocument()
+        pdfDocument.setTextWidth(PDF_TEXT_WIDTH)
 
         with PrintContext(self.printer) as ctx:
             ctx.painter.scale(PDF_PAINTER_SCALE, PDF_PAINTER_SCALE)
-            self.PaintFromHTML(
-                pdf_Doc, ctx.painter, HEADER_LOCATION, html_data["header"]
+            self.paintFromHTML(
+                pdfDocument, ctx.painter, HEADER_LOCATION, htmlData["header"]
             )
-            self.PaintFromHTML(pdf_Doc, ctx.painter, MAIN_LOCATION, html_data["termo"])
-            self.PaintFromHTML(
-                pdf_Doc, ctx.painter, FOOTER_LOCATION, html_data["footer"]
+            self.paintFromHTML(
+                pdfDocument, ctx.painter, MAIN_LOCATION, htmlData["termo"]
+            )
+            self.paintFromHTML(
+                pdfDocument, ctx.painter, FOOTER_LOCATION, htmlData["footer"]
             )

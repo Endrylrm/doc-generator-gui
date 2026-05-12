@@ -8,4 +8,4 @@ class DocumentState:
     for our controller to use between our printing services.
     """
 
-    output_path: str = ""
+    outputPath: str = ""

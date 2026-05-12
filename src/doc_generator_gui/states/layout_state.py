@@ -9,4 +9,4 @@ class LayoutState:
     change the table layout.
     """
 
-    cur_layout: dict[str, str] = field(default_factory=dict)
+    curLayout: dict[str, str] = field(default_factory=dict)

@@ -30,17 +30,20 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.layout_controller = LayoutController(LayoutStore())
-        self.doc_controller = DocumentController(CompanyDataStore())
+        self.layoutController = LayoutController(LayoutStore())
+        self.documentController = DocumentController(CompanyDataStore())
 
-        self.html_tmpl_service = HTMLTemplateService(self.doc_controller)
-        self.pdf_service = PDFService(self.doc_controller)
-        self.printer_service = PrinterService(self.doc_controller)
+        self.htmlTemplateService = HTMLTemplateService(self.documentController)
+        self.pdfService = PDFService(self.documentController)
+        self.printerService = PrinterService(self.documentController)
 
-        self.CreateWidgets(controller)
-        self.GridConfiguration()
+        self.createWidgets(controller)
+        self.setGridConfiguration()
 
-    def CreateWidgets(self, controller):
+        # start with a loaded layout
+        self.tableDocument.setTableLayout(self.layoutCombobox.currentText())
+
+    def createWidgets(self, controller):
         """
         Used to create new widgets (labels, buttons, etc.),
         controller (main window / controller widget) is used in buttons
@@ -48,100 +51,104 @@ class GenDocument(QtWidgets.QWidget):
         """
 
         # Label - Title
-        self.label_title = QtWidgets.QLabel(
+        self.labelTitle = QtWidgets.QLabel(
             self, text="<b>Gerador de Termos de Responsabilidade</b>"
         )
         # separator - Title
-        self.separator_title = QtWidgets.QFrame(self)
-        self.separator_title.setLineWidth(1)
-        self.separator_title.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separator_title.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separatorTitle = QtWidgets.QFrame(self)
+        self.separatorTitle.setLineWidth(1)
+        self.separatorTitle.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separatorTitle.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Label - Print Type
-        self.label_layout_combobox = QtWidgets.QLabel(
+        self.labelLayoutCombobox = QtWidgets.QLabel(
             self, text="<b>Layout de Impressão</b>"
         )
         # ComboBox - Print Type
-        self.layout_combobox = QtWidgets.QComboBox(self)
-        print_types = list(
+        self.layoutCombobox = QtWidgets.QComboBox(self)
+        printTypes = list(
             map(
-                self.layout_combobox.addItem,
-                self.layout_controller.GetAllLayouts().keys(),
+                self.layoutCombobox.addItem,
+                self.layoutController.getAllLayouts().keys(),
             )
         )
         # separator - ComboBox
-        self.separator_combobox = QtWidgets.QFrame(self)
-        self.separator_combobox.setLineWidth(1)
-        self.separator_combobox.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separator_combobox.setFrameShadow(QtWidgets.QFrame.Sunken)
-        # separator - CheckBox
-        self.separator_checkbox = QtWidgets.QFrame(self)
-        self.separator_checkbox.setLineWidth(1)
-        self.separator_checkbox.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separator_checkbox.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separatorCombobox = QtWidgets.QFrame(self)
+        self.separatorCombobox.setLineWidth(1)
+        self.separatorCombobox.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separatorCombobox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
-        self.table_document = LayoutTableWidget(
-            self, self.doc_controller, self.layout_controller, self.layout_combobox
+        self.tableDocument = LayoutTableWidget(
+            self, self.documentController, self.layoutController
         )
+        # set table layout to combobox current selection
+        self.layoutCombobox.currentTextChanged.connect(
+            self.tableDocument.setTableLayout
+        )
+        # separator - CheckBox
+        self.separatorCheckbox = QtWidgets.QFrame(self)
+        self.separatorCheckbox.setLineWidth(1)
+        self.separatorCheckbox.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separatorCheckbox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # CheckBox - Ativar Data Manual
-        self.enable_date_picker = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
-        self.enable_date_picker.setToolTip(
+        self.isDateSelectable = QtWidgets.QCheckBox(self, text="Ativar Data Manual.")
+        self.isDateSelectable.setToolTip(
             "<b>Ativar Data Manual:</b>\nDesativa a data automâtica e permite a seleção de datas."
         )
-        self.enable_date_picker.stateChanged.connect(self.EnableDatePicker)
+        self.isDateSelectable.stateChanged.connect(self.enableDatePicker)
         # CheckBox - Devolução
-        self.is_device_return = QtWidgets.QCheckBox(
+        self.isDeviceReturn = QtWidgets.QCheckBox(
             self, text="Devolução de Dispositivo."
         )
-        self.is_device_return.setToolTip(
+        self.isDeviceReturn.setToolTip(
             "<b>Devolução de Dispositivo.:</b>\nAtive para gerar os termos de devolução."
         )
         # CheckBox - Desativar Visualização de Impressão
-        self.disable_printer_preview = QtWidgets.QCheckBox(
+        self.disablePrinterPreview = QtWidgets.QCheckBox(
             self, text="Desativar visualização de impressão."
         )
-        self.disable_printer_preview.setToolTip(
+        self.disablePrinterPreview.setToolTip(
             "<b>Desativar visualização de impressão.:</b>\nDesativa a visualização de impressão."
         )
         # CheckBox - Desativar Impressão
-        self.disable_printer = QtWidgets.QCheckBox(
+        self.disablePrinter = QtWidgets.QCheckBox(
             self, text="Desativar impressão automática."
         )
-        self.disable_printer.setToolTip(
+        self.disablePrinter.setToolTip(
             "<b>Desativar impressão automática.:</b>\nDesativa a impressão automática, gerando apenas o PDF."
         )
         # DateTimeEdit - Data Manual
-        self.date_picker = QtWidgets.QDateTimeEdit(self)
-        self.date_picker.setCalendarPopup(True)
-        self.date_picker.setDateTime(QtCore.QDateTime.currentDateTime())
-        self.date_picker.setDisplayFormat("dddd, dd 'de' MMMM 'de' yyyy")
-        self.date_picker.setEnabled(False)
+        self.datePicker = QtWidgets.QDateTimeEdit(self)
+        self.datePicker.setCalendarPopup(True)
+        self.datePicker.setDateTime(QtCore.QDateTime.currentDateTime())
+        self.datePicker.setDisplayFormat("dddd, dd 'de' MMMM 'de' yyyy")
+        self.datePicker.setEnabled(False)
         # separator - Buttons
-        self.separator_buttons = QtWidgets.QFrame(self)
-        self.separator_buttons.setLineWidth(1)
-        self.separator_buttons.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separator_buttons.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separatorButtons = QtWidgets.QFrame(self)
+        self.separatorButtons.setLineWidth(1)
+        self.separatorButtons.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separatorButtons.setFrameShadow(QtWidgets.QFrame.Sunken)
         # PushButton - Gerar Documento
-        self.button_gen_doc = QtWidgets.QPushButton(
+        self.buttonGenDoc = QtWidgets.QPushButton(
             self, text="\N{DOCUMENT} " + "Gerar Documento"
         )
-        self.button_gen_doc.clicked.connect(self.GenerateDocument)
+        self.buttonGenDoc.clicked.connect(self.generateDocument)
 
-    def GridConfiguration(self):
+    def setGridConfiguration(self):
         """
         Used to configure this frame grid (columns and rows) for our widgets.
         """
 
         # Grid Layout
-        widget_grid_layout = QtWidgets.QGridLayout(self)
+        widgetGridLayout = QtWidgets.QGridLayout(self)
         # Label - Título
-        widget_grid_layout.addWidget(
-            self.label_title, 0, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
+        widgetGridLayout.addWidget(
+            self.labelTitle, 0, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
         )
         # separator - Título
-        widget_grid_layout.addWidget(self.separator_title, 1, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorTitle, 1, 0, 1, 2)
         # Label - Tipo de impressão
-        widget_grid_layout.addWidget(
-            self.label_layout_combobox,
+        widgetGridLayout.addWidget(
+            self.labelLayoutCombobox,
             2,
             0,
             1,
@@ -149,91 +156,89 @@ class GenDocument(QtWidgets.QWidget):
             QtGui.Qt.AlignmentFlag.AlignCenter,
         )
         # ComboBox - Tipo de impressão
-        widget_grid_layout.addWidget(self.layout_combobox, 3, 0, 1, 2)
+        widgetGridLayout.addWidget(self.layoutCombobox, 3, 0, 1, 2)
         # separator - Tipo de impressão ComboBox
-        widget_grid_layout.addWidget(self.separator_combobox, 4, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorCombobox, 4, 0, 1, 2)
         # Table - Data Layouts
-        widget_grid_layout.addWidget(self.table_document, 5, 0, 6, 2)
+        widgetGridLayout.addWidget(self.tableDocument, 5, 0, 6, 2)
         # separator - CheckBox
-        widget_grid_layout.addWidget(self.separator_checkbox, 11, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorCheckbox, 11, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widget_grid_layout.addWidget(self.enable_date_picker, 12, 0, 1, 1)
+        widgetGridLayout.addWidget(self.isDateSelectable, 12, 0, 1, 1)
         # DateTimeEdit - Data Manual
-        widget_grid_layout.addWidget(self.date_picker, 12, 1, 1, 1)
+        widgetGridLayout.addWidget(self.datePicker, 12, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widget_grid_layout.addWidget(self.is_device_return, 13, 0, 1, 1)
+        widgetGridLayout.addWidget(self.isDeviceReturn, 13, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widget_grid_layout.addWidget(self.disable_printer_preview, 13, 1, 1, 1)
+        widgetGridLayout.addWidget(self.disablePrinterPreview, 13, 1, 1, 1)
         # CheckBox - Desativar Impressão
-        widget_grid_layout.addWidget(self.disable_printer, 14, 0, 1, 1)
+        widgetGridLayout.addWidget(self.disablePrinter, 14, 0, 1, 1)
         # separator - Buttons
-        widget_grid_layout.addWidget(self.separator_buttons, 16, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorButtons, 16, 0, 1, 2)
         # PushButton - Gerar Documento
-        widget_grid_layout.addWidget(self.button_gen_doc, 17, 0, 1, 2)
+        widgetGridLayout.addWidget(self.buttonGenDoc, 17, 0, 1, 2)
         # space between widgets
-        widget_grid_layout.setSpacing(10)
+        widgetGridLayout.setSpacing(10)
         # stretch a specific row
-        widget_grid_layout.setRowStretch(15, 1)
+        widgetGridLayout.setRowStretch(15, 1)
         # set this widget layout to the grid layout
-        self.setLayout(widget_grid_layout)
+        self.setLayout(widgetGridLayout)
 
-    def EnableDatePicker(self):
-        is_date_selectable: bool = (
-            True if self.enable_date_picker.isChecked() else False
-        )
-        self.date_picker.setEnabled(is_date_selectable)
+    def enableDatePicker(self):
+        isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False
+        self.datePicker.setEnabled(isDateSelectable)
 
-    def GenerateDocument(self):
+    def generateDocument(self):
         """
         Responsible to start the PDF creation and sending to a
         printer (optional).
         """
 
-        result = self.table_document.ValidateRequiredInputs()
+        result = self.tableDocument.validateRequiredInputs()
 
-        if not result.is_valid:
-            msg_box_icon = QtGui.QIcon("gen_document.ico")
+        if not result.isValid:
+            msgBoxIcon = QtGui.QIcon("gen_document.ico")
 
-            DialogFactory.CreateInfoMessageBox(
-                f"Aviso - Campo {result.error_message} está vazio!",
-                f"Sem {result.error_message}!",
-                f"Por gentileza, coloque o {result.error_message}.",
-                msg_win_icon=msg_box_icon,
+            DialogFactory.createInfoMessageBox(
+                f"Aviso - Campo {result.errorMessage} está vazio!",
+                f"Sem {result.errorMessage}!",
+                f"Por gentileza, coloque o {result.errorMessage}.",
+                msgBoxIcon=msgBoxIcon,
             )
             return
 
-        self.table_document.GetDataFromInputs()
+        self.tableDocument.getDataFromInputs()
 
-        employee_name = self.table_document.GetEmployeeName()
-        default_path = (
-            self.layout_controller.GetCurrentLayout()["config"]["output_devol"]
-            if self.is_device_return.isChecked()
-            else self.layout_controller.GetCurrentLayout()["config"]["output"]
+        employeeName = self.tableDocument.getEmployeeName()
+        defaultPath = (
+            self.layoutController.getCurrentLayout()["config"]["output_devol"]
+            if self.isDeviceReturn.isChecked()
+            else self.layoutController.getCurrentLayout()["config"]["output"]
         )
-        self.doc_controller.SetOutputPath(employee_name, default_path)
+        self.documentController.setOutputPath(employeeName, defaultPath)
 
-        file_to_read = (
-            self.layout_controller.GetCurrentLayout()["config"]["termo"]
-            if not self.is_device_return.isChecked()
-            else self.layout_controller.GetCurrentLayout()["config"]["termo_devol"]
+        fileToRead = (
+            self.layoutController.getCurrentLayout()["config"]["termo"]
+            if not self.isDeviceReturn.isChecked()
+            else self.layoutController.getCurrentLayout()["config"]["termo_devol"]
         )
 
-        date_text = (
-            self.date_picker.text()
-            if self.enable_date_picker.isChecked()
+        dateText = (
+            self.datePicker.text()
+            if self.isDateSelectable.isChecked()
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
-        self.doc_controller.GetInputData()["$data$"] = date_text
+        self.documentController.getInputData()["$data$"] = dateText
 
-        clean_html = self.html_tmpl_service.Parse(file_to_read)
-        self.pdf_service.Generate(clean_html)
+        cleanHTML = self.htmlTemplateService.parse(fileToRead)
+        self.pdfService.generate(cleanHTML)
 
-        if not self.disable_printer.isChecked():
-            self.printer_service.PrintDocument(
-                self.disable_printer_preview.isChecked(),
-                self.layout_combobox.currentText(),
+        if not self.disablePrinter.isChecked():
+            self.printerService.print(
+                self.layoutCombobox.currentText(),
+                self.disablePrinterPreview.isChecked(),
             )
 
         # set the state to it's default value after using it
-        self.doc_controller.SetDefaultState()
+        self.documentController.setDefaultState()

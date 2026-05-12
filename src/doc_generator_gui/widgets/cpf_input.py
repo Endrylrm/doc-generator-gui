@@ -12,29 +12,29 @@ class CpfInput(QtWidgets.QLineEdit):
         self.setPlaceholderText(
             "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática."
         )
-        self.textEdited.connect(self.format_text)
+        self.textEdited.connect(self.formatText)
         self.setMaxLength(18)
 
-    def format_text(self):
+    def formatText(self):
         cursor = self.cursorPosition()
 
         # Remove any non-digit characters and limit to 14 characters
         text = "".join(filter(str.isdecimal, self.text()))[:14]
 
         # correct cursor position, slice before filtering
-        digits_before_cursor = len("".join(filter(str.isdecimal, self.text()[:cursor])))
+        digitsBeforeCursor = len("".join(filter(str.isdecimal, self.text()[:cursor])))
 
         # Format as a common format for both CPF and CNPJ (e.g., 123.456.789-01 or 12.345.678/9012-34)
         formatted = (
-            self.format_as_cpf(text) if len(text) <= 11 else self.format_as_cnpj(text)
+            self.formatAsCPF(text) if len(text) <= 11 else self.formatAsCNPJ(text)
         )
 
         self.setText(formatted)
 
-        new_cursor = self.cursor_from_digits(formatted, digits_before_cursor)
-        self.setCursorPosition(new_cursor)
+        newCursor = self.cursorFromDigits(formatted, digitsBeforeCursor)
+        self.setCursorPosition(newCursor)
 
-    def format_as_cpf(self, text: str) -> str:
+    def formatAsCPF(self, text: str) -> str:
         if len(text) >= 4:
             text = f"{text[:3]}.{text[3:]}"
         if len(text) >= 8:
@@ -43,7 +43,7 @@ class CpfInput(QtWidgets.QLineEdit):
             text = f"{text[:11]}-{text[11:]}"
         return text
 
-    def format_as_cnpj(self, text: str) -> str:
+    def formatAsCNPJ(self, text: str) -> str:
         if len(text) >= 3:
             text = f"{text[:2]}.{text[2:]}"
         if len(text) >= 7:
@@ -54,8 +54,8 @@ class CpfInput(QtWidgets.QLineEdit):
             text = f"{text[:15]}-{text[15:]}"
         return text
 
-    def cursor_from_digits(self, formatted: str, digits_count: int) -> int:
-        if digits_count <= 0:
+    def cursorFromDigits(self, formatted: str, digitsCount: int) -> int:
+        if digitsCount <= 0:
             return 0
 
         count = 0
@@ -63,7 +63,7 @@ class CpfInput(QtWidgets.QLineEdit):
         for index, char in enumerate(formatted):
             if char.isdecimal():
                 count += 1
-            if count >= digits_count:
+            if count >= digitsCount:
                 return index + 1
 
         return len(formatted)
