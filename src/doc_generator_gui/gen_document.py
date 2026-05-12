@@ -192,15 +192,15 @@ class GenDocument(QtWidgets.QWidget):
         printer (optional).
         """
 
-        is_valid, error_msg = self.table_document.ValidateRequiredInputs()
+        result = self.table_document.ValidateRequiredInputs()
 
-        if not is_valid:
+        if not result.is_valid:
             msg_box_icon = QtGui.QIcon("gen_document.ico")
 
             DialogFactory.CreateInfoMessageBox(
-                f"Aviso - Campo {error_msg} está vazio!",
-                f"Sem {error_msg}!",
-                f"Por gentileza, coloque o {error_msg}.",
+                f"Aviso - Campo {result.error_message} está vazio!",
+                f"Sem {result.error_message}!",
+                f"Por gentileza, coloque o {result.error_message}.",
                 msg_win_icon=msg_box_icon,
             )
             return

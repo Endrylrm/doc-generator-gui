@@ -6,6 +6,8 @@ from ..states.document_state import DocumentState
 
 from ..stores.layout_store import LayoutStore
 
+from ..validators.input_validation_result import InputValidationResult
+
 
 class LayoutTableWidget(QtWidgets.QTableWidget):
     """
@@ -64,7 +66,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         table_rows = list(map(self.AddRowToTable, keys))
 
-    def ValidateRequiredInputs(self) -> tuple[bool, str | None]:
+    def ValidateRequiredInputs(self) -> InputValidationResult:
         """
         this just checks if our inputs are not empty
         and returns the check and the error message,
@@ -77,9 +79,9 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             error_msg = self.layout_store.GetValueFromLayout(row, "error_message")
 
             if is_empty_cell and is_required:
-                return False, error_msg
+                return InputValidationResult(False, error_msg)
 
-        return True, None
+        return InputValidationResult(True)
 
     def CreateRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
         description_font = QtGui.QFont()
