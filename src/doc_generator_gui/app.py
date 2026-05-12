@@ -44,8 +44,8 @@ class Application(QtWidgets.QMainWindow):
 
     def initPages(self):
         """
-        Initialization for our Frames/Pages, requires a container and
-        we add each of our pages to our dictionary.
+        Initialization for our Frames/Pages, we add each of our pages
+        to our dictionary with the correspondent index value.
         """
 
         # Application Home Page
@@ -54,7 +54,8 @@ class Application(QtWidgets.QMainWindow):
 
     def showPage(self, page: str):
         """
-        Switch to a specific page/frame.
+        Switch to a specific page/frame based on the
+        dictionary key.
         """
 
         self.stack.setCurrentIndex(self.pages[page])
