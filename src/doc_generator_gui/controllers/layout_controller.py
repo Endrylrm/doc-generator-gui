@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Generator
 
 from ..states.layout_state import LayoutState
 
@@ -35,7 +35,7 @@ class LayoutController:
     def getAllLayouts(self) -> dict[str, str]:
         return self.__layoutStore.getAllLayouts()
 
-    def filterCurrentLayout(self) -> dict[str, str]:
+    def filterCurrentLayout(self) -> Generator[str]:
         filteredKeys = (key for key in self.__layoutState.curLayout if key != "config")
         return filteredKeys
 
