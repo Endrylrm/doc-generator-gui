@@ -7,7 +7,7 @@ class ReaderService(Protocol):
     def load(self): ...
 
 
-class LayoutService(ReaderService):
+class LayoutJsonService(ReaderService):
     """
     This class is responsible for providing information on
     the layouts of our UI.
@@ -21,7 +21,7 @@ class LayoutService(ReaderService):
             return json.load(file)
 
 
-class CompanyDataService(ReaderService):
+class CompanyJsonService(ReaderService):
     """
     This class is responsible for providing information on
     the company data.

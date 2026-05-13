@@ -12,7 +12,7 @@ from .controllers.layout_controller import LayoutController
 from .services.html_template_service import HTMLTemplateService
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
-from .services.readers import CompanyDataService, LayoutService
+from .services.readers import CompanyJsonService, LayoutJsonService
 
 from .stores.layout_store import LayoutStore
 from .stores.company_data_store import CompanyDataStore
@@ -31,8 +31,8 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        companyDataStore = CompanyDataStore(CompanyDataService("data/company.json"))
-        layoutStore = LayoutStore(LayoutService("data/layouts.json"))
+        companyDataStore = CompanyDataStore(CompanyJsonService("data/company.json"))
+        layoutStore = LayoutStore(LayoutJsonService("data/layouts.json"))
 
         self.layoutController = LayoutController(layoutStore)
         self.documentController = DocumentController(companyDataStore)
