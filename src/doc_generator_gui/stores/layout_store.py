@@ -1,9 +1,9 @@
-from ..services.readers import LayoutService
+from ..services.readers import ReaderService
 
 
 class LayoutStore:
-    def __init__(self):
-        self.__layoutService = LayoutService("data/layouts.json")
+    def __init__(self, reader: ReaderService):
+        self.__layoutService = reader
         self.__layouts = None
 
     def getAllLayouts(self):

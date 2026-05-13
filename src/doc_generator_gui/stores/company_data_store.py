@@ -1,9 +1,9 @@
-from ..services.readers import CompanyDataService
+from ..services.readers import ReaderService
 
 
 class CompanyDataStore:
-    def __init__(self):
-        self.__companyDataService = CompanyDataService("data/company.json")
+    def __init__(self, reader: ReaderService):
+        self.__companyDataService = reader
         self.__companyData = None
 
     def getCompanyData(self) -> dict:
