@@ -87,16 +87,17 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         return rowDescription
 
     def createRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | CpfInput:
-        maxTextLength = (
-            layout["max_text_length"] if "max_text_length" in layout else 900
-        )
-        rowInput = QtWidgets.QLineEdit() if layout["type"] != "cpf" else CpfInput()
+        match layout["type"]:
+            case "cpf":
+                rowInput = CpfInput()
+            case _:
+                rowInput = QtWidgets.QLineEdit()
+                if "max_text_length" in layout:
+                    rowInput.setMaxLength(layout["max_text_length"])
         rowInput.setPlaceholderText(layout["placeholder"])
         rowInput.textEdited.connect(
             lambda: self.setInputHistoryData(key, rowInput.text())
         )
-        if layout["type"] != "cpf":
-            rowInput.setMaxLength(maxTextLength)
         if key in self.documentController.getInputHistory():
             rowInput.setText(self.documentController.getInputHistory()[key])
         return rowInput
