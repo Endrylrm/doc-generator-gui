@@ -69,12 +69,8 @@ class GenDocument(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.layoutCombobox = QtWidgets.QComboBox(self)
-        printTypes = list(
-            map(
-                self.layoutCombobox.addItem,
-                self.layoutController.getAllLayouts().keys(),
-            )
-        )
+        for printType in self.layoutController.getAllLayouts().keys():
+            self.layoutCombobox.addItem(printType)
         # separator - ComboBox
         self.separatorCombobox = QtWidgets.QFrame(self)
         self.separatorCombobox.setLineWidth(1)
