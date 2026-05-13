@@ -53,13 +53,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self.layoutController.setCurrentLayout(layout_name)
 
-        keys = [
-            key
-            for key in self.layoutController.getCurrentLayout().keys()
-            if key != "config"
-        ]
-
-        tableRows = list(map(self.addRowToTable, keys))
+        for key in self.layoutController.filterCurrentLayout():
+            self.addRowToTable(key)
 
     def validateRequiredInputs(self) -> InputValidationResult:
         """

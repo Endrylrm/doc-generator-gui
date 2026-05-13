@@ -35,5 +35,9 @@ class LayoutController:
     def getAllLayouts(self) -> dict[str, str]:
         return self.__layoutStore.getAllLayouts()
 
+    def filterCurrentLayout(self) -> dict[str, str]:
+        filteredKeys = (key for key in self.__layoutState.curLayout if key != "config")
+        return filteredKeys
+
     def clearLayoutState(self):
         self.__layoutState.curLayout = {}
