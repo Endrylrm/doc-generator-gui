@@ -11,7 +11,7 @@
         "cpf": {
 			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 			"type": "cpf",
 			"error_message": "CPF do funcionário",
 			"replace": "$cpf$"
@@ -60,7 +60,7 @@
         "cpf": {
 			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 			"type": "cpf",
 			"error_message": "CPF do funcionário",
 			"replace": "$cpf$"
@@ -110,7 +110,7 @@
         "cpf": {
 			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 			"type": "cpf",
 			"error_message": "CPF do funcionário",
 			"replace": "$cpf$"
@@ -152,7 +152,7 @@
         "cpf": {
 			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 			"type": "cpf",
 			"error_message": "CPF do funcionário",
 			"replace": "$cpf$"
@@ -202,7 +202,7 @@
         "cpf": {
 			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 			"type": "cpf",
 			"error_message": "CPF do funcionário",
 			"replace": "$cpf$"
@@ -244,7 +244,7 @@
         "cpf": {
 			"required": true,
 			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+			"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 			"type": "cpf",
 			"error_message": "CPF do funcionário",
 			"replace": "$cpf$"

@@ -9,9 +9,6 @@ class CpfInput(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.setPlaceholderText(
-            "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática."
-        )
         self.textEdited.connect(self.formatText)
         self.setMaxLength(18)
 
