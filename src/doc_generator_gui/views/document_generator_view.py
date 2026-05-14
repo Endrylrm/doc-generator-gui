@@ -4,23 +4,21 @@ from datetime import datetime
 
 from PySide6 import QtWidgets, QtGui, QtCore
 
-from .widgets.layout_table_widget import LayoutTableWidget
+from ..widgets.layout_table_widget import LayoutTableWidget
 
-from .controllers.document_controller import DocumentController
-from .controllers.layout_controller import LayoutController
+from ..viewmodels.document_viewmodel import DocumentViewModel
+from ..viewmodels.input_viewmodel import InputViewModel
+from ..viewmodels.layout_viewmodel import LayoutViewModel
 
-from .services.html_template_service import HTMLTemplateService
-from .services.pdf_service import PDFService
-from .services.printer_service import PrinterService
-from .services.readers import CompanyJsonService, LayoutJsonService
+from ..services.html_template_service import HTMLTemplateService
+from ..services.pdf_service import PDFService
+from ..services.printer_service import PrinterService
+from ..services.readers import CompanyJsonService, LayoutJsonService
 
-from .stores.layout_store import LayoutStore
-from .stores.company_data_store import CompanyDataStore
-
-from .factories.dialog_factory import DialogFactory
+from ..factories.dialog_factory import DialogFactory
 
 
-class GenDocument(QtWidgets.QWidget):
+class DocumentGeneratorView(QtWidgets.QWidget):
     """
     This Frame Module is responsible for generating our
     statement of responsibility for our employees.
@@ -31,15 +29,13 @@ class GenDocument(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        companyDataStore = CompanyDataStore(CompanyJsonService("data/company.json"))
-        layoutStore = LayoutStore(LayoutJsonService("data/layouts.json"))
+        self.layoutVM = LayoutViewModel(LayoutJsonService("data/layouts.json"))
+        self.inputVM = InputViewModel(CompanyJsonService("data/company.json"))
+        self.documentVM = DocumentViewModel()
 
-        self.layoutController = LayoutController(layoutStore)
-        self.documentController = DocumentController(companyDataStore)
-
-        self.htmlTemplateService = HTMLTemplateService(self.documentController)
-        self.pdfService = PDFService(self.documentController)
-        self.printerService = PrinterService(self.documentController)
+        self.htmlTemplateService = HTMLTemplateService(self.documentVM.documentContext)
+        self.pdfService = PDFService(self.documentVM.documentContext)
+        self.printerService = PrinterService(self.documentVM.documentContext)
 
         self.createWidgets(parent)
         self.setGridConfiguration()
@@ -69,7 +65,7 @@ class GenDocument(QtWidgets.QWidget):
         )
         # ComboBox - Print Type
         self.layoutCombobox = QtWidgets.QComboBox(self)
-        for printType in self.layoutController.getAllLayouts().keys():
+        for printType in self.layoutVM.getAllLayouts().keys():
             self.layoutCombobox.addItem(printType)
         # separator - ComboBox
         self.separatorCombobox = QtWidgets.QFrame(self)
@@ -78,7 +74,7 @@ class GenDocument(QtWidgets.QWidget):
         self.separatorCombobox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         self.tableDocument = LayoutTableWidget(
-            self, self.documentController, self.layoutController
+            self, self.documentVM, self.inputVM, self.layoutVM
         )
         # set table layout to combobox current selection
         self.layoutCombobox.currentTextChanged.connect(
@@ -211,17 +207,19 @@ class GenDocument(QtWidgets.QWidget):
 
         employeeName = self.tableDocument.getEmployeeName()
         defaultPath = (
-            self.layoutController.getCurrentLayout()["config"]["output_devol"]
+            self.layoutVM.getCurrentLayout()["config"]["output_devol"]
             if self.isDeviceReturn.isChecked()
-            else self.layoutController.getCurrentLayout()["config"]["output"]
+            else self.layoutVM.getCurrentLayout()["config"]["output"]
         )
-        self.documentController.setOutputPath(employeeName, defaultPath)
+        self.documentVM.setOutputPath(employeeName, defaultPath)
 
         fileToRead = (
-            self.layoutController.getCurrentLayout()["config"]["termo"]
+            self.layoutVM.getCurrentLayout()["config"]["termo"]
             if not self.isDeviceReturn.isChecked()
-            else self.layoutController.getCurrentLayout()["config"]["termo_devol"]
+            else self.layoutVM.getCurrentLayout()["config"]["termo_devol"]
         )
+
+        self.documentVM.readHTMLFiles(fileToRead)
 
         dateText = (
             self.datePicker.text()
@@ -229,16 +227,14 @@ class GenDocument(QtWidgets.QWidget):
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
-        self.documentController.getInputData()["$data$"] = dateText
+        self.inputVM.getInputData()["$data$"] = dateText
 
-        cleanHTML = self.htmlTemplateService.parse(fileToRead)
-        self.pdfService.generate(cleanHTML)
+        self.htmlTemplateService.parse(self.inputVM.getInputData())
+        self.pdfService.generate()
 
         if not self.disablePrinter.isChecked():
-            self.printerService.print(
-                self.layoutCombobox.currentText(),
-                self.disablePrinterPreview.isChecked(),
-            )
+            self.printerService.print(self.disablePrinterPreview.isChecked())
 
-        # set the state to it's default value after using it
-        self.documentController.setDefaultState()
+        # set the ViewModel state to it's default value after using it
+        self.inputVM.setDefaultState()
+        self.documentVM.clearDocumentState()

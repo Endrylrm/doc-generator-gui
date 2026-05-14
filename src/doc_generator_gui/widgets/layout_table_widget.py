@@ -2,8 +2,9 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from .cpf_input import CpfInput
 
-from ..controllers.document_controller import DocumentController
-from ..controllers.layout_controller import LayoutController
+from ..viewmodels.document_viewmodel import DocumentViewModel
+from ..viewmodels.input_viewmodel import InputViewModel
+from ..viewmodels.layout_viewmodel import LayoutViewModel
 
 from ..validations.results import InputValidationResult
 
@@ -17,13 +18,15 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
     def __init__(
         self,
         parent=None,
-        documentController: DocumentController | None = None,
-        layoutController: LayoutController | None = None,
+        documentVM: DocumentViewModel | None = None,
+        inputVM: InputViewModel | None = None,
+        layoutVM: LayoutViewModel | None = None,
     ):
         super().__init__(parent=parent)
 
-        self.documentController = documentController
-        self.layoutController = layoutController
+        self.documentVM = documentVM
+        self.inputVM = inputVM
+        self.layoutVM = layoutVM
 
         table_headers = ["Descrição", "Preencher"]
 
@@ -51,9 +54,10 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self.setRowCount(0)
 
-        self.layoutController.setCurrentLayout(layout_name)
+        self.layoutVM.setCurrentLayout(layout_name)
+        self.documentVM.setPrintType(layout_name)
 
-        for key in self.layoutController.filterCurrentLayout():
+        for key in self.layoutVM.filterCurrentLayout():
             self.addRowToTable(key)
 
     def validateRequiredInputs(self) -> InputValidationResult:
@@ -65,8 +69,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         for row in range(self.rowCount()):
             isEmptyCell = self.cellWidget(row, 1).text() == ""
-            isRequired = self.layoutController.getValueFromLayout(row, "required")
-            errorMsg = self.layoutController.getValueFromLayout(row, "error_message")
+            isRequired = self.layoutVM.getValueFromLayout(row, "required")
+            errorMsg = self.layoutVM.getValueFromLayout(row, "error_message")
 
             if isEmptyCell and isRequired:
                 return InputValidationResult(False, errorMsg)
@@ -93,12 +97,12 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         rowInput.textEdited.connect(
             lambda: self.setInputHistoryData(key, rowInput.text())
         )
-        if key in self.documentController.getInputHistory():
-            rowInput.setText(self.documentController.getInputHistory()[key])
+        if key in self.inputVM.getInputHistory():
+            rowInput.setText(self.inputVM.getInputHistory()[key])
         return rowInput
 
     def setInputHistoryData(self, key: str, text: str):
-        self.documentController.updateInputHistory(key, text)
+        self.inputVM.updateInputHistory(key, text)
 
     def addRowToTable(self, key: str):
         """
@@ -106,7 +110,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         index = self.rowCount()
-        rowLayout = self.layoutController.getCurrentLayout()[key]
+        rowLayout = self.layoutVM.getCurrentLayout()[key]
         self.setRowCount(index + 1)
         rowDescription = self.createRowDescription(rowLayout)
         self.setItem(index, 0, rowDescription)
@@ -120,22 +124,22 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         for row in range(self.rowCount()):
-            template = self.layoutController.getValueFromLayout(row, "replace")
+            template = self.layoutVM.getValueFromLayout(row, "replace")
 
             currentText = self.cellWidget(row, 1).text()
 
             if currentText == "":
                 continue
 
-            prefix = self.layoutController.getValueFromLayout(row, "prefix")
-            suffix = self.layoutController.getValueFromLayout(row, "suffix")
+            prefix = self.layoutVM.getValueFromLayout(row, "prefix")
+            suffix = self.layoutVM.getValueFromLayout(row, "suffix")
             currentText = prefix + currentText + suffix
 
-            self.documentController.updateInputData(template, currentText)
+            self.inputVM.updateInputData(template, currentText)
 
     def getEmployeeName(self) -> str:
         for row in range(self.rowCount()):
-            if self.layoutController.getValueFromLayout(row, "type") == "name":
+            if self.layoutVM.getValueFromLayout(row, "type") == "name":
                 name = self.cellWidget(row, 1).text()
                 return name
 

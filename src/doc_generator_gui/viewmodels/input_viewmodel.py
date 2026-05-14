@@ -1,0 +1,61 @@
+from typing import Any
+
+from ..services.readers import ReaderService
+
+
+class InputViewModel:
+    """
+    This class is responsible for controlling our states
+    that we use when printing.
+    """
+
+    def __init__(self, reader: ReaderService):
+        self.__companyDataService = reader
+
+        self.__inputData = {}
+        self.__inputHistory = {}
+        self.__companyData = None
+
+        self.setDefaultState()
+
+    def getInputData(self) -> dict[str, str]:
+        return self.__inputData
+
+    def getInputHistory(self) -> dict[str, str]:
+        return self.__inputHistory
+
+    def getCompanyData(self) -> dict[str, str]:
+        if self.__companyData is None:
+            self.__companyData = self.__companyDataService.load()
+
+        return self.__companyData
+
+    def updateInputData(self, key: str, value: str):
+        self.__inputData[key] = value
+
+    def updateInputHistory(self, key: str, value: str):
+        self.__inputHistory[key] = value
+
+    def mergeToInputData(self, dictToMerge: dict[str, str]):
+        self.__inputData.update(dictToMerge)
+
+    def mergeToInputHistory(self, dictToMerge: dict[str, str]):
+        self.__inputHistory.update(dictToMerge)
+
+    def setDefaultState(self):
+        """
+        Sets input_data with only the company data resetting
+        the state to it's default value.
+        """
+
+        self.__inputData = {}
+
+        companyData = {
+            data["replace"]: data["value"] for data in self.getCompanyData().values()
+        }
+
+        self.__inputData.update(companyData)
+
+    def clearInputState(self):
+        self.__inputData = {}
+        self.__inputHistory = {}

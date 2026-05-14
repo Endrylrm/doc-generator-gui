@@ -1,20 +1,19 @@
 from typing import Any, Generator
 
-from ..states.layout_state import LayoutState
-
-from ..stores.layout_store import LayoutStore
+from ..services.readers import ReaderService
 
 
-class LayoutController:
+class LayoutViewModel:
     """
     This class is responsible for controlling the layout
     our table widget uses.
     """
 
-    def __init__(self, layoutStore: LayoutStore):
-        self.__layoutState = LayoutState()
+    def __init__(self, reader: ReaderService):
+        self.__layoutService = reader
 
-        self.__layoutStore = layoutStore
+        self.__layouts = None
+        self.__curLayout = {}
 
     def getValueFromLayout(self, index: int, key: str) -> Any | str:
         """
@@ -23,21 +22,25 @@ class LayoutController:
         by selecting the corresponding key.
         """
 
-        layoutData = list(self.__layoutState.curLayout.items())[index][1]
+        layoutData = list(self.__curLayout.items())[index][1]
         return layoutData[key] if key in layoutData else ""
 
     def getCurrentLayout(self) -> dict:
-        return self.__layoutState.curLayout
+        return self.__curLayout
 
     def setCurrentLayout(self, key: str) -> dict:
-        self.__layoutState.curLayout = self.getAllLayouts()[key]
+        self.__curLayout = self.getAllLayouts()[key]
 
     def getAllLayouts(self) -> dict[str, str]:
-        return self.__layoutStore.getAllLayouts()
+        if self.__layouts is None:
+            self.__layouts = self.__layoutService.load()
+
+        return self.__layouts
 
     def filterCurrentLayout(self) -> Generator[str]:
-        filteredKeys = (key for key in self.__layoutState.curLayout if key != "config")
+        filteredKeys = (key for key in self.__curLayout if key != "config")
         return filteredKeys
 
     def clearLayoutState(self):
-        self.__layoutState.curLayout = {}
+        self.__curLayout = {}
+        self.__layouts = {}

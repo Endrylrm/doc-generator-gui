@@ -1,8 +1,7 @@
 from PySide6 import QtGui, QtPdf, QtPrintSupport
 
+from ..contexts.document_context import DocumentContext
 from ..contexts.print_context import PrintContext
-
-from ..controllers.document_controller import DocumentController
 
 from ..factories.printer_factory import PrinterFactory
 
@@ -13,8 +12,8 @@ class PrinterService:
     physically for our employees.
     """
 
-    def __init__(self, documentController: DocumentController):
-        self.documentController = documentController
+    def __init__(self, documentContext: DocumentContext):
+        self.documentContext = documentContext
         self.printer = PrinterFactory.createPrinterToNative()
 
     def paintDocument(self):
@@ -28,7 +27,7 @@ class PrinterService:
         START_LOCATION: list[int] = [2, 0]
 
         pdfFile = QtPdf.QPdfDocument()
-        pdfFile.load(self.documentController.getOutputPath())
+        pdfFile.load(self.documentContext.outputPath)
 
         size = QtGui.QPageSize.sizePixels(
             QtGui.QPageSize.PageSizeId.A4, PDF_PRINTER_RESOLUTION
@@ -45,32 +44,36 @@ class PrinterService:
                 ctx.painter.translate(START_LOCATION[0], START_LOCATION[1])
                 ctx.painter.drawImage(0, 0, pageImageFromPDF)
 
-    def printDialog(self, printType: str):
+    def printDialog(self):
         """
         this function is responsible for creating a print dialog.
         """
 
         printDialog = QtPrintSupport.QPrintDialog(self.printer)
-        printDialog.setWindowTitle(f"Imprimir Termo de {printType}")
+        printDialog.setWindowTitle(
+            f"Imprimir termo de {self.documentContext.printType}"
+        )
         printDialogIcon = QtGui.QIcon("gen_document.ico")
         printDialog.setWindowIcon(printDialogIcon)
         if printDialog.exec() == printDialog.DialogCode.Accepted:
             self.paintDocument()
 
-    def printPreviewDialog(self, printType: str):
+    def printPreviewDialog(self):
         """
         this function is responsible for creating a print dialog
         with preview.
         """
 
         printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(self.printer)
-        printPreviewDialog.setWindowTitle(f"Imprimir Termo de {printType}")
+        printPreviewDialog.setWindowTitle(
+            f"Imprimir termo de {self.documentContext.printType}"
+        )
         printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
         printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
         printPreviewDialog.paintRequested.connect(self.paintDocument)
         printPreviewDialog.exec()
 
-    def print(self, printType: str = "", disablePrintPreview: bool = False):
+    def print(self, disablePrintPreview: bool = False):
         """
         this function is responsible to send our PDF file to a native
         printer, it uses a QPrinter to send to a native printer,
@@ -78,7 +81,7 @@ class PrinterService:
         """
 
         if disablePrintPreview:
-            self.printDialog(printType)
+            self.printDialog()
             return
 
-        self.printPreviewDialog(printType)
+        self.printPreviewDialog()

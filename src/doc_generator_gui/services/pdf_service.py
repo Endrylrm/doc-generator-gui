@@ -1,8 +1,7 @@
 from PySide6 import QtGui
 
+from ..contexts.document_context import DocumentContext
 from ..contexts.print_context import PrintContext
-
-from ..controllers.document_controller import DocumentController
 
 from ..factories.printer_factory import PrinterFactory
 
@@ -13,8 +12,8 @@ class PDFService:
     be printed physically.
     """
 
-    def __init__(self, documentController: DocumentController):
-        self.documentController = documentController
+    def __init__(self, documentContext: DocumentContext):
+        self.documentContext = documentContext
         self.printer = PrinterFactory.createPrinterToPDF()
 
     def paintFromHTML(
@@ -33,7 +32,7 @@ class PDFService:
         doc.setHtml(html)
         doc.documentLayout().draw(painter, documentPaintCtx)
 
-    def generate(self, htmlData: dict):
+    def generate(self):
         """
         we use a QPrinter, QPainter and QTextdocument to generate a
         PDF file of our HTML, we scale our painter and use the function
@@ -47,10 +46,12 @@ class PDFService:
         MAIN_LOCATION: list[int] = [30, 72]
         FOOTER_LOCATION: list[int] = [-30, 665]
 
-        self.printer.setOutputFileName(self.documentController.getOutputPath())
+        self.printer.setOutputFileName(self.documentContext.outputPath)
 
         pdfDocument = QtGui.QTextDocument()
         pdfDocument.setTextWidth(PDF_TEXT_WIDTH)
+
+        htmlData = self.documentContext.currentHTML
 
         with PrintContext(self.printer) as ctx:
             ctx.painter.scale(PDF_PAINTER_SCALE, PDF_PAINTER_SCALE)

@@ -1,9 +1,9 @@
 from PySide6 import QtWidgets, QtGui
 
-from .gen_document import GenDocument
+from .document_generator_view import DocumentGeneratorView
 
 
-class Application(QtWidgets.QMainWindow):
+class MainView(QtWidgets.QMainWindow):
     """
     This is our Main Window, it is responsible to Load, switch
     and show the frame that we want.
@@ -40,7 +40,7 @@ class Application(QtWidgets.QMainWindow):
 
         self.initPages()
 
-        self.showPage("GenDocument")
+        self.showPage("DocumentGeneratorView")
 
     def initPages(self):
         """
@@ -49,8 +49,8 @@ class Application(QtWidgets.QMainWindow):
         """
 
         # Application Home Page
-        self.stack.addWidget(GenDocument(self))
-        self.pages["GenDocument"] = 0
+        self.stack.addWidget(DocumentGeneratorView(self))
+        self.pages["DocumentGeneratorView"] = 0
 
     def showPage(self, page: str):
         """

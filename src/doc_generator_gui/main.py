@@ -1,7 +1,7 @@
 import sys
 
 from PySide6 import QtWidgets, QtCore
-from doc_generator_gui.app import Application
+from .views.main_view import MainView
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     ):
         app.installTranslator(translator)
 
-    window = Application("Gerador de Termos", 800, 600, "gen_document.ico")
+    window = MainView("Gerador de Termos", 800, 600, "gen_document.ico")
     window.show()
     sys.exit(app.exec())
 
