@@ -5,8 +5,8 @@ from ..services.readers import ReaderService
 
 class InputViewModel:
     """
-    This class is responsible for controlling our states
-    that we use when printing.
+    This class is a ViewModel for managing our inputs
+    state that we use before printing.
     """
 
     def __init__(self, reader: ReaderService):

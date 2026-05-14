@@ -5,7 +5,7 @@ from ..services.readers import ReaderService
 
 class LayoutViewModel:
     """
-    This class is responsible for controlling the layout
+    This class is a ViewModel for controlling the layout
     our table widget uses.
     """
 

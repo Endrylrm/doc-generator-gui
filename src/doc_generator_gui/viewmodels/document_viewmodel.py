@@ -3,8 +3,8 @@ from ..contexts.document_context import DocumentContext
 
 class DocumentViewModel:
     """
-    This class is responsible for controlling our states
-    that we use when printing.
+    This class is a ViewModel for controlling our document
+    state that we use when printing.
     """
 
     def __init__(self):
