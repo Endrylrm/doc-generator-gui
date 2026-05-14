@@ -29,9 +29,9 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.layoutVM = LayoutViewModel(LayoutJsonService("data/layouts.json"))
-        self.inputVM = InputViewModel(CompanyJsonService("data/company.json"))
         self.documentVM = DocumentViewModel()
+        self.inputVM = InputViewModel(CompanyJsonService("data/company.json"))
+        self.layoutVM = LayoutViewModel(LayoutJsonService("data/layouts.json"))
 
         self.htmlTemplateService = HTMLTemplateService(self.documentVM.documentContext)
         self.pdfService = PDFService(self.documentVM.documentContext)
@@ -40,8 +40,8 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.createWidgets(parent)
         self.setGridConfiguration()
 
-        # start with a loaded layout
-        self.tableDocument.setTableLayout(self.layoutCombobox.currentText())
+        # start with a tab opened
+        self.switchLayoutTab(0)
 
     def createWidgets(self, controller):
         """
@@ -50,6 +50,11 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         to show another page/frame widget.
         """
 
+        # Tabs - layout
+        self.tabs = QtWidgets.QTabBar(self)
+        for layout in self.layoutVM.getAllLayouts().keys():
+            self.tabs.addTab(layout)
+        self.tabs.tabBarClicked.connect(self.switchLayoutTab)
         # Label - Title
         self.labelTitle = QtWidgets.QLabel(
             self, text="<b>Gerador de Termos de Responsabilidade</b>"
@@ -59,26 +64,9 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.separatorTitle.setLineWidth(1)
         self.separatorTitle.setFrameShape(QtWidgets.QFrame.HLine)
         self.separatorTitle.setFrameShadow(QtWidgets.QFrame.Sunken)
-        # Label - Print Type
-        self.labelLayoutCombobox = QtWidgets.QLabel(
-            self, text="<b>Layout de Impressão</b>"
-        )
-        # ComboBox - Print Type
-        self.layoutCombobox = QtWidgets.QComboBox(self)
-        for printType in self.layoutVM.getAllLayouts().keys():
-            self.layoutCombobox.addItem(printType)
-        # separator - ComboBox
-        self.separatorCombobox = QtWidgets.QFrame(self)
-        self.separatorCombobox.setLineWidth(1)
-        self.separatorCombobox.setFrameShape(QtWidgets.QFrame.HLine)
-        self.separatorCombobox.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         self.tableDocument = LayoutTableWidget(
             self, self.documentVM, self.inputVM, self.layoutVM
-        )
-        # set table layout to combobox current selection
-        self.layoutCombobox.currentTextChanged.connect(
-            self.tableDocument.setTableLayout
         )
         # separator - CheckBox
         self.separatorCheckbox = QtWidgets.QFrame(self)
@@ -136,49 +124,45 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         # Grid Layout
         widgetGridLayout = QtWidgets.QGridLayout(self)
+        # Tabs - layout
+        widgetGridLayout.addWidget(self.tabs, 0, 0, 1, 2)
         # Label - Título
         widgetGridLayout.addWidget(
-            self.labelTitle, 0, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
+            self.labelTitle, 1, 0, 1, 2, QtGui.Qt.AlignmentFlag.AlignCenter
         )
         # separator - Título
-        widgetGridLayout.addWidget(self.separatorTitle, 1, 0, 1, 2)
-        # Label - Tipo de impressão
-        widgetGridLayout.addWidget(
-            self.labelLayoutCombobox,
-            2,
-            0,
-            1,
-            2,
-            QtGui.Qt.AlignmentFlag.AlignCenter,
-        )
-        # ComboBox - Tipo de impressão
-        widgetGridLayout.addWidget(self.layoutCombobox, 3, 0, 1, 2)
-        # separator - Tipo de impressão ComboBox
-        widgetGridLayout.addWidget(self.separatorCombobox, 4, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorTitle, 2, 0, 1, 2)
         # Table - Data Layouts
-        widgetGridLayout.addWidget(self.tableDocument, 5, 0, 6, 2)
+        widgetGridLayout.addWidget(self.tableDocument, 3, 0, 6, 2)
         # separator - CheckBox
-        widgetGridLayout.addWidget(self.separatorCheckbox, 11, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorCheckbox, 9, 0, 1, 2)
         # CheckBox - Ativar Data Manual
-        widgetGridLayout.addWidget(self.isDateSelectable, 12, 0, 1, 1)
+        widgetGridLayout.addWidget(self.isDateSelectable, 10, 0, 1, 1)
         # DateTimeEdit - Data Manual
-        widgetGridLayout.addWidget(self.datePicker, 12, 1, 1, 1)
+        widgetGridLayout.addWidget(self.datePicker, 10, 1, 1, 1)
         # CheckBox - Ativar Devolução
-        widgetGridLayout.addWidget(self.isDeviceReturn, 13, 0, 1, 1)
+        widgetGridLayout.addWidget(self.isDeviceReturn, 11, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widgetGridLayout.addWidget(self.disablePrinterPreview, 13, 1, 1, 1)
+        widgetGridLayout.addWidget(self.disablePrinterPreview, 11, 1, 1, 1)
         # CheckBox - Desativar Impressão
-        widgetGridLayout.addWidget(self.disablePrinter, 14, 0, 1, 1)
+        widgetGridLayout.addWidget(self.disablePrinter, 12, 0, 1, 1)
         # separator - Buttons
-        widgetGridLayout.addWidget(self.separatorButtons, 16, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorButtons, 15, 0, 1, 2)
         # PushButton - Gerar Documento
-        widgetGridLayout.addWidget(self.buttonGenDoc, 17, 0, 1, 2)
+        widgetGridLayout.addWidget(self.buttonGenDoc, 16, 0, 1, 2)
         # space between widgets
         widgetGridLayout.setSpacing(10)
         # stretch a specific row
-        widgetGridLayout.setRowStretch(15, 1)
+        widgetGridLayout.setRowStretch(13, 1)
         # set this widget layout to the grid layout
         self.setLayout(widgetGridLayout)
+
+    def switchLayoutTab(self, index):
+        layout = self.tabs.tabText(index)
+        self.tableDocument.setTableLayout(layout)
+        self.labelTitle.setText(
+            f"<b>Gerador de Termos de Responsabilidade - {layout}</b>"
+        )
 
     def enableDatePicker(self):
         isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False

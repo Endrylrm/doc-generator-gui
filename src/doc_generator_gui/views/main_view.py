@@ -16,7 +16,7 @@ class MainView(QtWidgets.QMainWindow):
         height: int = None,
         icon: str = None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
 
@@ -27,38 +27,14 @@ class MainView(QtWidgets.QMainWindow):
         if icon is not None:
             self.setWindowIcon(QtGui.QIcon(icon))
 
-        self.stack = QtWidgets.QStackedWidget(self)
+        self.documentGenerator = DocumentGeneratorView(self)
 
         self.container = QtWidgets.QWidget(self)
         self.container.setGeometry(0, 0, width, height)
         self.containerGrid = QtWidgets.QGridLayout(self.container)
-        self.containerGrid.addWidget(self.stack)
+        self.containerGrid.addWidget(self.documentGenerator)
         self.container.setLayout(self.containerGrid)
         self.setCentralWidget(self.container)
-
-        self.pages = {}
-
-        self.initPages()
-
-        self.showPage("DocumentGeneratorView")
-
-    def initPages(self):
-        """
-        Initialization for our Frames/Pages, we add each of our pages
-        to our dictionary with the correspondent index value.
-        """
-
-        # Application Home Page
-        self.stack.addWidget(DocumentGeneratorView(self))
-        self.pages["DocumentGeneratorView"] = 0
-
-    def showPage(self, page: str):
-        """
-        Switch to a specific page/frame based on the
-        dictionary key.
-        """
-
-        self.stack.setCurrentIndex(self.pages[page])
 
     def centerWindow(self, width: int = 300, height: int = 300):
         """

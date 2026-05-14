@@ -30,6 +30,9 @@ class DocumentViewModel:
                 "footer": footerFile.read(),
             }
 
+    def getPrintType(self) -> str:
+        return self.documentContext.printType
+
     def setPrintType(self, printType: str) -> str:
         self.documentContext.printType = printType
 
