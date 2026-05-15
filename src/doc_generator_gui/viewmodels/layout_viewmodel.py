@@ -25,13 +25,13 @@ class LayoutViewModel:
         layoutData = list(self.__curLayout.items())[index][1]
         return layoutData[key] if key in layoutData else ""
 
-    def getCurrentLayout(self) -> dict:
+    def getCurrentLayout(self) -> dict[str, Any]:
         return self.__curLayout
 
-    def setCurrentLayout(self, key: str) -> dict:
+    def setCurrentLayout(self, key: str) -> dict[str, Any]:
         self.__curLayout = self.getAllLayouts()[key]
 
-    def getAllLayouts(self) -> dict:
+    def getAllLayouts(self) -> dict[str, Any]:
         if self.__layouts is None:
             self.__layouts = self.__layoutService.load()
 
