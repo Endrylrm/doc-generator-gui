@@ -31,7 +31,7 @@ class LayoutViewModel:
     def setCurrentLayout(self, key: str) -> dict:
         self.__curLayout = self.getAllLayouts()[key]
 
-    def getAllLayouts(self) -> dict[str, str]:
+    def getAllLayouts(self) -> dict:
         if self.__layouts is None:
             self.__layouts = self.__layoutService.load()
 
