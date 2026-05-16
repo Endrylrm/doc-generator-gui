@@ -24,7 +24,7 @@ class DocumentViewModel:
             open(f"{tmplPath}/footer.html", "r", encoding="utf-8") as footerFile,
         ):
 
-            self.documentContext.currentHTML = {
+            self.__documentContext.currentHTML = {
                 "header": headerFile.read(),
                 "termo": termoFile.read(),
                 "footer": footerFile.read(),
