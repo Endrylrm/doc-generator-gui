@@ -13,7 +13,7 @@ class LayoutViewModel:
         self.__layoutService = reader
 
         self.__layouts = None
-        self.__curLayout = {}
+        self.__curLayout = ""
 
     def getValueFromLayout(self, index: int, key: str) -> Any | str:
         """
@@ -22,14 +22,14 @@ class LayoutViewModel:
         by selecting the corresponding key.
         """
 
-        layoutData = list(self.__curLayout.items())[index][1]
+        layoutData = list(self.getCurrentLayout().items())[index][1]
         return layoutData[key] if key in layoutData else ""
 
     def getCurrentLayout(self) -> dict[str, Any]:
-        return self.__curLayout
+        return self.getAllLayouts()[self.__curLayout]
 
     def setCurrentLayout(self, key: str):
-        self.__curLayout = self.getAllLayouts()[key]
+        self.__curLayout = key
 
     def getAllLayouts(self) -> dict[str, Any]:
         if self.__layouts is None:
@@ -38,9 +38,9 @@ class LayoutViewModel:
         return self.__layouts
 
     def filterCurrentLayout(self) -> Generator[str]:
-        filteredKeys = (key for key in self.__curLayout if key != "config")
+        filteredKeys = (key for key in self.getCurrentLayout() if key != "config")
         return filteredKeys
 
     def clearLayoutState(self):
-        self.__curLayout = {}
+        self.__curLayout = ""
         self.__layouts = {}
