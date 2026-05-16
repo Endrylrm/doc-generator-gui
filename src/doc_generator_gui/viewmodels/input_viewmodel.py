@@ -46,17 +46,18 @@ class InputViewModel:
         the state to it's default value.
         """
 
-        if self.__inputData:
-            # slice everything, except the company data
-            self.__inputData = dict(list(self.__inputData.items())[:9])
+        if not self.__inputData:
+            # we load the company data on the first time.
+            companyData = {
+                data["replace"]: data["value"]
+                for data in self.getCompanyData().values()
+            }
+
+            self.__inputData.update(companyData)
             return
 
-        # we load the company data on the first time.
-        companyData = {
-            data["replace"]: data["value"] for data in self.getCompanyData().values()
-        }
-
-        self.__inputData.update(companyData)
+        # slice everything, except the company data
+        self.__inputData = dict(list(self.__inputData.items())[:9])
 
     def clearInputState(self):
         self.__inputData = {}
