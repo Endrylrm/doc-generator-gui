@@ -28,7 +28,7 @@ class LayoutViewModel:
     def getCurrentLayout(self) -> dict[str, Any]:
         return self.__curLayout
 
-    def setCurrentLayout(self, key: str) -> dict[str, Any]:
+    def setCurrentLayout(self, key: str):
         self.__curLayout = self.getAllLayouts()[key]
 
     def getAllLayouts(self) -> dict[str, Any]:
