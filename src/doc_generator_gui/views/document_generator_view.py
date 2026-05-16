@@ -21,7 +21,7 @@ from ..factories.dialog_factory import DialogFactory
 class DocumentGeneratorView(QtWidgets.QWidget):
     """
     This Frame Module is responsible for generating our
-    statement of responsibility for our employees.
+    documents for our employees.
     """
 
     def __init__(self, parent):
@@ -33,9 +33,9 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.inputVM = InputViewModel(CompanyJsonService("data/company.json"))
         self.layoutVM = LayoutViewModel(LayoutJsonService("data/layouts.json"))
 
-        self.htmlTemplateService = HTMLTemplateService(self.documentVM.documentContext)
-        self.pdfService = PDFService(self.documentVM.documentContext)
-        self.printerService = PrinterService(self.documentVM.documentContext)
+        self.htmlTemplateService = HTMLTemplateService(self.documentVM.getContext())
+        self.pdfService = PDFService(self.documentVM.getContext())
+        self.printerService = PrinterService(self.documentVM.getContext())
 
         self.createWidgets(parent)
         self.setGridConfiguration()
@@ -46,8 +46,8 @@ class DocumentGeneratorView(QtWidgets.QWidget):
     def createWidgets(self, controller):
         """
         Used to create new widgets (labels, buttons, etc.),
-        controller (main window / controller widget) is used in buttons
-        to show another page/frame widget.
+        controller (main window / controller widget) is used
+        in buttons to show another page/frame widget.
         """
 
         # Tabs - layout

@@ -5,8 +5,8 @@ from .document_generator_view import DocumentGeneratorView
 
 class MainView(QtWidgets.QMainWindow):
     """
-    This is our Main Window, it is responsible to Load, switch
-    and show the frame that we want.
+    This is our Main Window, it is responsible to show
+    the view that we want.
     """
 
     def __init__(

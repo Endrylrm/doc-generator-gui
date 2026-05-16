@@ -8,7 +8,7 @@ class DocumentViewModel:
     """
 
     def __init__(self):
-        self.documentContext = DocumentContext()
+        self.__documentContext = DocumentContext()
 
     def readHTMLFiles(self, fileToRead: str):
         """
@@ -30,14 +30,17 @@ class DocumentViewModel:
                 "footer": footerFile.read(),
             }
 
+    def getContext(self) -> DocumentContext:
+        return self.__documentContext
+
     def getPrintType(self) -> str:
-        return self.documentContext.printType
+        return self.__documentContext.printType
 
     def setPrintType(self, printType: str) -> str:
-        self.documentContext.printType = printType
+        self.__documentContext.printType = printType
 
     def getOutputPath(self) -> str:
-        return self.documentContext.outputPath
+        return self.__documentContext.outputPath
 
     def setOutputPath(self, employeeName: str, path: str):
         """
@@ -45,8 +48,8 @@ class DocumentViewModel:
         name of the employee in our table and the current type.
         """
 
-        self.documentContext.outputPath = f"{path} - {employeeName}.pdf"
+        self.__documentContext.outputPath = f"{path} - {employeeName}.pdf"
 
     def clearDocumentState(self):
-        self.documentContext.outputPath = ""
-        self.documentContext.currentHTML = {}
+        self.__documentContext.outputPath = ""
+        self.__documentContext.currentHTML = {}
