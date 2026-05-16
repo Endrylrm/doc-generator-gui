@@ -14,7 +14,6 @@ class InputViewModel:
 
         self.__inputData = {}
         self.__inputHistory = {}
-        self.__companyData = None
 
         self.setDefaultState()
 
@@ -25,10 +24,9 @@ class InputViewModel:
         return self.__inputHistory
 
     def getCompanyData(self) -> dict[str, str]:
-        if self.__companyData is None:
-            self.__companyData = self.__companyDataService.load()
+        companyData = self.__companyDataService.load()
 
-        return self.__companyData
+        return companyData
 
     def updateInputData(self, key: str, value: str):
         self.__inputData[key] = value
@@ -48,8 +46,12 @@ class InputViewModel:
         the state to it's default value.
         """
 
-        self.__inputData = {}
+        if self.__inputData:
+            # slice everything, except the company data
+            self.__inputData = dict(list(self.__inputData.items())[:9])
+            return
 
+        # we load the company data on the first time.
         companyData = {
             data["replace"]: data["value"] for data in self.getCompanyData().values()
         }
