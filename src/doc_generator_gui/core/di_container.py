@@ -1,20 +1,17 @@
 import inspect
 
-from dataclasses import dataclass
 from typing import Any, Callable, Type
 
-
-@dataclass
-class Provider:
-    implementation: Type | None = None
-    factory: Callable | None = None
-    singleton: bool = False
+from .providers import Provider
 
 
 class DIContainer:
     def __init__(self):
         self.__providers: dict[Type, Provider] = {}
         self.__singletons: dict[Type, Any] = {}
+        self.__factories: dict[Type, Callable] = {}
+
+        self.__reflection_cache: dict[Type, list[Any]] = {}
 
     def register(
         self,
@@ -33,10 +30,7 @@ class DIContainer:
         factory: Callable,
         singleton: bool = False,
     ):
-        self.__providers[interface] = Provider(
-            factory=factory,
-            singleton=singleton,
-        )
+        self.__providers[interface] = Provider(factory=factory, singleton=singleton)
 
     def registerInstance(self, interface: Type, instance: Any):
         self._singletons[interface] = instance
@@ -44,6 +38,9 @@ class DIContainer:
     def resolve(self, interface: Type) -> Any:
         if interface in self.__singletons:
             return self.__singletons[interface]
+
+        if interface in self.__factories:
+            return self.__factories[interface]
 
         if interface not in self.__providers:
             raise ValueError(f"{interface} is not registered in the container.")
@@ -53,6 +50,7 @@ class DIContainer:
         if provider.factory:
             instance = provider.factory()
 
+            self.__factories[interface] = instance
         else:
             instance = self.__create_instance(provider.implementation)
 
@@ -61,7 +59,7 @@ class DIContainer:
 
         return instance
 
-    def __create_instance(self, cls: Type) -> Any:
+    def __get_reflection(self, cls: Type) -> list[Any]:
         signature = inspect.signature(cls.__init__).parameters.items()
 
         dependencies = [
@@ -71,5 +69,15 @@ class DIContainer:
             if param.default is inspect.Parameter.empty
             if param.annotation is not inspect.Parameter.empty
         ]
+
+        self.__reflection_cache[cls] = dependencies
+
+        return dependencies
+
+    def __create_instance(self, cls: Type) -> Any:
+        if cls in self.__reflection_cache:
+            return cls(*self.__reflection_cache[cls])
+
+        dependencies = self.__get_reflection(cls)
 
         return cls(*dependencies)

@@ -58,6 +58,10 @@ def main():
     container.register(InputViewModel)
     container.register(LayoutViewModel)
 
+    test1 = container.resolve(ILayoutReaderService)
+    test2 = container.resolve(ILayoutReaderService)
+    test3 = container.resolve(ILayoutReaderService)
+
     window = MainView(
         title="Gerador de Termos",
         width=800,
