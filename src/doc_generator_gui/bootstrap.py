@@ -68,4 +68,5 @@ def bootstrap():
         layoutVM=container.resolve(LayoutViewModel),
     )
     window.show()
+
     sys.exit(app.exec())
