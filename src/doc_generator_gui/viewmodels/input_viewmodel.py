@@ -1,6 +1,6 @@
 from typing import Any
 
-from ..services.readers import ReaderService
+from ..services.readers import ICompanyReaderService
 
 
 class InputViewModel:
@@ -9,7 +9,7 @@ class InputViewModel:
     state that we use before printing.
     """
 
-    def __init__(self, reader: ReaderService):
+    def __init__(self, reader: ICompanyReaderService):
         self.__companyDataService = reader
 
         self.__inputData = {}
@@ -33,12 +33,6 @@ class InputViewModel:
 
     def updateInputHistory(self, key: str, value: str):
         self.__inputHistory[key] = value
-
-    def mergeToInputData(self, dictToMerge: dict[str, str]):
-        self.__inputData.update(dictToMerge)
-
-    def mergeToInputHistory(self, dictToMerge: dict[str, str]):
-        self.__inputHistory.update(dictToMerge)
 
     def setDefaultState(self):
         """

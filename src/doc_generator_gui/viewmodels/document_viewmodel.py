@@ -1,5 +1,9 @@
 from ..contexts.document_context import DocumentContext
 
+from ..services.template_engine_service import TemplateEngineService
+from ..services.pdf_service import PDFService
+from ..services.printer_service import PrinterService
+
 
 class DocumentViewModel:
     """
@@ -7,8 +11,18 @@ class DocumentViewModel:
     state that we use when printing.
     """
 
-    def __init__(self):
-        self.__documentContext = DocumentContext()
+    def __init__(
+        self,
+        documentContext: DocumentContext,
+        tmplEngineService: TemplateEngineService,
+        pdfService: PDFService,
+        printerService: PrinterService,
+    ):
+        self.__documentContext = documentContext
+
+        self.__tmplEngineService = tmplEngineService
+        self.__pdfService = pdfService
+        self.__printerService = printerService
 
     def readHTMLFiles(self, fileToRead: str):
         """
@@ -29,6 +43,16 @@ class DocumentViewModel:
                 "termo": termoFile.read(),
                 "footer": footerFile.read(),
             }
+
+    def parseHTML(self, fileToRead: str, input_data: dict[str, str]):
+        self.readHTMLFiles(fileToRead)
+        self.__tmplEngineService.parse(input_data)
+
+    def generatePDF(self):
+        self.__pdfService.generate()
+
+    def sendToPrinter(self, disablePrintPreview: bool = False):
+        self.__printerService.print(disablePrintPreview)
 
     def getContext(self) -> DocumentContext:
         return self.__documentContext
@@ -51,5 +75,6 @@ class DocumentViewModel:
         self.__documentContext.outputPath = f"{path} - {employeeName}.pdf"
 
     def clearDocumentState(self):
+        self.__documentContext.printType = ""
         self.__documentContext.outputPath = ""
         self.__documentContext.currentHTML = {}

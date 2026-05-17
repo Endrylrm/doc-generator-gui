@@ -1,5 +1,9 @@
 from PySide6 import QtWidgets, QtGui
 
+from ..viewmodels.document_viewmodel import DocumentViewModel
+from ..viewmodels.input_viewmodel import InputViewModel
+from ..viewmodels.layout_viewmodel import LayoutViewModel
+
 from .document_generator_view import DocumentGeneratorView
 
 
@@ -15,6 +19,9 @@ class MainView(QtWidgets.QMainWindow):
         width: int = None,
         height: int = None,
         icon: str = None,
+        documentVM: DocumentViewModel | None = None,
+        inputVM: InputViewModel | None = None,
+        layoutVM: LayoutViewModel | None = None,
         *args,
         **kwargs,
     ):
@@ -27,7 +34,9 @@ class MainView(QtWidgets.QMainWindow):
         if icon is not None:
             self.setWindowIcon(QtGui.QIcon(icon))
 
-        self.documentGenerator = DocumentGeneratorView(self)
+        self.documentGenerator = DocumentGeneratorView(
+            self, documentVM, inputVM, layoutVM
+        )
 
         self.container = QtWidgets.QWidget(self)
         self.container.setGeometry(0, 0, width, height)

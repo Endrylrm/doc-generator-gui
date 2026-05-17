@@ -45,8 +45,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
     def setTableLayout(self, layout_name: str = ""):
         """
-        matches our selected Print layout, changes the text and layout
-        of the table widget accordingly.
+        matches our selected Print layout, changes the text
+        and layout of the table widget accordingly.
         """
 
         if layout_name == None:
@@ -106,7 +106,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
     def addRowToTable(self, key: str):
         """
-        Adds a new row to our tablewidget based on our json layout.
+        Adds a new row to our tablewidget based on our layout.
         """
 
         index = self.rowCount()

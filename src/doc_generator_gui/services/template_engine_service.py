@@ -3,7 +3,7 @@ import re
 from ..contexts.document_context import DocumentContext
 
 
-class HTMLTemplateService:
+class TemplateEngineService:
     """
     This class is responsible for working with the html template
     and cleaning our html for creation of PDFs.
@@ -32,5 +32,3 @@ class HTMLTemplateService:
         # clean any variable that didn't get used
         # mostly those we put as not required
         self.removeUnusedTemplate(self.documentContext.currentHTML)
-
-        return self.documentContext.currentHTML

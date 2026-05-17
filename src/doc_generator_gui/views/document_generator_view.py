@@ -10,11 +10,6 @@ from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.input_viewmodel import InputViewModel
 from ..viewmodels.layout_viewmodel import LayoutViewModel
 
-from ..services.html_template_service import HTMLTemplateService
-from ..services.pdf_service import PDFService
-from ..services.printer_service import PrinterService
-from ..services.readers import CompanyJsonService, LayoutJsonService
-
 from ..factories.dialog_factory import DialogFactory
 
 
@@ -24,18 +19,20 @@ class DocumentGeneratorView(QtWidgets.QWidget):
     documents for our employees.
     """
 
-    def __init__(self, parent):
+    def __init__(
+        self,
+        parent,
+        documentVM: DocumentViewModel,
+        inputVM: InputViewModel,
+        layoutVM: LayoutViewModel,
+    ):
         super().__init__(parent=parent)
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.documentVM = DocumentViewModel()
-        self.inputVM = InputViewModel(CompanyJsonService("data/company.json"))
-        self.layoutVM = LayoutViewModel(LayoutJsonService("data/layouts.json"))
-
-        self.htmlTemplateService = HTMLTemplateService(self.documentVM.getContext())
-        self.pdfService = PDFService(self.documentVM.getContext())
-        self.printerService = PrinterService(self.documentVM.getContext())
+        self.documentVM = documentVM
+        self.inputVM = inputVM
+        self.layoutVM = layoutVM
 
         self.createWidgets(parent)
         self.setGridConfiguration()
@@ -197,14 +194,6 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         )
         self.documentVM.setOutputPath(employeeName, defaultPath)
 
-        fileToRead = (
-            self.layoutVM.getCurrentLayout()["config"]["termo"]
-            if not self.isDeviceReturn.isChecked()
-            else self.layoutVM.getCurrentLayout()["config"]["termo_devol"]
-        )
-
-        self.documentVM.readHTMLFiles(fileToRead)
-
         dateText = (
             self.datePicker.text()
             if self.isDateSelectable.isChecked()
@@ -213,11 +202,17 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         self.inputVM.getInputData()["$data$"] = dateText
 
-        self.htmlTemplateService.parse(self.inputVM.getInputData())
-        self.pdfService.generate()
+        fileToRead = (
+            self.layoutVM.getCurrentLayout()["config"]["termo"]
+            if not self.isDeviceReturn.isChecked()
+            else self.layoutVM.getCurrentLayout()["config"]["termo_devol"]
+        )
+
+        self.documentVM.parseHTML(fileToRead, self.inputVM.getInputData())
+        self.documentVM.generatePDF()
 
         if not self.disablePrinter.isChecked():
-            self.printerService.print(self.disablePrinterPreview.isChecked())
+            self.documentVM.sendToPrinter(self.disablePrinterPreview.isChecked())
 
         # set the ViewModel state to it's default value after using it
         self.inputVM.setDefaultState()
