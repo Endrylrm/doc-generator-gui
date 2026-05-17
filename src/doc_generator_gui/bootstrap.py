@@ -6,8 +6,8 @@ from .core.di_container import DIContainer
 
 from .contexts.document_context import DocumentContext
 
-from .services.readers import ICompanyReaderService, ILayoutReaderService
-from .services.readers import CompanyJsonService, LayoutJsonService
+from .services.readers import ICompanyReader, ILayoutReader
+from .services.readers import CompanyJsonReader, LayoutJsonReader
 
 from .services.template_engine_service import TemplateEngineService
 from .services.pdf_service import PDFService
@@ -42,10 +42,10 @@ def bootstrap():
 
     # Register Loaders / Readers
     container.registerFactory(
-        ICompanyReaderService, lambda: CompanyJsonService("data/company.json")
+        ICompanyReader, lambda: CompanyJsonReader("data/company.json")
     )
     container.registerFactory(
-        ILayoutReaderService, lambda: LayoutJsonService("data/layouts.json")
+        ILayoutReader, lambda: LayoutJsonReader("data/layouts.json")
     )
 
     # Register Services

@@ -1,6 +1,6 @@
 from typing import Any
 
-from ..services.readers import ICompanyReaderService
+from ..services.readers import ICompanyReader
 
 
 class InputViewModel:
@@ -9,7 +9,7 @@ class InputViewModel:
     state that we use before printing.
     """
 
-    def __init__(self, reader: ICompanyReaderService):
+    def __init__(self, reader: ICompanyReader):
         self.__companyDataService = reader
 
         self.__inputData = {}

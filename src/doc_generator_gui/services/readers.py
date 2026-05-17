@@ -3,15 +3,15 @@ import json
 from typing import Protocol
 
 
-class ILayoutReaderService(Protocol):
+class ILayoutReader(Protocol):
     def load(self) -> dict[str, str]: ...
 
 
-class ICompanyReaderService(Protocol):
+class ICompanyReader(Protocol):
     def load(self) -> dict[str, str]: ...
 
 
-class LayoutJsonService(ILayoutReaderService):
+class LayoutJsonReader(ILayoutReader):
     """
     This class is responsible for providing information on
     the layouts of our UI.
@@ -25,7 +25,7 @@ class LayoutJsonService(ILayoutReaderService):
             return json.load(file)
 
 
-class CompanyJsonService(ICompanyReaderService):
+class CompanyJsonReader(ICompanyReader):
     """
     This class is responsible for providing information on
     the company data.

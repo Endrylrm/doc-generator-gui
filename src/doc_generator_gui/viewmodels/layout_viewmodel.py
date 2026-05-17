@@ -1,6 +1,6 @@
 from typing import Any, Generator
 
-from ..services.readers import ILayoutReaderService
+from ..services.readers import ILayoutReader
 
 
 class LayoutViewModel:
@@ -9,7 +9,7 @@ class LayoutViewModel:
     our table widget uses.
     """
 
-    def __init__(self, reader: ILayoutReaderService):
+    def __init__(self, reader: ILayoutReader):
         self.__layoutService = reader
 
         self.__layouts = None
