@@ -154,7 +154,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         # set this widget layout to the grid layout
         self.setLayout(widgetGridLayout)
 
-    def switchLayoutTab(self, index):
+    def switchLayoutTab(self, index: int):
         layout = self.tabs.tabText(index)
         self.tableDocument.setTableLayout(layout)
         self.labelTitle.setText(
