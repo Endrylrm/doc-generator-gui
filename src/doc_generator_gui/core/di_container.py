@@ -55,10 +55,13 @@ class DIContainer:
             return self._createInstance(provider.implementation)
 
     def _getReflection(self, cls: Type) -> list[Any]:
+        if cls in self._reflectionCache:
+            return self._reflectionCache[cls]
+
         signature = inspect.signature(cls.__init__).parameters.items()
 
         dependencies = [
-            self.resolve(param.annotation)
+            param.annotation
             for name, param in signature
             if name != "self"
             if param.default is inspect.Parameter.empty
@@ -70,9 +73,11 @@ class DIContainer:
         return dependencies
 
     def _createInstance(self, cls: Type) -> Any:
-        if cls in self._reflectionCache:
-            return cls(*self._reflectionCache[cls])
+        dependencies = self._reflectionCache.get(cls)
 
-        dependencies = self._getReflection(cls)
+        if dependencies is None:
+            dependencies = self._getReflection(cls)
 
-        return cls(*dependencies)
+        resolved = [self.resolve(dependency) for dependency in dependencies]
+
+        return cls(*resolved)
