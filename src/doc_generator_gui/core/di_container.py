@@ -31,9 +31,6 @@ class DIContainer:
     ):
         self._providers[interface] = Provider(factory=factory, singleton=singleton)
 
-    def registerInstance(self, interface: Type, instance: Any):
-        self._singletons[interface] = instance
-
     def resolve(self, interface: Type) -> Any:
         if interface in self._singletons:
             return self._singletons[interface]
