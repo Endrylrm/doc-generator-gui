@@ -91,14 +91,12 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
                 rowInput = CpfInput()
             case _:
                 rowInput = QtWidgets.QLineEdit()
-                if "max_text_length" in layout:
-                    rowInput.setMaxLength(layout["max_text_length"])
-        rowInput.setPlaceholderText(layout["placeholder"])
+                rowInput.setMaxLength(layout.get("max_text_length", 30000))
+        rowInput.setPlaceholderText(layout.get("placeholder", ""))
         rowInput.textEdited.connect(
             lambda: self.setInputHistoryData(key, rowInput.text())
         )
-        if key in self.inputVM.getInputHistory():
-            rowInput.setText(self.inputVM.getInputHistory()[key])
+        rowInput.setText(self.inputVM.getInputHistory().get(key, ""))
         return rowInput
 
     def setInputHistoryData(self, key: str, text: str):
