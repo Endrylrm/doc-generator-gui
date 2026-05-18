@@ -18,11 +18,11 @@ class DocumentViewModel:
         pdfService: PDFService,
         printerService: PrinterService,
     ):
-        self.__documentContext = documentContext
+        self._documentContext = documentContext
 
-        self.__tmplEngineService = tmplEngineService
-        self.__pdfService = pdfService
-        self.__printerService = printerService
+        self._tmplEngineService = tmplEngineService
+        self._pdfService = pdfService
+        self._printerService = printerService
 
     def readHTMLFiles(self, fileToRead: str):
         """
@@ -38,7 +38,7 @@ class DocumentViewModel:
             open(f"{tmplPath}/footer.html", "r", encoding="utf-8") as footerFile,
         ):
 
-            self.__documentContext.currentHTML = {
+            self._documentContext.currentHTML = {
                 "header": headerFile.read(),
                 "termo": termoFile.read(),
                 "footer": footerFile.read(),
@@ -46,25 +46,25 @@ class DocumentViewModel:
 
     def parseHTML(self, fileToRead: str, input_data: dict[str, str]):
         self.readHTMLFiles(fileToRead)
-        self.__tmplEngineService.parse(input_data)
+        self._tmplEngineService.parse(input_data)
 
     def generatePDF(self):
-        self.__pdfService.generate()
+        self._pdfService.generate()
 
     def sendToPrinter(self, disablePrintPreview: bool = False):
-        self.__printerService.print(disablePrintPreview)
+        self._printerService.print(disablePrintPreview)
 
     def getContext(self) -> DocumentContext:
-        return self.__documentContext
+        return self._documentContext
 
     def getPrintType(self) -> str:
-        return self.__documentContext.printType
+        return self._documentContext.printType
 
     def setPrintType(self, printType: str) -> str:
-        self.__documentContext.printType = printType
+        self._documentContext.printType = printType
 
     def getOutputPath(self) -> str:
-        return self.__documentContext.outputPath
+        return self._documentContext.outputPath
 
     def setOutputPath(self, employeeName: str, path: str):
         """
@@ -72,9 +72,9 @@ class DocumentViewModel:
         name of the employee in our table and the current type.
         """
 
-        self.__documentContext.outputPath = f"{path} - {employeeName}.pdf"
+        self._documentContext.outputPath = f"{path} - {employeeName}.pdf"
 
     def clearDocumentState(self):
-        self.__documentContext.printType = ""
-        self.__documentContext.outputPath = ""
-        self.__documentContext.currentHTML = {}
+        self._documentContext.printType = ""
+        self._documentContext.outputPath = ""
+        self._documentContext.currentHTML = {}

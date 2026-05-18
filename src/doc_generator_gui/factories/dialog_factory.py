@@ -8,7 +8,7 @@ class DialogFactory:
     """
 
     @classmethod
-    def __createMessageBox(
+    def _createMessageBox(
         cls,
         msgWinTitle=None,
         msgText=None,
@@ -85,7 +85,7 @@ class DialogFactory:
         Used to create a new information message box and display it.
         """
 
-        msg = cls.__createMessageBox(
+        msg = cls._createMessageBox(
             msgWinTitle=msgWinTitle,
             msgText=msgText,
             msgInfoText=msgInfoText,
@@ -124,7 +124,7 @@ class DialogFactory:
         Used to create a new Warning message box and display it.
         """
 
-        msg = cls.__createMessageBox(
+        msg = cls._createMessageBox(
             msgWinTitle=msgWinTitle,
             msgText=msgText,
             msgInfoText=msgInfoText,
@@ -163,7 +163,7 @@ class DialogFactory:
         Used to create a new critical/error message box and display it.
         """
 
-        msg = cls.__createMessageBox(
+        msg = cls._createMessageBox(
             msgWinTitle=msgWinTitle,
             msgText=msgText,
             msgInfoText=msgInfoText,
@@ -202,7 +202,7 @@ class DialogFactory:
         Used to create a new Question message box, returns a QMessageBox object.
         """
 
-        msg = cls.__createMessageBox(
+        msg = cls._createMessageBox(
             msgWinTitle=msgWinTitle,
             msgText=msgText,
             msgInfoText=msgInfoText,

@@ -7,10 +7,10 @@ from .providers import Provider
 
 class DIContainer:
     def __init__(self):
-        self.__providers: dict[Type, Provider] = {}
-        self.__singletons: dict[Type, Any] = {}
+        self._providers: dict[Type, Provider] = {}
+        self._singletons: dict[Type, Any] = {}
 
-        self.__reflectionCache: dict[Type, list[Any]] = {}
+        self._reflectionCache: dict[Type, list[Any]] = {}
 
     def register(
         self,
@@ -19,7 +19,7 @@ class DIContainer:
         singleton: bool = False,
     ):
         implementation = implementation or interface
-        self.__providers[interface] = Provider(
+        self._providers[interface] = Provider(
             implementation=implementation, singleton=singleton
         )
 
@@ -29,35 +29,35 @@ class DIContainer:
         factory: Callable,
         singleton: bool = False,
     ):
-        self.__providers[interface] = Provider(factory=factory, singleton=singleton)
+        self._providers[interface] = Provider(factory=factory, singleton=singleton)
 
     def registerInstance(self, interface: Type, instance: Any):
-        self.__singletons[interface] = instance
+        self._singletons[interface] = instance
 
     def resolve(self, interface: Type) -> Any:
-        if interface in self.__singletons:
-            return self.__singletons[interface]
+        if interface in self._singletons:
+            return self._singletons[interface]
 
-        if interface not in self.__providers:
+        if interface not in self._providers:
             raise ValueError(f"{interface} is not registered in the container.")
 
-        provider = self.__providers[interface]
+        provider = self._providers[interface]
 
-        instance = self.__build(provider)
+        instance = self._build(provider)
 
         if provider.singleton:
-            self.__singletons[interface] = instance
+            self._singletons[interface] = instance
 
         return instance
 
-    def __build(self, provider: Provider):
+    def _build(self, provider: Provider):
         if provider.factory:
             return provider.factory()
 
         if provider.implementation:
-            return self.__createInstance(provider.implementation)
+            return self._createInstance(provider.implementation)
 
-    def __getReflection(self, cls: Type) -> list[Any]:
+    def _getReflection(self, cls: Type) -> list[Any]:
         signature = inspect.signature(cls.__init__).parameters.items()
 
         dependencies = [
@@ -68,14 +68,14 @@ class DIContainer:
             if param.annotation is not inspect.Parameter.empty
         ]
 
-        self.__reflectionCache[cls] = dependencies
+        self._reflectionCache[cls] = dependencies
 
         return dependencies
 
-    def __createInstance(self, cls: Type) -> Any:
-        if cls in self.__reflectionCache:
-            return cls(*self.__reflectionCache[cls])
+    def _createInstance(self, cls: Type) -> Any:
+        if cls in self._reflectionCache:
+            return cls(*self._reflectionCache[cls])
 
-        dependencies = self.__getReflection(cls)
+        dependencies = self._getReflection(cls)
 
         return cls(*dependencies)

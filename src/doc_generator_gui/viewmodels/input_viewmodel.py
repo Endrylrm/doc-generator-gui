@@ -10,29 +10,29 @@ class InputViewModel:
     """
 
     def __init__(self, reader: ICompanyReader):
-        self.__companyDataService = reader
+        self._companyDataReader = reader
 
-        self.__inputData = {}
-        self.__inputHistory = {}
+        self._inputData = {}
+        self._inputHistory = {}
 
         self.setDefaultState()
 
     def getInputData(self) -> dict[str, str]:
-        return self.__inputData
+        return self._inputData
 
     def getInputHistory(self) -> dict[str, str]:
-        return self.__inputHistory
+        return self._inputHistory
 
     def getCompanyData(self) -> dict[str, str]:
-        companyData = self.__companyDataService.load()
+        companyData = self._companyDataReader.load()
 
         return companyData
 
     def updateInputData(self, key: str, value: str):
-        self.__inputData[key] = value
+        self._inputData[key] = value
 
     def updateInputHistory(self, key: str, value: str):
-        self.__inputHistory[key] = value
+        self._inputHistory[key] = value
 
     def setDefaultState(self):
         """
@@ -40,19 +40,19 @@ class InputViewModel:
         the state to it's default value.
         """
 
-        if not self.__inputData:
+        if not self._inputData:
             # we load the company data on the first time.
             companyData = {
                 data["replace"]: data["value"]
                 for data in self.getCompanyData().values()
             }
 
-            self.__inputData.update(companyData)
+            self._inputData.update(companyData)
             return
 
         # slice everything, except the company data
-        self.__inputData = dict(list(self.__inputData.items())[:9])
+        self._inputData = dict(list(self._inputData.items())[:9])
 
     def clearInputState(self):
-        self.__inputData = {}
-        self.__inputHistory = {}
+        self._inputData = {}
+        self._inputHistory = {}

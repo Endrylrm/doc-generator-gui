@@ -9,7 +9,7 @@ class PrinterFactory:
 
     @classmethod
     def createPrinterToPDF(cls) -> QtPrintSupport.QPrinter:
-        printer = cls.__createPrinter()
+        printer = cls._createPrinter()
 
         PDF_PRINTER_RESOLUTION: int = 600
 
@@ -19,7 +19,7 @@ class PrinterFactory:
 
     @classmethod
     def createPrinterToNative(cls) -> QtPrintSupport.QPrinter:
-        printer = cls.__createPrinter()
+        printer = cls._createPrinter()
 
         PRINTER_RESOLUTION: int = 600
 
@@ -29,7 +29,7 @@ class PrinterFactory:
         return printer
 
     @classmethod
-    def __createPrinter(cls) -> QtPrintSupport.QPrinter:
+    def _createPrinter(cls) -> QtPrintSupport.QPrinter:
         printer = QtPrintSupport.QPrinter(
             QtPrintSupport.QPrinter.PrinterMode.HighResolution
         )
