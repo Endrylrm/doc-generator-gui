@@ -10,7 +10,7 @@ class DIContainer:
         self.__providers: dict[Type, Provider] = {}
         self.__singletons: dict[Type, Any] = {}
 
-        self.__reflection_cache: dict[Type, list[Any]] = {}
+        self.__reflectionCache: dict[Type, list[Any]] = {}
 
     def register(
         self,
@@ -68,13 +68,13 @@ class DIContainer:
             if param.annotation is not inspect.Parameter.empty
         ]
 
-        self.__reflection_cache[cls] = dependencies
+        self.__reflectionCache[cls] = dependencies
 
         return dependencies
 
     def __createInstance(self, cls: Type) -> Any:
-        if cls in self.__reflection_cache:
-            return cls(*self.__reflection_cache[cls])
+        if cls in self.__reflectionCache:
+            return cls(*self.__reflectionCache[cls])
 
         dependencies = self.__getReflection(cls)
 
