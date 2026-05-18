@@ -9,7 +9,6 @@ class DIContainer:
     def __init__(self):
         self.__providers: dict[Type, Provider] = {}
         self.__singletons: dict[Type, Any] = {}
-        self.__factories: dict[Type, Callable] = {}
 
         self.__reflection_cache: dict[Type, list[Any]] = {}
 
@@ -33,33 +32,32 @@ class DIContainer:
         self.__providers[interface] = Provider(factory=factory, singleton=singleton)
 
     def registerInstance(self, interface: Type, instance: Any):
-        self._singletons[interface] = instance
+        self.__singletons[interface] = instance
 
     def resolve(self, interface: Type) -> Any:
         if interface in self.__singletons:
             return self.__singletons[interface]
-
-        if interface in self.__factories:
-            return self.__factories[interface]
 
         if interface not in self.__providers:
             raise ValueError(f"{interface} is not registered in the container.")
 
         provider = self.__providers[interface]
 
-        if provider.factory:
-            instance = provider.factory()
-
-            self.__factories[interface] = instance
-        else:
-            instance = self.__create_instance(provider.implementation)
+        instance = self.__build(provider)
 
         if provider.singleton:
             self.__singletons[interface] = instance
 
         return instance
 
-    def __get_reflection(self, cls: Type) -> list[Any]:
+    def __build(self, provider: Provider):
+        if provider.factory:
+            return provider.factory()
+
+        if provider.implementation:
+            return self.__createInstance(provider.implementation)
+
+    def __getReflection(self, cls: Type) -> list[Any]:
         signature = inspect.signature(cls.__init__).parameters.items()
 
         dependencies = [
@@ -74,10 +72,10 @@ class DIContainer:
 
         return dependencies
 
-    def __create_instance(self, cls: Type) -> Any:
+    def __createInstance(self, cls: Type) -> Any:
         if cls in self.__reflection_cache:
             return cls(*self.__reflection_cache[cls])
 
-        dependencies = self.__get_reflection(cls)
+        dependencies = self.__getReflection(cls)
 
         return cls(*dependencies)
