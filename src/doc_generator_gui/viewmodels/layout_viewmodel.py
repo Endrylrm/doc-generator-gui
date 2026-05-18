@@ -23,10 +23,10 @@ class LayoutViewModel:
         """
 
         layoutData = list(self.getCurrentLayout().items())[index][1]
-        return layoutData[key] if key in layoutData else ""
+        return layoutData.get(key, "")
 
     def getCurrentLayout(self) -> dict[str, Any]:
-        return self.getAllLayouts()[self._curLayout]
+        return self.getAllLayouts().get(self._curLayout)
 
     def setCurrentLayout(self, key: str):
         self._curLayout = key
