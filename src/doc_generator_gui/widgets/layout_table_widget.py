@@ -84,7 +84,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
     ) -> QtWidgets.QTableWidgetItem:
         descriptionFont = QtGui.QFont()
         descriptionFont.setBold(True)
-        rowDescription = QtWidgets.QTableWidgetItem(component["description"])
+        rowDescription = QtWidgets.QTableWidgetItem(component.get("description", ""))
         rowDescription.setFont(descriptionFont)
         rowDescription.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         return rowDescription
