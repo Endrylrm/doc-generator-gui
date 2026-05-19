@@ -1,5 +1,5 @@
 {
-    "Cartucho": {
+    "Devolução de Cartucho": {
         "nome": {
 			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
@@ -42,13 +42,11 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_cartucho.html",
-            "termo_devol": "termo_cartucho_devol.html",
-			"output": "./documents/Termo de Entrega de Cartucho",
-			"output_devol": "./documents/Termo de Devolução de Cartucho"
+            "document": "termo_cartucho_devol.html",
+			"output": "./documents/Termo de Devolução de Cartucho"
 		}
     },
-    "Celular": {
+    "Devolução de Celular": {
         "nome": {
 			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
@@ -92,13 +90,11 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_celular.html",
-            "termo_devol": "termo_celular_devol.html",
-			"output": "./documents/Termo de Entrega de Celular",
-			"output_devol": "./documents/Termo de Devolução de Celular"
+            "document": "termo_celular_devol.html",
+			"output": "./documents/Termo de Devolução de Celular"
 		}
     },
-	"iButton": {
+	"Devolução de iButton": {
         "nome": {
 			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
@@ -134,13 +130,11 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_ibutton.html",
-            "termo_devol": "termo_ibutton_devol.html",
-			"output": "./documents/Termo de Entrega de iButton",
-			"output_devol": "./documents/Termo de Devolução de iButton"
+            "document": "termo_ibutton_devol.html",
+			"output": "./documents/Termo de Devolução de iButton"
 		}
     },
-	"Impressora": {
+	"Devolução de Impressora": {
         "nome": {
 			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
@@ -184,13 +178,11 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_impressora.html",
-            "termo_devol": "termo_impressora_devol.html",
-			"output": "./documents/Termo de Entrega de Impressora",
-			"output_devol": "./documents/Termo de Devolução de Impressora"
+            "document": "termo_impressora_devol.html",
+			"output": "./documents/Termo de Devolução de Impressora"
 		}
     },
-	"Inversor": {
+	"Devolução de Inversor": {
         "nome": {
 			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
@@ -226,13 +218,11 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_inversor.html",
-            "termo_devol": "termo_inversor_devol.html",
-			"output": "./documents/Termo de Entrega de Inversor",
-			"output_devol": "./documents/Termo de Devolução de Inversor"
+            "document": "termo_inversor_devol.html",
+			"output": "./documents/Termo de Devolução de Inversor"
 		}
     },
-	"Notebook": {
+	"Devolução de Notebook": {
         "nome": {
 			"required": true,
             "description": "Nome do Funcionário (Obrigatório):",
@@ -275,10 +265,8 @@
 			"replace": "$obs$"
 		},
 		"config": {
-            "termo": "termo_notebook.html",
-            "termo_devol": "termo_notebook_devol.html",
-			"output": "./documents/Termo de Entrega de Notebook",
-			"output_devol": "./documents/Termo de Devolução de Notebook"
+            "document": "termo_notebook_devol.html",
+			"output": "./documents/Termo de Devolução de Notebook"
 		}
     }
 }

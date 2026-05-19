@@ -20,7 +20,7 @@ Após preencher e marcar as opções desejadas, é só clicar em "Gerar Document
 
 ## 💻 Extendendo
 
-Layouts de impressão são criados através do arquivo `layouts.json` e os dados da empresa ficam no arquivo `company.json`.
+Layouts de impressão são criados através dos arquivos `.json` na pasta `data/layouts/` e os dados da empresa ficam no arquivo `data/company.json`.
 
 Exemplo - `layouts.json`:
 
@@ -69,10 +69,8 @@ Exemplo - `layouts.json`:
 			"replace": "$obs$"
 		},
 		"Config": {
-            "termo": "termo_celular.html",
-            "termo_devol": "termo_celular_devol.html",
-			"output": "./Termos/Termo de Entrega de Celular",
-			"output_devol": "./Termos/Termo de Devolução de Celular"
+            "document": "termo_celular.html",
+			"output": "./documents/Termo de Entrega de Celular"
 		}
     }
 }

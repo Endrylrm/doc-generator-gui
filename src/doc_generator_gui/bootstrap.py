@@ -44,9 +44,7 @@ def bootstrap():
     container.registerFactory(
         ICompanyReader, lambda: CompanyJsonReader("data/company.json")
     )
-    container.registerFactory(
-        ILayoutReader, lambda: LayoutJsonReader("data/layouts.json")
-    )
+    container.registerFactory(ILayoutReader, lambda: LayoutJsonReader("data/layouts/"))
 
     # Register Services
     container.register(TemplateEngineService)

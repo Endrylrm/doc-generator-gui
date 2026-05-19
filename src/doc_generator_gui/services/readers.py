@@ -1,5 +1,6 @@
 import json
 
+from pathlib import Path
 from typing import Protocol
 
 
@@ -21,8 +22,14 @@ class LayoutJsonReader(ILayoutReader):
         self.path = path
 
     def load(self) -> dict[str, str]:
-        with open(self.path, "r", encoding="utf-8") as file:
-            return json.load(file)
+        data = {}
+
+        for file in Path(self.path).glob("*.json"):
+            with open(file, "r", encoding="utf-8") as f:
+                fileJson = json.load(f)
+                data.update(fileJson)
+
+        return data
 
 
 class CompanyJsonReader(ICompanyReader):

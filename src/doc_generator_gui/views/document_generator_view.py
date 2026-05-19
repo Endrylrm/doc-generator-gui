@@ -76,13 +76,6 @@ class DocumentGeneratorView(QtWidgets.QWidget):
             "<b>Ativar Data Manual:</b>\nDesativa a data automâtica e permite a seleção de datas."
         )
         self.isDateSelectable.stateChanged.connect(self.enableDatePicker)
-        # CheckBox - Devolução
-        self.isDeviceReturn = QtWidgets.QCheckBox(
-            self, text="Devolução de Dispositivo."
-        )
-        self.isDeviceReturn.setToolTip(
-            "<b>Devolução de Dispositivo.:</b>\nAtive para gerar os termos de devolução."
-        )
         # CheckBox - Desativar Visualização de Impressão
         self.disablePrinterPreview = QtWidgets.QCheckBox(
             self, text="Desativar visualização de impressão."
@@ -137,12 +130,10 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         widgetGridLayout.addWidget(self.isDateSelectable, 10, 0, 1, 1)
         # DateTimeEdit - Data Manual
         widgetGridLayout.addWidget(self.datePicker, 10, 1, 1, 1)
-        # CheckBox - Ativar Devolução
-        widgetGridLayout.addWidget(self.isDeviceReturn, 11, 0, 1, 1)
         # CheckBox - Desativar Visualização de Impressão
-        widgetGridLayout.addWidget(self.disablePrinterPreview, 11, 1, 1, 1)
+        widgetGridLayout.addWidget(self.disablePrinterPreview, 11, 0, 1, 1)
         # CheckBox - Desativar Impressão
-        widgetGridLayout.addWidget(self.disablePrinter, 12, 0, 1, 1)
+        widgetGridLayout.addWidget(self.disablePrinter, 11, 1, 1, 1)
         # separator - Buttons
         widgetGridLayout.addWidget(self.separatorButtons, 15, 0, 1, 2)
         # PushButton - Gerar Documento
@@ -187,11 +178,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.tableDocument.getDataFromInputs()
 
         employeeName = self.tableDocument.getEmployeeName()
-        defaultPath = (
-            self.layoutVM.getCurrentLayout()["config"]["output_devol"]
-            if self.isDeviceReturn.isChecked()
-            else self.layoutVM.getCurrentLayout()["config"]["output"]
-        )
+        defaultPath = self.layoutVM.getCurrentLayout()["config"]["output"]
         self.documentVM.setOutputPath(employeeName, defaultPath)
 
         dateText = (
@@ -202,11 +189,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         self.inputVM.getInputData()["$data$"] = dateText
 
-        fileToRead = (
-            self.layoutVM.getCurrentLayout()["config"]["termo"]
-            if not self.isDeviceReturn.isChecked()
-            else self.layoutVM.getCurrentLayout()["config"]["termo_devol"]
-        )
+        fileToRead = self.layoutVM.getCurrentLayout()["config"]["document"]
 
         self.documentVM.parseHTML(fileToRead, self.inputVM.getInputData())
         self.documentVM.generatePDF()
