@@ -57,7 +57,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self.layoutVM.setCurrentLayout(layout_name)
         self.documentVM.setPrintType(layout_name)
 
-        for key in self.layoutVM.getCurrentLayout()["user_interface"]:
+        for key in self.layoutVM.getCurrentLayoutUI():
             self.addRowToTable(key)
 
     def validateRequiredInputs(self) -> InputValidationResult:
@@ -108,7 +108,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         index = self.rowCount()
-        rowLayout = self.layoutVM.getCurrentLayout()["user_interface"][key]
+        rowLayout = self.layoutVM.getCurrentLayoutUI()[key]
         self.setRowCount(index + 1)
         rowDescription = self.createRowDescription(rowLayout)
         self.setItem(index, 0, rowDescription)

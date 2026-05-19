@@ -22,11 +22,17 @@ class LayoutViewModel:
         by selecting the corresponding key.
         """
 
-        layoutData = list(self.getCurrentLayout()["user_interface"].items())[index][1]
+        layoutData = list(self.getCurrentLayoutUI().items())[index][1]
         return layoutData.get(key, "")
 
-    def getCurrentLayout(self) -> dict[str, Any]:
+    def _getCurrentLayout(self) -> dict[str, Any]:
         return self.getAllLayouts().get(self._curLayout)
+
+    def getCurrentLayoutUI(self) -> dict[str, Any]:
+        return self._getCurrentLayout()["user_interface"]
+
+    def getCurrentLayoutConfig(self) -> dict[str, Any]:
+        return self._getCurrentLayout()["config"]
 
     def setCurrentLayout(self, key: str):
         self._curLayout = key
