@@ -140,8 +140,17 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             if currentText == "":
                 continue
 
-            prefix = self.layoutVM.getValueFromLayout(row, "prefix")
-            suffix = self.layoutVM.getValueFromLayout(row, "suffix")
+            prefix = ""
+            suffix = ""
+
+            if (prefix := self.layoutVM.getValueFromLayout(row, "prefix")) != "":
+                prefix = re.sub(self._htmlRE, "", prefix)
+                prefix = "<b>" + prefix + "</b> "
+
+            if (suffix := self.layoutVM.getValueFromLayout(row, "suffix")) != "":
+                suffix = re.sub(self._htmlRE, "", suffix)
+                suffix = " <b>" + suffix + "</b>"
+
             currentText = re.sub(self._htmlRE, "", currentText)
             currentText = prefix + currentText + suffix
 
