@@ -15,7 +15,7 @@ class LayoutViewModel:
     def __init__(self, reader: ILayoutReader):
         self._layoutReader = reader
 
-        self._layouts: LayoutContainer = None
+        self._layouts = None
         self._curLayout = ""
 
     def getValueFromLayout(self, index: int, key: str) -> Any | str:
