@@ -1,3 +1,5 @@
+import re
+
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from .cpf_input import CpfInput
@@ -44,6 +46,9 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self.setSelectionBehavior(self.selectionBehavior().SelectItems)
         self.setSelectionMode(self.selectionMode().SingleSelection)
         self.verticalHeader().setVisible(False)
+
+        self._htmlRE = re.compile(r"<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});")
+        self._filenameRE = re.compile(r"['!*<>:?\"|/\\]")
 
     def setTableLayout(self, layout_name: str = ""):
         """
@@ -137,6 +142,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
             prefix = self.layoutVM.getValueFromLayout(row, "prefix")
             suffix = self.layoutVM.getValueFromLayout(row, "suffix")
+            currentText = re.sub(self._htmlRE, "", currentText)
             currentText = prefix + currentText + suffix
 
             self.inputVM.updateInputData(template, currentText)
@@ -145,6 +151,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         for row in range(self.rowCount()):
             if self.layoutVM.getValueFromLayout(row, "type") == "name":
                 name = self.cellWidget(row, 1).text()
+                name = re.sub(self._htmlRE, "", name)
+                name = re.sub(self._filenameRE, "", name)
                 return name
 
         return ""
