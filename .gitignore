@@ -1,6 +1,7 @@
 # Termos em PDF
 termos/*.pdf
 documents/*.pdf
+assets/translations/
 
 # upx
 upx/

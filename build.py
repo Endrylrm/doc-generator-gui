@@ -21,7 +21,7 @@ def build_nuitka():
     )
 
     os.mkdir("./main.dist/documents")
-    shutil.copytree("./translations/", "./main.dist/PySide6/translations")
+    shutil.copytree("./assets/translations/", "./main.dist/PySide6/translations")
     shutil.copytree("./data/", "./main.dist/data")
     shutil.copy("gen_document.ico", "./main.dist/")
 
