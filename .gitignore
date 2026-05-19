@@ -1,6 +1,8 @@
 # Termos em PDF
 termos/*.pdf
 documents/*.pdf
+
+# PySide6 Translations
 assets/translations/
 
 # upx
