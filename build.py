@@ -4,7 +4,7 @@ import shutil
 import subprocess
 
 
-def Build_Nuitka():
+def build_nuitka():
     subprocess.run(
         [
             ".venv/Scripts/python.exe",
@@ -26,7 +26,7 @@ def Build_Nuitka():
     shutil.copy("gen_document.ico", "./main.dist/")
 
 
-def Build_PyInstaller():
+def build_pyinstaller():
     PyInstaller.__main__.run(
         [
             "./src/doc_generator_gui/main.py",

@@ -17,8 +17,8 @@ pytest = "^9.0.3"
 pytest-qt = "^4.5.0"
 
 [tool.poetry.scripts]
-build-nuitka = "build:Build_Nuitka"
-build-pyinstaller = "build:Build_PyInstaller"
+build-nuitka = "build:build_nuitka"
+build-pyinstaller = "build:build_pyinstaller"
 main = "src.doc_generator_gui.main:main"
 
 [build-system]
