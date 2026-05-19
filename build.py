@@ -20,7 +20,7 @@ def Build_Nuitka():
         ]
     )
 
-    os.mkdir("./main.dist/Termos")
+    os.mkdir("./main.dist/documents")
     shutil.copytree("./translations/", "./main.dist/PySide6/translations")
     shutil.copytree("./data/", "./main.dist/data")
     shutil.copy("gen_document.ico", "./main.dist/")
@@ -38,6 +38,6 @@ def Build_PyInstaller():
         ]
     )
 
-    os.mkdir("./dist/main/Termos")
+    os.mkdir("./dist/main/documents")
     shutil.copytree("./data/", "./dist/main/data")
     shutil.copy("gen_document.ico", "./dist/main/")
