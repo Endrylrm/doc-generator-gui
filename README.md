@@ -65,7 +65,7 @@ Exemplo - `layouts.json`:
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse celular...",
-				"prefix": "<b>Observação:</b> ",
+				"prefix": "Observação:",
 				"type": "remark",
 				"replace": "$obs$"
 			}
