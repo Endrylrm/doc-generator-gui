@@ -3,9 +3,11 @@ import json
 from pathlib import Path
 from typing import Protocol
 
+from ..schemas.layouts import LayoutContainer
+
 
 class ILayoutReader(Protocol):
-    def load(self) -> dict[str, str]: ...
+    def load(self) -> LayoutContainer: ...
 
 
 class ICompanyReader(Protocol):
@@ -21,7 +23,7 @@ class LayoutJsonReader(ILayoutReader):
     def __init__(self, path: str):
         self.path = path
 
-    def load(self) -> dict[str, str]:
+    def load(self) -> LayoutContainer:
         data = {}
 
         for file in Path(self.path).glob("*.json"):
