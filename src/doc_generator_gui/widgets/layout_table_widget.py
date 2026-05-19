@@ -133,9 +133,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         for row in range(self.rowCount()):
-            currentText = self.cellWidget(row, 1).text()
-
-            if currentText == "":
+            if (currentText := self.cellWidget(row, 1).text()) == "":
                 continue
 
             template = self.layoutVM.getValueFromLayout(row, "replace")
