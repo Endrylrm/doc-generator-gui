@@ -178,7 +178,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.tableDocument.getDataFromInputs()
 
         employeeName = self.tableDocument.getEmployeeName()
-        defaultPath = self.layoutVM.getCurrentLayoutConfig()["output"]
+        defaultPath = self.layoutVM.getCurrentLayoutConfig().get("output", "")
         self.documentVM.setOutputPath(employeeName, defaultPath)
 
         dateText = (
@@ -189,7 +189,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         self.inputVM.getInputData()["$data$"] = dateText
 
-        fileToRead = self.layoutVM.getCurrentLayoutConfig()["template"]
+        fileToRead = self.layoutVM.getCurrentLayoutConfig().get("template", "")
 
         self.documentVM.parseHTML(fileToRead, self.inputVM.getInputData())
         self.documentVM.generatePDF()

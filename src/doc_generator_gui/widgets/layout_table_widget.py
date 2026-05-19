@@ -2,6 +2,8 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from .cpf_input import CpfInput
 
+from ..schemas.components import UIComponent
+
 from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.input_viewmodel import InputViewModel
 from ..viewmodels.layout_viewmodel import LayoutViewModel
@@ -77,22 +79,26 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         return InputValidationResult(True)
 
-    def createRowDescription(self, layout: dict) -> QtWidgets.QTableWidgetItem:
+    def createRowDescription(
+        self, component: UIComponent
+    ) -> QtWidgets.QTableWidgetItem:
         descriptionFont = QtGui.QFont()
         descriptionFont.setBold(True)
-        rowDescription = QtWidgets.QTableWidgetItem(layout["description"])
+        rowDescription = QtWidgets.QTableWidgetItem(component["description"])
         rowDescription.setFont(descriptionFont)
         rowDescription.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         return rowDescription
 
-    def createRowInput(self, key: str, layout: dict) -> QtWidgets.QLineEdit | CpfInput:
-        match layout["type"]:
+    def createRowInput(
+        self, key: str, component: UIComponent
+    ) -> QtWidgets.QLineEdit | CpfInput:
+        match component["type"]:
             case "cpf":
                 rowInput = CpfInput()
             case _:
                 rowInput = QtWidgets.QLineEdit()
-                rowInput.setMaxLength(layout.get("max_text_length", 30000))
-        rowInput.setPlaceholderText(layout.get("placeholder", ""))
+                rowInput.setMaxLength(component.get("max_text_length", 30000))
+        rowInput.setPlaceholderText(component.get("placeholder", ""))
         rowInput.textEdited.connect(
             lambda: self.setInputHistoryData(key, rowInput.text())
         )
@@ -108,11 +114,11 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         index = self.rowCount()
-        rowLayout = self.layoutVM.getCurrentLayoutUI()[key]
+        layoutComponent = self.layoutVM.getCurrentLayoutUI()[key]
         self.setRowCount(index + 1)
-        rowDescription = self.createRowDescription(rowLayout)
+        rowDescription = self.createRowDescription(layoutComponent)
         self.setItem(index, 0, rowDescription)
-        rowInput = self.createRowInput(key, rowLayout)
+        rowInput = self.createRowInput(key, layoutComponent)
         self.setCellWidget(index, 1, rowInput)
 
     def getDataFromInputs(self):

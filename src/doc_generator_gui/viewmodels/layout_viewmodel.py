@@ -2,6 +2,9 @@ from typing import Any, Generator
 
 from ..services.readers import ILayoutReader
 
+from ..schemas.components import UIComponent
+from ..schemas.layouts import LayoutContainer, Layout, LayoutConfig
+
 
 class LayoutViewModel:
     """
@@ -12,7 +15,7 @@ class LayoutViewModel:
     def __init__(self, reader: ILayoutReader):
         self._layoutReader = reader
 
-        self._layouts = None
+        self._layouts: LayoutContainer = None
         self._curLayout = ""
 
     def getValueFromLayout(self, index: int, key: str) -> Any | str:
@@ -25,19 +28,19 @@ class LayoutViewModel:
         layoutData = list(self.getCurrentLayoutUI().items())[index][1]
         return layoutData.get(key, "")
 
-    def _getCurrentLayout(self) -> dict[str, Any]:
-        return self.getAllLayouts().get(self._curLayout)
+    def _getCurrentLayout(self) -> Layout:
+        return self.getAllLayouts().get(self._curLayout, {})
 
-    def getCurrentLayoutUI(self) -> dict[str, Any]:
-        return self._getCurrentLayout()["user_interface"]
+    def getCurrentLayoutUI(self) -> dict[str, UIComponent]:
+        return self._getCurrentLayout().get("user_interface", {})
 
-    def getCurrentLayoutConfig(self) -> dict[str, Any]:
-        return self._getCurrentLayout()["config"]
+    def getCurrentLayoutConfig(self) -> LayoutConfig:
+        return self._getCurrentLayout().get("config", {})
 
     def setCurrentLayout(self, key: str):
         self._curLayout = key
 
-    def getAllLayouts(self) -> dict[str, Any]:
+    def getAllLayouts(self) -> LayoutContainer:
         if self._layouts is None:
             self._layouts = self._layoutReader.load()
 
