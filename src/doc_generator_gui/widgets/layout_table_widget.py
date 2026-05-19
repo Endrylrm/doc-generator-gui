@@ -133,12 +133,12 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         """
 
         for row in range(self.rowCount()):
-            template = self.layoutVM.getValueFromLayout(row, "replace")
-
             currentText = self.cellWidget(row, 1).text()
 
             if currentText == "":
                 continue
+
+            template = self.layoutVM.getValueFromLayout(row, "replace")
 
             prefix = ""
             suffix = ""
