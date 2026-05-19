@@ -11,6 +11,8 @@ class BaseInputUI(BaseUI):
     placeholder: str
     error_message: str
     replace: str
+    prefix: str
+    suffix: str
 
 
 class InputUI(BaseInputUI):
