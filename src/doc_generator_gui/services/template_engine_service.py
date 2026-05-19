@@ -11,7 +11,7 @@ class TemplateEngineService:
 
     def __init__(self, documentContext: DocumentContext):
         self.documentContext = documentContext
-        self._templateRegex = re.compile("\$([a-zA-Z0-9_]+)\$")
+        self._templateRegex = re.compile(r"\$([a-zA-Z0-9_]+)\$")
 
     def buildCleanHTML(self, html: dict[str, str], input_data: dict[str, str]):
         for key in html:
