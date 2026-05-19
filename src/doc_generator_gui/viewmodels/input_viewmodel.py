@@ -43,7 +43,7 @@ class InputViewModel:
         if not self._inputData:
             # we load the company data on the first time.
             companyData = {
-                data["replace"]: data["value"]
+                data["template"]: data["value"]
                 for data in self.getCompanyData().values()
             }
 
