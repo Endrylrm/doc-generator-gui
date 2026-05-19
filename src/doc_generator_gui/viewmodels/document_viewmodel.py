@@ -30,7 +30,7 @@ class DocumentViewModel:
         containing all the html data.
         """
 
-        tmplPath = "./data/Templates"
+        tmplPath = "./data/templates"
 
         with (
             open(f"{tmplPath}/header.html", "r", encoding="utf-8") as headerFile,

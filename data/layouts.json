@@ -44,8 +44,8 @@
 		"config": {
             "termo": "termo_cartucho.html",
             "termo_devol": "termo_cartucho_devol.html",
-			"output": "./Termos/Termo de Entrega de Cartucho",
-			"output_devol": "./Termos/Termo de Devolução de Cartucho"
+			"output": "./documents/Termo de Entrega de Cartucho",
+			"output_devol": "./documents/Termo de Devolução de Cartucho"
 		}
     },
     "Celular": {
@@ -94,8 +94,8 @@
 		"config": {
             "termo": "termo_celular.html",
             "termo_devol": "termo_celular_devol.html",
-			"output": "./Termos/Termo de Entrega de Celular",
-			"output_devol": "./Termos/Termo de Devolução de Celular"
+			"output": "./documents/Termo de Entrega de Celular",
+			"output_devol": "./documents/Termo de Devolução de Celular"
 		}
     },
 	"iButton": {
@@ -136,8 +136,8 @@
 		"config": {
             "termo": "termo_ibutton.html",
             "termo_devol": "termo_ibutton_devol.html",
-			"output": "./Termos/Termo de Entrega de iButton",
-			"output_devol": "./Termos/Termo de Devolução de iButton"
+			"output": "./documents/Termo de Entrega de iButton",
+			"output_devol": "./documents/Termo de Devolução de iButton"
 		}
     },
 	"Impressora": {
@@ -186,8 +186,8 @@
 		"config": {
             "termo": "termo_impressora.html",
             "termo_devol": "termo_impressora_devol.html",
-			"output": "./Termos/Termo de Entrega de Impressora",
-			"output_devol": "./Termos/Termo de Devolução de Impressora"
+			"output": "./documents/Termo de Entrega de Impressora",
+			"output_devol": "./documents/Termo de Devolução de Impressora"
 		}
     },
 	"Inversor": {
@@ -228,8 +228,8 @@
 		"config": {
             "termo": "termo_inversor.html",
             "termo_devol": "termo_inversor_devol.html",
-			"output": "./Termos/Termo de Entrega de Inversor",
-			"output_devol": "./Termos/Termo de Devolução de Inversor"
+			"output": "./documents/Termo de Entrega de Inversor",
+			"output_devol": "./documents/Termo de Devolução de Inversor"
 		}
     },
 	"Notebook": {
@@ -277,8 +277,8 @@
 		"config": {
             "termo": "termo_notebook.html",
             "termo_devol": "termo_notebook_devol.html",
-			"output": "./Termos/Termo de Entrega de Notebook",
-			"output_devol": "./Termos/Termo de Devolução de Notebook"
+			"output": "./documents/Termo de Entrega de Notebook",
+			"output_devol": "./documents/Termo de Devolução de Notebook"
 		}
     }
 }

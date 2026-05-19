@@ -1,5 +1,6 @@
 # Termos em PDF
-Termos/*.pdf
+termos/*.pdf
+documents/*.pdf
 
 # upx
 upx/
