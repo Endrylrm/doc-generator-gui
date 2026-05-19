@@ -135,13 +135,13 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         # CheckBox - Desativar Impressão
         widgetGridLayout.addWidget(self.disablePrinter, 11, 1, 1, 1)
         # separator - Buttons
-        widgetGridLayout.addWidget(self.separatorButtons, 15, 0, 1, 2)
+        widgetGridLayout.addWidget(self.separatorButtons, 13, 0, 1, 2)
         # PushButton - Gerar Documento
-        widgetGridLayout.addWidget(self.buttonGenDoc, 16, 0, 1, 2)
+        widgetGridLayout.addWidget(self.buttonGenDoc, 14, 0, 1, 2)
         # space between widgets
         widgetGridLayout.setSpacing(10)
         # stretch a specific row
-        widgetGridLayout.setRowStretch(13, 1)
+        widgetGridLayout.setRowStretch(12, 1)
         # set this widget layout to the grid layout
         self.setLayout(widgetGridLayout)
 
@@ -189,7 +189,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         self.inputVM.getInputData()["$data$"] = dateText
 
-        fileToRead = self.layoutVM.getCurrentLayout()["config"]["document"]
+        fileToRead = self.layoutVM.getCurrentLayout()["config"]["template"]
 
         self.documentVM.parseHTML(fileToRead, self.inputVM.getInputData())
         self.documentVM.generatePDF()

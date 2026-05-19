@@ -27,49 +27,51 @@ Exemplo - `layouts.json`:
 ```json
 {
     "Celular": {
-        "nome": {
-			"required": true,
-            "description": "Nome do Funcionário (Obrigatório):",
-			"placeholder": "Digite o nome do funcionário...",
-			"type": "name",
-			"error_message": "Nome do funcionário",
-            "replace": "$name$"
-        },
-        "cpf": {
-			"required": true,
-			"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-			"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
-			"type": "cpf",
-			"error_message": "CPF do funcionário",
-			"replace": "$cpf$"
-		},
-		"celular": {
-			"required": true,
-			"description": "Celular do Funcionário (Obrigatório):",
-			"placeholder": "Digite o Celular a ser entregue ao funcionário...",
-			"type": "normal",
-			"error_message": "Celular do Funcionário",
-			"replace": "$celular$"
-		},
-		"imei": {
-			"required": true,
-			"description": "IMEI do Celular do Funcionário (Obrigatório):",
-			"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
-			"replace": "$imei$",
-			"type": "normal",
-			"error_message": "IMEI do Celular do Funcionário",
-			"maxTextLength": 33
-		},
-		"remark": {
-			"required": false,
-			"description": "Observação (Opcional):",
-			"placeholder": "Digite uma observação referente a esse celular...",
-			"prefix": "<b>Observação:</b> ",
-			"type": "remark",
-			"replace": "$obs$"
+		"user_interface": {
+			"nome": {
+				"required": true,
+				"description": "Nome do Funcionário (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"type": "name",
+				"error_message": "Nome do funcionário",
+				"replace": "$name$"
+			},
+			"cpf": {
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+				"type": "cpf",
+				"error_message": "CPF do funcionário",
+				"replace": "$cpf$"
+			},
+			"celular": {
+				"required": true,
+				"description": "Celular do Funcionário (Obrigatório):",
+				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
+				"type": "normal",
+				"error_message": "Celular do Funcionário",
+				"replace": "$celular$"
+			},
+			"imei": {
+				"required": true,
+				"description": "IMEI do Celular do Funcionário (Obrigatório):",
+				"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
+				"replace": "$imei$",
+				"type": "normal",
+				"error_message": "IMEI do Celular do Funcionário",
+				"maxTextLength": 33
+			},
+			"remark": {
+				"required": false,
+				"description": "Observação (Opcional):",
+				"placeholder": "Digite uma observação referente a esse celular...",
+				"prefix": "<b>Observação:</b> ",
+				"type": "remark",
+				"replace": "$obs$"
+			}
 		},
 		"Config": {
-            "document": "termo_celular.html",
+            "template": "termo_celular.html",
 			"output": "./documents/Termo de Entrega de Celular"
 		}
     }

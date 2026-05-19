@@ -22,7 +22,7 @@ class LayoutViewModel:
         by selecting the corresponding key.
         """
 
-        layoutData = list(self.getCurrentLayout().items())[index][1]
+        layoutData = list(self.getCurrentLayout()["user_interface"].items())[index][1]
         return layoutData.get(key, "")
 
     def getCurrentLayout(self) -> dict[str, Any]:
@@ -36,10 +36,6 @@ class LayoutViewModel:
             self._layouts = self._layoutReader.load()
 
         return self._layouts
-
-    def filterCurrentLayout(self) -> Generator[str]:
-        filteredKeys = (key for key in self.getCurrentLayout() if key != "config")
-        return filteredKeys
 
     def clearLayoutState(self):
         self._curLayout = ""
