@@ -29,49 +29,50 @@ Exemplo - `layouts.json`:
     "Celular": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"celular": {
+				"type": "normal",
 				"required": true,
 				"description": "Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Celular do Funcionário",
-				"replace": "$celular$"
+				"template": "$celular$"
 			},
 			"imei": {
+				"type": "normal",
 				"required": true,
 				"description": "IMEI do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
-				"replace": "$imei$",
-				"type": "normal",
 				"error_message": "IMEI do Celular do Funcionário",
-				"maxTextLength": 33
+				"maxTextLength": 33,
+				"template": "$imei$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse celular...",
+				"error_message": "Observação do Celular do Funcionário",
 				"prefix": "Observação:",
-				"type": "remark",
-				"replace": "$obs$"
+				"template": "$obs$"
 			}
 		},
 		"Config": {
-            "template": "termo_celular.html",
+            "document_template": "termo_celular.html",
 			"output": "./documents/Termo de Entrega de Celular"
 		}
     }

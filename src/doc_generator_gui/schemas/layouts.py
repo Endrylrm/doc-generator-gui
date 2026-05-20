@@ -4,7 +4,7 @@ from .components import UIComponent
 
 
 class LayoutConfig(TypedDict):
-    template: str
+    document_template: str
     output: str
 
 

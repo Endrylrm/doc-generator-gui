@@ -10,7 +10,7 @@ class BaseInputUI(BaseUI):
     description: str
     placeholder: str
     error_message: str
-    replace: str
+    template: str
 
 
 class InputUI(BaseInputUI):

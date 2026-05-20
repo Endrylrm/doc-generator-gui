@@ -2,282 +2,282 @@
     "Cartucho": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"cartucho": {
+				"type": "normal",
 				"required": true,
 				"description": "Cartucho de Impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite o cartucho de impressora a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Cartucho de Impressora do Funcionário",
-				"replace": "$cartucho$"
+				"template": "$cartucho$"
 			},
 			"impressora": {
+				"type": "normal",
 				"required": true,
 				"description": "Modelo de impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite o modelo de impressora que será usado esse cartucho...",
-				"type": "normal",
 				"error_message": "Modelo de impressora do Funcionário",
-				"replace": "$impressora$"
+				"template": "$impressora$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse cartucho de impressora...",
-				"prefix": "Observação:",
-				"type": "remark",
 				"error_message": "Observação do Cartucho de impressora do Funcionário",
-				"replace": "$obs$"
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_cartucho.html",
+            "document_template": "termo_cartucho.html",
 			"output": "./documents/Termo de Entrega de Cartucho"
 		}
     },
     "Celular": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"celular": {
+				"type": "normal",
 				"required": true,
 				"description": "Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Celular do Funcionário",
-				"replace": "$celular$"
+				"template": "$celular$"
 			},
 			"imei": {
+				"type": "normal",
 				"required": true,
 				"description": "IMEI do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
-				"replace": "$imei$",
-				"type": "normal",
 				"error_message": "IMEI do Celular do Funcionário",
-				"max_text_length": 33
+				"max_text_length": 33,
+				"template": "$imei$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse celular...",
 				"prefix": "Observação:",
-				"type": "remark",
 				"error_message": "Observação do Celular do Funcionário",
-				"replace": "$obs$"
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_celular.html",
+            "document_template": "termo_celular.html",
 			"output": "./documents/Termo de Entrega de Celular"
 		}
     },
 	"iButton": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"ibutton": {
+				"type": "normal",
 				"required": true,
 				"description": "Código do iButton (Obrigatório):",
 				"placeholder": "Digite o código do iButton a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Código do iButton do Funcionário",
-				"replace": "$button$",
-				"max_text_length": 12
+				"max_text_length": 12,
+				"template": "$button$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse iButton...",
-				"prefix": "Observação:",
-				"type": "remark",
 				"error_message": "Observação do iButton do Funcionário",
-				"replace": "$obs$"
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_ibutton.html",
+            "document_template": "termo_ibutton.html",
 			"output": "./documents/Termo de Entrega de iButton"
 		}
     },
 	"Impressora": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"impressora": {
+				"type": "normal",
 				"required": true,
 				"description": "Impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite a impressora a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Impressora do Funcionário",
-				"replace": "$impressora$"
+				"template": "$impressora$"
 			},
 			"serial": {
+				"type": "normal",
 				"required": true,
 				"description": "Serial da impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Serial da impressora a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Serial da impressora do Funcionário",
-				"replace": "$serial$",
-				"max_text_length": 10
+				"max_text_length": 10,
+				"template": "$serial$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a essa impressora...",
-				"prefix": "Observação:",
-				"type": "remark",
 				"error_message": "Observação da impressora do Funcionário",
-				"replace": "$obs$"
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_impressora.html",
+            "document_template": "termo_impressora.html",
 			"output": "./documents/Termo de Entrega de Impressora"
 		}
     },
 	"Inversor": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"inversor": {
+				"type": "normal",
 				"required": true,
 				"description": "Marca/Modelo do inversor (Obrigatório):",
 				"placeholder": "Digite o inversor a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Marca/Modelo do inversor do Funcionário",
-				"replace": "$inversor$",
-				"max_text_length": 12
+				"max_text_length": 12,
+				"template": "$inversor$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse inversor...",
-				"prefix": "Observação:",
-				"type": "remark",
 				"error_message": "Observação do Inversor de Energia do Funcionário",
-				"replace": "$obs$"
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_inversor.html",
+            "document_template": "termo_inversor.html",
 			"output": "./documents/Termo de Entrega de Inversor"
 		}
     },
 	"Notebook": {
 		"user_interface": {
 			"nome": {
+				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"type": "name",
 				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"template": "$name$"
 			},
 			"cpf": {
+				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"error_message": "CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"notebook": {
+				"type": "normal",
 				"required": true,
 				"description": "Notebook do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Notebook a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Notebook do Funcionário",
-				"replace": "$notebook$"
+				"template": "$notebook$"
 			},
 			"serial": {
+				"type": "normal",
 				"required": true,
 				"description": "Serial do Notebook do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Serial do Notebook a ser entregue ao funcionário...",
-				"type": "normal",
 				"error_message": "Serial do Notebook do Funcionário",
-				"replace": "$serial$"
+				"template": "$serial$"
 			},
 			"remark": {
+				"type": "remark",
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse Notebook...",
-				"prefix": "Observação:",
-				"type": "remark",
 				"error_message": "Observação do Notebook do Funcionário",
-				"replace": "$obs$"
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_notebook.html",
+            "document_template": "termo_notebook.html",
 			"output": "./documents/Termo de Entrega de Notebook"
 		}
     }

@@ -2,282 +2,282 @@
     "Devolução de Cartucho": {
 		"user_interface": {
 			"nome": {
-				"required": true,
-				"description": "Nome do Funcionário (Obrigatório):",
-				"placeholder": "Digite o nome do funcionário...",
 				"type": "name",
-				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"required": true,
+				"description": "Nome do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"error_message": "Devolução - Nome do funcionário",
+				"template": "$name$"
 			},
 			"cpf": {
-				"required": true,
-				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
+				"error_message": "Devolução - CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"cartucho": {
-				"required": true,
-				"description": "Cartucho de Impressora do Funcionário (Obrigatório):",
-				"placeholder": "Digite o cartucho de impressora a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Cartucho de Impressora do Funcionário",
-				"replace": "$cartucho$"
+				"required": true,
+				"description": "Cartucho de Impressora da Devolução (Obrigatório):",
+				"placeholder": "Digite o cartucho de impressora que será devolvido...",
+				"error_message": "Devolução - Cartucho de Impressora do Funcionário",
+				"template": "$cartucho$"
 			},
 			"impressora": {
-				"required": true,
-				"description": "Modelo de impressora do Funcionário (Obrigatório):",
-				"placeholder": "Digite o modelo de impressora que será usado esse cartucho...",
 				"type": "normal",
-				"error_message": "Modelo de impressora do Funcionário",
-				"replace": "$impressora$"
+				"required": true,
+				"description": "Modelo de impressora da Devolução (Obrigatório):",
+				"placeholder": "Digite o modelo de impressora que era usado esse cartucho...",
+				"error_message": "Devolução - Modelo de impressora do Funcionário",
+				"template": "$impressora$"
 			},
 			"remark": {
-				"required": false,
-				"description": "Observação (Opcional):",
-				"placeholder": "Digite uma observação referente a esse cartucho de impressora...",
-				"prefix": "Observação:",
 				"type": "remark",
-				"error_message": "Observação do Cartucho de impressora do Funcionário",
-				"replace": "$obs$"
+				"required": false,
+				"description": "Observação da Devolução (Opcional):",
+				"placeholder": "Digite uma observação referente a devolução desse cartucho de impressora...",
+				"error_message": "Devolução - Observação do Cartucho de impressora do Funcionário",
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_cartucho_devol.html",
+            "document_template": "termo_cartucho_devol.html",
 			"output": "./documents/Termo de Devolução de Cartucho"
 		}
     },
     "Devolução de Celular": {
 		"user_interface": {
 			"nome": {
-				"required": true,
-				"description": "Nome do Funcionário (Obrigatório):",
-				"placeholder": "Digite o nome do funcionário...",
 				"type": "name",
-				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"required": true,
+				"description": "Nome do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"error_message": "Devolução - Nome do funcionário",
+				"template": "$name$"
 			},
 			"cpf": {
-				"required": true,
-				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
+				"error_message": "Devolução - CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"celular": {
-				"required": true,
-				"description": "Celular do Funcionário (Obrigatório):",
-				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Celular do Funcionário",
-				"replace": "$celular$"
+				"required": true,
+				"description": "Celular da Devolução (Obrigatório):",
+				"placeholder": "Digite o Celular que será devolvido...",
+				"error_message": "Devolução - Celular do Funcionário",
+				"template": "$celular$"
 			},
 			"imei": {
-				"required": true,
-				"description": "IMEI do Celular do Funcionário (Obrigatório):",
-				"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
-				"replace": "$imei$",
 				"type": "normal",
-				"error_message": "IMEI do Celular do Funcionário",
-				"max_text_length": 33
+				"required": true,
+				"description": "IMEI do Celular da Devolução (Obrigatório):",
+				"placeholder": "Digite o IMEI do Celular que será devolvido...",
+				"error_message": "Devolução - IMEI do Celular do Funcionário",
+				"max_text_length": 33,
+				"template": "$imei$"
 			},
 			"remark": {
-				"required": false,
-				"description": "Observação (Opcional):",
-				"placeholder": "Digite uma observação referente a esse celular...",
-				"prefix": "Observação:",
 				"type": "remark",
-				"error_message": "Observação do Celular do Funcionário",
-				"replace": "$obs$"
+				"required": false,
+				"description": "Observação da Devolução (Opcional):",
+				"placeholder": "Digite uma observação referente a devolução desse celular...",
+				"error_message": "Devolução - Observação do Celular do Funcionário",
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_celular_devol.html",
+            "document_template": "termo_celular_devol.html",
 			"output": "./documents/Termo de Devolução de Celular"
 		}
     },
 	"Devolução de iButton": {
 		"user_interface": {
 			"nome": {
-				"required": true,
-				"description": "Nome do Funcionário (Obrigatório):",
-				"placeholder": "Digite o nome do funcionário...",
 				"type": "name",
-				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"required": true,
+				"description": "Nome do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"error_message": "Devolução - Nome do funcionário",
+				"template": "$name$"
 			},
 			"cpf": {
-				"required": true,
-				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
+				"error_message": "Devolução - CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"ibutton": {
-				"required": true,
-				"description": "Código do iButton (Obrigatório):",
-				"placeholder": "Digite o código do iButton a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Código do iButton do Funcionário",
-				"replace": "$button$",
-				"max_text_length": 12
+				"required": true,
+				"description": "Código do iButton da Devolução(Obrigatório):",
+				"placeholder": "Digite o código do iButton que será devolvido...",
+				"error_message": "Devolução - Código do iButton do Funcionário",
+				"max_text_length": 12,
+				"template": "$button$"
 			},
 			"remark": {
-				"required": false,
-				"description": "Observação (Opcional):",
-				"placeholder": "Digite uma observação referente a esse iButton...",
-				"prefix": "Observação:",
 				"type": "remark",
-				"error_message": "Observação do iButton do Funcionário",
-				"replace": "$obs$"
+				"required": false,
+				"description": "Observação da Devolução (Opcional):",
+				"placeholder": "Digite uma observação referente a devolução desse iButton...",
+				"error_message": "Devolução - Observação do iButton do Funcionário",
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_ibutton_devol.html",
+            "document_template": "termo_ibutton_devol.html",
 			"output": "./documents/Termo de Devolução de iButton"
 		}
     },
 	"Devolução de Impressora": {
 		"user_interface": {
 			"nome": {
-				"required": true,
-				"description": "Nome do Funcionário (Obrigatório):",
-				"placeholder": "Digite o nome do funcionário...",
 				"type": "name",
-				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"required": true,
+				"description": "Nome do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"error_message": "Devolução - Nome do funcionário",
+				"template": "$name$"
 			},
 			"cpf": {
-				"required": true,
-				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
+				"error_message": "Devolução - CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"impressora": {
-				"required": true,
-				"description": "Impressora do Funcionário (Obrigatório):",
-				"placeholder": "Digite a impressora a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Impressora do Funcionário",
-				"replace": "$impressora$"
+				"required": true,
+				"description": "Impressora da Devolução (Obrigatório):",
+				"placeholder": "Digite a impressora que será devolvida...",
+				"error_message": "Devolução - Impressora do Funcionário",
+				"template": "$impressora$"
 			},
 			"serial": {
-				"required": true,
-				"description": "Serial da impressora do Funcionário (Obrigatório):",
-				"placeholder": "Digite o Serial da impressora a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Serial da impressora do Funcionário",
-				"replace": "$serial$",
-				"max_text_length": 10
+				"required": true,
+				"description": "Serial da impressora da Devolução (Obrigatório):",
+				"placeholder": "Digite o Serial da impressora que será devolvida...",
+				"error_message": "Devolução - Serial da impressora do Funcionário",
+				"max_text_length": 10,
+				"template": "$serial$"
 			},
 			"remark": {
-				"required": false,
-				"description": "Observação (Opcional):",
-				"placeholder": "Digite uma observação referente a essa impressora...",
-				"prefix": "Observação:",
 				"type": "remark",
-				"error_message": "Observação da impressora do Funcionário",
-				"replace": "$obs$"
+				"required": false,
+				"description": "Observação da Devolução (Opcional):",
+				"placeholder": "Digite uma observação referente a devolução dessa impressora...",
+				"error_message": "Devolução - Observação da impressora do Funcionário",
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_impressora_devol.html",
+            "document_template": "termo_impressora_devol.html",
 			"output": "./documents/Termo de Devolução de Impressora"
 		}
     },
 	"Devolução de Inversor": {
 		"user_interface": {
 			"nome": {
-				"required": true,
-				"description": "Nome do Funcionário (Obrigatório):",
-				"placeholder": "Digite o nome do funcionário...",
 				"type": "name",
-				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"required": true,
+				"description": "Nome do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"error_message": "Devolução - Nome do funcionário",
+				"template": "$name$"
 			},
 			"cpf": {
-				"required": true,
-				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
+				"error_message": "Devolução - CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"inversor": {
-				"required": true,
-				"description": "Marca/Modelo do inversor (Obrigatório):",
-				"placeholder": "Digite o inversor a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Marca/Modelo do inversor do Funcionário",
-				"replace": "$inversor$",
-				"max_text_length": 12
+				"required": true,
+				"description": "Marca/Modelo do inversor da Devolução (Obrigatório):",
+				"placeholder": "Digite o inversor que será devolvido...",
+				"error_message": "Devolução - Marca/Modelo do inversor do Funcionário",
+				"max_text_length": 12,
+				"template": "$inversor$"
 			},
 			"remark": {
-				"required": false,
-				"description": "Observação (Opcional):",
-				"placeholder": "Digite uma observação referente a esse inversor...",
-				"prefix": "Observação:",
 				"type": "remark",
-				"error_message": "Observação do Inversor de Energia do Funcionário",
-				"replace": "$obs$"
+				"required": false,
+				"description": "Observação da Devolução (Opcional):",
+				"placeholder": "Digite uma observação referente a devolução desse inversor...",
+				"error_message": "Devolução - Observação do Inversor de Energia do Funcionário",
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_inversor_devol.html",
+            "document_template": "termo_inversor_devol.html",
 			"output": "./documents/Termo de Devolução de Inversor"
 		}
     },
 	"Devolução de Notebook": {
 		"user_interface": {
 			"nome": {
-				"required": true,
-				"description": "Nome do Funcionário (Obrigatório):",
-				"placeholder": "Digite o nome do funcionário...",
 				"type": "name",
-				"error_message": "Nome do funcionário",
-				"replace": "$name$"
+				"required": true,
+				"description": "Nome do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Digite o nome do funcionário...",
+				"error_message": "Devolução - Nome do funcionário",
+				"template": "$name$"
 			},
 			"cpf": {
-				"required": true,
-				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"type": "cpf",
-				"error_message": "CPF do funcionário",
-				"replace": "$cpf$"
+				"required": true,
+				"description": "CPF / CNPJ do Funcionário da Devolução (Obrigatório):",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
+				"error_message": "Devolução - CPF / CNPJ do funcionário",
+				"template": "$cpf$"
 			},
 			"notebook": {
-				"required": true,
-				"description": "Notebook do Funcionário (Obrigatório):",
-				"placeholder": "Digite o Notebook a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Notebook do Funcionário",
-				"replace": "$notebook$"
+				"required": true,
+				"description": "Notebook da Devolução (Obrigatório):",
+				"placeholder": "Digite o Notebook que será devolvido...",
+				"error_message": "Devolução - Notebook do Funcionário",
+				"template": "$notebook$"
 			},
 			"serial": {
-				"required": true,
-				"description": "Serial do Notebook do Funcionário (Obrigatório):",
-				"placeholder": "Digite o Serial do Notebook a ser entregue ao funcionário...",
 				"type": "normal",
-				"error_message": "Serial do Notebook do Funcionário",
-				"replace": "$serial$"
+				"required": true,
+				"description": "Serial do Notebook da Devolução (Obrigatório):",
+				"placeholder": "Digite o Serial do Notebook que será devolvido...",
+				"error_message": "Devolução - Serial do Notebook do Funcionário",
+				"template": "$serial$"
 			},
 			"remark": {
-				"required": false,
-				"description": "Observação (Opcional):",
-				"placeholder": "Digite uma observação referente a esse Notebook...",
-				"prefix": "Observação:",
 				"type": "remark",
-				"error_message": "Observação do Notebook do Funcionário",
-				"replace": "$obs$"
+				"required": false,
+				"description": "Observação da Devolução (Opcional):",
+				"placeholder": "Digite uma observação referente a devolução desse Notebook...",
+				"error_message": "Devolução - Observação do Notebook do Funcionário",
+				"prefix": "Observação:",
+				"template": "$obs$"
 			}
 		},
 		"config": {
-            "template": "termo_notebook_devol.html",
+            "document_template": "termo_notebook_devol.html",
 			"output": "./documents/Termo de Devolução de Notebook"
 		}
     }

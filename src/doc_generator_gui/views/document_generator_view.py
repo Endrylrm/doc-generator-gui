@@ -189,7 +189,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         self.inputVM.getInputData()["$data$"] = dateText
 
-        fileToRead = self.layoutVM.getCurrentLayoutConfig().get("template", "")
+        fileToRead = self.layoutVM.getCurrentLayoutConfig().get("document_template", "")
 
         self.documentVM.parseHTML(fileToRead, self.inputVM.getInputData())
         self.documentVM.generatePDF()

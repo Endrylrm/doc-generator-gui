@@ -136,7 +136,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             if (currentText := self.cellWidget(row, 1).text()) == "":
                 continue
 
-            template = self.layoutVM.getValueFromLayout(row, "replace")
+            template = self.layoutVM.getValueFromLayout(row, "template")
 
             prefix = ""
             suffix = ""
