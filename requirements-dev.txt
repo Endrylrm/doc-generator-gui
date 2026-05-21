@@ -1,3 +1,4 @@
 Nuitka==4.1.1
 pyinstaller==6.20.0
 pytest==9.0.3
+pytest-qt==4.5.0
