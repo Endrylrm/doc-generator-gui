@@ -18,7 +18,9 @@ class LayoutViewModel:
         self._layouts = None
         self._curLayout = ""
 
-    def getLayoutValueByIndex(self, index: int, key: str) -> Any | str:
+    def getLayoutValueByIndex(
+        self, index: int, key: str, default: Any = None
+    ) -> Any | None:
         """
         The current layout dictionary is converted into a list of
         values, allowing indexed access to a layout entry. Then the
@@ -26,7 +28,7 @@ class LayoutViewModel:
         """
 
         layoutData = list(self.getCurrentLayoutUI().values())[index]
-        return layoutData.get(key, "")
+        return layoutData.get(key, None)
 
     def _getCurrentLayout(self) -> Layout:
         return self.getAllLayouts().get(self._curLayout, {})
