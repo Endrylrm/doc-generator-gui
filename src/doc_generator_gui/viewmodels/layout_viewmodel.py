@@ -18,14 +18,14 @@ class LayoutViewModel:
         self._layouts = None
         self._curLayout = ""
 
-    def getValueFromLayout(self, index: int, key: str) -> Any | str:
+    def getLayoutValueByIndex(self, index: int, key: str) -> Any | str:
         """
         we convert our dictionary items in a list, then we returns the
         data from the dictionary based on the index of a parent key,
         by selecting the corresponding key.
         """
 
-        layoutData = list(self.getCurrentLayoutUI().items())[index][1]
+        layoutData = list(self.getCurrentLayoutUI().values())[index]
         return layoutData.get(key, "")
 
     def _getCurrentLayout(self) -> Layout:
