@@ -2,6 +2,8 @@
 
 Esse software tem a função de gerar termos em PDF para empresas usando HTML e CSS, através do PySide6 (QT).
 
+para iniciá-lo, use `uv run main` no seu terminal.
+
 <b style="color: red;">Atenção:</b> Esse projeto que criei é com o intuito de estudar programação através da linguagem Python e me auxiliar com essa parte de termos onde estava trabalhando, não deve ser usado em produção, devido a possíveis falhas de seguranças ou bugs.
 
 ## 👨‍💻 Usando o Gerador de Termos
@@ -83,18 +85,18 @@ Exemplo - `layouts.json`:
 
 se precisa criar um executável para seus usuários, usamos o [`PyInstaller`](https://pyinstaller.org/en/stable/) ou o [`Nuitka (Recomendado)`](https://nuitka.net/).
 
-Para isso possuímos dois scripts no poetry:
+Para isso possuímos dois scripts no uv:
 
 <details>
 <summary>Nuitka</summary>
 
-> `poetry run build-nuitka`
+> `uv run build-nuitka`
 
 </details>
 
 <details>
 <summary>Pyinstaller</summary>
 
-> `poetry run build-pyinstaller`
+> `uv run build-pyinstaller`
 
 </details>
