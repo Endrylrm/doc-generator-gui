@@ -14,7 +14,7 @@ class PDFService:
 
     def __init__(self, documentContext: DocumentContext):
         self._documentContext = documentContext
-        self.printer = PrinterFactory.createPrinterToPDF()
+        self._printer = PrinterFactory.createPrinterToPDF()
 
     def paintFromHTML(
         self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
@@ -46,14 +46,14 @@ class PDFService:
         MAIN_LOCATION: list[int] = [30, 72]
         FOOTER_LOCATION: list[int] = [-30, 665]
 
-        self.printer.setOutputFileName(self._documentContext.outputPath)
+        self._printer.setOutputFileName(self._documentContext.outputPath)
 
         pdfDocument = QtGui.QTextDocument()
         pdfDocument.setTextWidth(PDF_TEXT_WIDTH)
 
         htmlData = self._documentContext.currentHTML
 
-        with PrintContext(self.printer) as ctx:
+        with PrintContext(self._printer) as ctx:
             ctx.painter.scale(PDF_PAINTER_SCALE, PDF_PAINTER_SCALE)
             self.paintFromHTML(
                 pdfDocument, ctx.painter, HEADER_LOCATION, htmlData["header"]
