@@ -14,7 +14,7 @@ class PrinterService:
 
     def __init__(self, documentContext: DocumentContext):
         self._documentContext = documentContext
-        self.printer = PrinterFactory.createPrinterToNative()
+        self._printer = PrinterFactory.createPrinterToNative()
 
     def paintDocument(self):
         """
@@ -33,10 +33,10 @@ class PrinterService:
             QtGui.QPageSize.PageSizeId.A4, PDF_PRINTER_RESOLUTION
         )
 
-        with PrintContext(self.printer) as ctx:
+        with PrintContext(self._printer) as ctx:
             for curPage in range(pdfFile.pageCount()):
                 if curPage > 0:
-                    self.printer.newPage()
+                    self._printer.newPage()
 
                 pageImageFromPDF = pdfFile.render(curPage, size)
 
@@ -49,7 +49,7 @@ class PrinterService:
         this function is responsible for creating a print dialog.
         """
 
-        printDialog = QtPrintSupport.QPrintDialog(self.printer)
+        printDialog = QtPrintSupport.QPrintDialog(self._printer)
         printDialog.setWindowTitle(
             f"Imprimir termo de {self._documentContext.printType}"
         )
@@ -64,7 +64,7 @@ class PrinterService:
         with preview.
         """
 
-        printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(self.printer)
+        printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(self._printer)
         printPreviewDialog.setWindowTitle(
             f"Imprimir termo de {self._documentContext.printType}"
         )
