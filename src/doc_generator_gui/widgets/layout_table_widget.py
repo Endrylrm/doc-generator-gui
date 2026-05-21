@@ -138,9 +138,6 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
             template = self.layoutVM.getValueFromLayout(row, "template")
 
-            prefix = ""
-            suffix = ""
-
             if (prefix := self.layoutVM.getValueFromLayout(row, "prefix")) != "":
                 prefix = re.sub(self._htmlRE, "", prefix)
                 prefix = "<b>" + prefix + "</b> "
