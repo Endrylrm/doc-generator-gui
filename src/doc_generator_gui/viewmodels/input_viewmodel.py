@@ -42,12 +42,7 @@ class InputViewModel:
 
         if not self._inputData:
             # we load the company data on the first time.
-            companyData = {
-                data["template"]: data["value"]
-                for data in self.getCompanyData().values()
-            }
-
-            self._inputData.update(companyData)
+            self._inputData.update(self.getCompanyData())
             return
 
         # slice everything, except the company data

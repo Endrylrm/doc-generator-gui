@@ -45,4 +45,9 @@ class CompanyJsonReader(ICompanyReader):
 
     def load(self) -> dict[str, str]:
         with open(self.path, "r", encoding="utf-8") as file:
-            return json.load(file)
+            return self._normalizeData(json.load(file))
+
+    def _normalizeData(self, data: dict) -> dict[str, str]:
+        normalized = {data[key]["template"]: data[key]["value"] for key in data}
+
+        return normalized
