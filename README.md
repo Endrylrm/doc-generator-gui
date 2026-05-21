@@ -85,18 +85,18 @@ Exemplo - `layouts.json`:
 
 se precisa criar um executável para seus usuários, usamos o [`PyInstaller`](https://pyinstaller.org/en/stable/) ou o [`Nuitka (Recomendado)`](https://nuitka.net/).
 
-Para isso possuímos dois scripts no uv:
+Para isso possuímos um script, onde você irá escolher o metodo de compilação que você deseja no uv:
 
 <details>
 <summary>Nuitka</summary>
 
-> `uv run build-nuitka`
+> `uv run build.py` ou `uv run build.py nuitka`
 
 </details>
 
 <details>
 <summary>Pyinstaller</summary>
 
-> `uv run build-pyinstaller`
+> `uv run build.py pyinstaller`
 
 </details>

@@ -17,8 +17,6 @@ classifiers = [
 dependencies = ["PySide6>=6.11.1,<7"]
 
 [project.scripts]
-build-nuitka = "build:build_nuitka"
-build-pyinstaller = "build:build_pyinstaller"
 main = "doc_generator_gui.main:main"
 
 [dependency-groups]

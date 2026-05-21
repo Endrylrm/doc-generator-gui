@@ -1,5 +1,6 @@
 import PyInstaller.__main__
 import os
+import sys
 import shutil
 import subprocess
 
@@ -41,3 +42,14 @@ def build_pyinstaller():
     os.mkdir("./dist/main/documents")
     shutil.copytree("./data/", "./dist/main/data")
     shutil.copy("gen_document.ico", "./dist/main/")
+
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+
+    if not args or "nuitka" in args:
+        build_nuitka()
+    elif "pyinstaller" in args:
+        build_pyinstaller()
+    else:
+        print(f"Unknown command: {args}. Use 'nuitka' or 'pyinstaller'.")
