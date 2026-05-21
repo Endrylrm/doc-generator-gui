@@ -20,9 +20,9 @@ class LayoutViewModel:
 
     def getLayoutValueByIndex(self, index: int, key: str) -> Any | str:
         """
-        we convert our dictionary items in a list, then we returns the
-        data from the dictionary based on the index of a parent key,
-        by selecting the corresponding key.
+        The current layout dictionary is converted into a list of
+        values, allowing indexed access to a layout entry. Then the
+        requested value is retrieved from that entry by the index.
         """
 
         layoutData = list(self.getCurrentLayoutUI().values())[index]
