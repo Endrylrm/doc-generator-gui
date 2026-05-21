@@ -28,7 +28,7 @@ class LayoutViewModel:
         """
 
         layoutData = list(self.getCurrentLayoutUI().values())[index]
-        return layoutData.get(key, None)
+        return layoutData.get(key, default)
 
     def _getCurrentLayout(self) -> Layout:
         return self.getAllLayouts().get(self._curLayout, {})
