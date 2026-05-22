@@ -28,10 +28,10 @@ class InputViewModel:
 
         return companyData
 
-    def updateInputData(self, key: str, value: str):
+    def setInputData(self, key: str, value: str):
         self._inputData[key] = value
 
-    def updateInputHistory(self, key: str, value: str):
+    def setInputHistory(self, key: str, value: str):
         self._inputHistory[key] = value
 
     def setDefaultState(self):

@@ -111,7 +111,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         return rowInput
 
     def setInputHistoryData(self, key: str, text: str):
-        self.inputVM.updateInputHistory(key, text)
+        self.inputVM.setInputHistory(key, text)
 
     def addRowToTable(self, key: str):
         """
@@ -149,7 +149,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             currentText = re.sub(self._htmlRE, "", currentText)
             currentText = prefix + currentText + suffix
 
-            self.inputVM.updateInputData(template, currentText)
+            self.inputVM.setInputData(template, currentText)
 
     def getEmployeeName(self) -> str:
         for row in range(self.rowCount()):

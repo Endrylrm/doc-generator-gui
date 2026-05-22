@@ -187,7 +187,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
-        self.inputVM.getInputData()["$data$"] = dateText
+        self.inputVM.setInputData("$data$", dateText)
 
         fileToRead = self.layoutVM.getCurrentLayoutConfig().get("document_template", "")
 
