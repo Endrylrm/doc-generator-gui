@@ -24,29 +24,8 @@ class DocumentViewModel:
         self._pdfService = pdfService
         self._printerService = printerService
 
-    def readHTMLFiles(self, fileToRead: str):
-        """
-        this function reads our terms html files, returning a dictionary
-        containing all the html data.
-        """
-
-        tmplPath = "./data/templates"
-
-        with (
-            open(f"{tmplPath}/header.html", "r", encoding="utf-8") as headerFile,
-            open(f"{tmplPath}/{fileToRead}", "r", encoding="utf-8") as termoFile,
-            open(f"{tmplPath}/footer.html", "r", encoding="utf-8") as footerFile,
-        ):
-
-            self._documentContext.currentHTML = {
-                "header": headerFile.read(),
-                "termo": termoFile.read(),
-                "footer": footerFile.read(),
-            }
-
     def parseHTML(self, fileToRead: str, input_data: dict[str, str]):
-        self.readHTMLFiles(fileToRead)
-        self._tmplEngineService.parse(input_data)
+        self._tmplEngineService.parse(fileToRead, input_data)
 
     def generatePDF(self):
         self._pdfService.generate()

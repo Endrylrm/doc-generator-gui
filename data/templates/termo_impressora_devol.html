@@ -28,14 +28,14 @@
       text-indent: 40px;
     "
   >
-    A Empresa $empresa$, situada na $rua_empresa$, Bairro: $bairro_empresa$,
-    inscrita no CNPJ: $cnpj_empresa$, recebe neste ato, a Impressora da
-    Marca/Modelo:
-    <b style="font-size: 11px">$impressora$,</b> Código Serial:
-    <b style="font-size: 11px">$serial$,</b> e cartucho que foi cedido para uso
-    no trabalho ao Funcionário/Parceiro:
-    <b style="font-size: 11px">$name$,</b> CPF/CNPJ:
-    <b style="font-size: 11px">$cpf$.</b>
+    A Empresa {{ empresa }}, situada na {{ rua_empresa }}, Bairro: {{
+    bairro_empresa }}, inscrita no CNPJ: {{ cnpj_empresa }}, recebe neste ato, a
+    Impressora da Marca/Modelo:
+    <b style="font-size: 11px">{{ impressora }},</b> Código Serial:
+    <b style="font-size: 11px">{{ serial }},</b> e cartucho que foi cedido para
+    uso no trabalho ao Funcionário/Parceiro:
+    <b style="font-size: 11px">{{ name }},</b> CPF/CNPJ:
+    <b style="font-size: 11px">{{ cpf }}.</b>
   </div>
 
   <div
@@ -47,7 +47,8 @@
       margin-bottom: 10px;
     "
   >
-    $obs$
+    {% if obs %}
+    <b>Observação: </b>{{ obs }} {% endif %}
   </div>
 
   <div
@@ -69,6 +70,6 @@
     align="center"
     style="font-size: 11px; font-family: Arial; margin-top: 5px"
   >
-    <b>$name$</b>
+    <b>{{ name }}</b>
   </div>
 </div>

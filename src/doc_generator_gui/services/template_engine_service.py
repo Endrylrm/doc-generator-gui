@@ -1,4 +1,4 @@
-import re
+from jinja2 import Environment, FileSystemLoader
 
 from ..contexts.document_context import DocumentContext
 
@@ -11,25 +11,19 @@ class TemplateEngineService:
 
     def __init__(self, documentContext: DocumentContext):
         self._documentContext = documentContext
-        self._templateRegex = re.compile(r"\$([a-zA-Z0-9_]+)\$")
 
-    def buildCleanHTML(self, html: dict[str, str], input_data: dict[str, str]):
-        for key in html:
-            for oldString, newString in input_data.items():
-                html[key] = html[key].replace(oldString, newString)
+        self._env = Environment(loader=FileSystemLoader("data/templates"))
 
-    def removeUnusedTemplate(self, html: dict[str, str]):
-        for key in html:
-            html[key] = re.sub(self._templateRegex, "", html[key])
-
-    def parse(self, input_data: dict[str, str]):
+    def parse(self, file: str, input_data: dict[str, str]):
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.
         """
+        template = self._env.get_template("header.html")
+        self._documentContext.currentHTML["header"] = template.render(**input_data)
 
-        self.buildCleanHTML(self._documentContext.currentHTML, input_data)
+        template = self._env.get_template(file)
+        self._documentContext.currentHTML["termo"] = template.render(**input_data)
 
-        # clean any variable that didn't get used
-        # mostly those we put as not required
-        self.removeUnusedTemplate(self._documentContext.currentHTML)
+        template = self._env.get_template("footer.html")
+        self._documentContext.currentHTML["footer"] = template.render(**input_data)

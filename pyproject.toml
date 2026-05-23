@@ -14,7 +14,10 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-dependencies = ["PySide6>=6.11.1,<7"]
+dependencies = [
+    "jinja2>=3.1.6",
+    "PySide6>=6.11.1,<7",
+]
 
 [project.scripts]
 main = "doc_generator_gui.main:main"

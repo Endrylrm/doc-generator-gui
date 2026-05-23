@@ -69,7 +69,6 @@ Exemplo - `layouts.json`:
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse celular...",
 				"error_message": "Observação do Celular do Funcionário",
-				"prefix": "Observação:",
 				"template": "$obs$"
 			}
 		},

@@ -28,13 +28,13 @@
       text-indent: 40px;
     "
   >
-    A Empresa $empresa$, situada na $rua_empresa$, Bairro: $bairro_empresa$,
-    inscrita no CNPJ: $cnpj_empresa$, entrega neste ato, o Inversor da
-    Marca/Modelo:
-    <b style="font-size: 11px">$inversor$</b> ao Funcionário/Parceiro:
-    <b style="font-size: 11px">$name$,</b> CPF/CNPJ:
-    <b style="font-size: 11px">$cpf$,</b> doravante denominado simplesmente de
-    "USUÁRIO", sob as seguintes condições:
+    A Empresa {{ empresa }}, situada na {{ rua_empresa }}, Bairro: {{
+    bairro_empresa }}, inscrita no CNPJ: {{ cnpj_empresa }}, entrega neste ato,
+    o Inversor da Marca/Modelo:
+    <b style="font-size: 11px">{{ inversor }}</b> ao Funcionário/Parceiro:
+    <b style="font-size: 11px">{{ name }},</b> CPF/CNPJ:
+    <b style="font-size: 11px">{{ cpf }},</b> doravante denominado simplesmente
+    de "USUÁRIO", sob as seguintes condições:
     <p
       style="
         text-indent: 40px;
@@ -54,7 +54,8 @@
     align="center"
     style="font-size: 10px; font-family: Arial; margin-bottom: 10px"
   >
-    $obs$
+    {% if obs %}
+    <b>Observação: </b>{{ obs }} {% endif %}
   </div>
 
   <div
@@ -71,6 +72,6 @@
     align="center"
     style="font-size: 11px; font-family: Arial; margin-top: 5px"
   >
-    <b>$name$</b>
+    <b>{{ name }}</b>
   </div>
 </div>

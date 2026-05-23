@@ -28,13 +28,13 @@
       text-indent: 40px;
     "
   >
-    A Empresa $empresa$, situada na $rua_empresa$, Bairro: $bairro_empresa$,
-    inscrita no CNPJ: $cnpj_empresa$, recebe neste ato, o aparelho iButton
-    (Código de identificação: <b style="font-size: 11px">$button$</b>),
-    dispositivo utilizado para liberar a ignição do veículo, que foi cedido para
-    uso no trabalho ao Funcionário/Parceiro:
-    <b style="font-size: 11px">$name$,</b> CPF/CNPJ:
-    <b style="font-size: 11px">$cpf$.</b>
+    A Empresa {{ empresa }}, situada na {{ rua_empresa }}, Bairro: {{
+    bairro_empresa }}, inscrita no CNPJ: {{ cnpj_empresa }}, recebe neste ato, o
+    aparelho iButton (Código de identificação:
+    <b style="font-size: 11px">{{ ibutton }}</b>), dispositivo utilizado para
+    liberar a ignição do veículo, que foi cedido para uso no trabalho ao
+    Funcionário/Parceiro: <b style="font-size: 11px">{{ name }},</b> CPF/CNPJ:
+    <b style="font-size: 11px">{{ cpf }}.</b>
   </div>
 
   <div
@@ -46,7 +46,8 @@
       margin-bottom: 10px;
     "
   >
-    $obs$
+    {% if obs %}
+    <b>Observação: </b>{{ obs }} {% endif %}
   </div>
 
   <div
@@ -68,6 +69,6 @@
     align="center"
     style="font-size: 11px; font-family: Arial; margin-top: 5px"
   >
-    <b>$name$</b>
+    <b>{{ name }}</b>
   </div>
 </div>

@@ -16,7 +16,7 @@
         width="440"
         style="font-style: italic; font-size: 11px; font-family: Arial"
       >
-        $cidade_empresa$, $data$.
+        {{ cidade_empresa }}, {{ data }}.
       </td>
     </tr>
     <tr>
@@ -31,7 +31,7 @@
         width="440"
         style="padding-top: 5px; font-size: 10px; font-family: Arial"
       >
-        <b>$empresa$</b>
+        <b>{{ empresa }}</b>
       </td>
     </tr>
     <tr>
@@ -40,7 +40,7 @@
         width="440"
         style="font-size: 10px; font-family: Arial"
       >
-        $rua_empresa$
+        {{ rua_empresa }}
       </td>
     </tr>
     <tr>
@@ -49,8 +49,8 @@
         width="440"
         style="font-size: 10px; font-family: Arial"
       >
-        Fone: $fone_empresa$ – CEP $cep_empresa$ -
-        $cidade_empresa$/$estado_empresa$ - $pais_empresa$
+        Fone: {{ fone_empresa }} – CEP {{ cep_empresa }} - {{ cidade_empresa
+        }}/{{ estado_empresa }} - {{ pais_empresa }}
       </td>
     </tr>
   </table>
