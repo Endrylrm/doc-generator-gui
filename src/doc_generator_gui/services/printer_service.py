@@ -24,7 +24,7 @@ class PrinterService:
 
         PDF_PRINTER_RESOLUTION: int = 600
         PAINTER_SCALE: float = 1
-        START_LOCATION: list[int] = [2, 0]
+        START_LOCATION: list[int] = [0, 0]
 
         pdfFile = QtPdf.QPdfDocument()
         pdfFile.load(self._documentContext.outputPath)
