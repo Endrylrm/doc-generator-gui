@@ -21,10 +21,10 @@ class TemplateEngineService:
         """
 
         template = self._env.get_template("header.html")
-        self._documentContext.currentHTML["header"] = template.render(**input_data)
+        self._documentContext.currentHTML["header"] = template.render(input_data)
 
         template = self._env.get_template(file)
-        self._documentContext.currentHTML["termo"] = template.render(**input_data)
+        self._documentContext.currentHTML["termo"] = template.render(input_data)
 
         template = self._env.get_template("footer.html")
-        self._documentContext.currentHTML["footer"] = template.render(**input_data)
+        self._documentContext.currentHTML["footer"] = template.render(input_data)
