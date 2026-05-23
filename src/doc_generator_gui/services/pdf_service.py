@@ -59,7 +59,7 @@ class PDFService:
                 pdfDocument, ctx.painter, HEADER_LOCATION, htmlData["header"]
             )
             self.paintFromHTML(
-                pdfDocument, ctx.painter, MAIN_LOCATION, htmlData["termo"]
+                pdfDocument, ctx.painter, MAIN_LOCATION, htmlData["document"]
             )
             self.paintFromHTML(
                 pdfDocument, ctx.painter, FOOTER_LOCATION, htmlData["footer"]
