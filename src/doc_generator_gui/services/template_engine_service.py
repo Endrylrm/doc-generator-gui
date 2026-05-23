@@ -16,8 +16,9 @@ class TemplateEngineService:
 
     def render(self, file: str, input_data: dict[str, str]):
         """
-        this function changes all the variables in our html with the correct data,
-        returning a dictionary containing all cleaned html data.
+        this function renders all the template variables in our html
+        with the correct data, setting our current html clean and ready
+        for use.
         """
 
         template = self._env.get_template("header.html")
