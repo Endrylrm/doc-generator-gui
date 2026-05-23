@@ -3,7 +3,7 @@ from PySide6 import QtGui, QtPrintSupport
 
 class PrintContext:
     """
-    This class is responsible for providing context on the
+    This class is responsible is a context manager for the
     QPrinters and QPainters used on our printing services.
     """
 
