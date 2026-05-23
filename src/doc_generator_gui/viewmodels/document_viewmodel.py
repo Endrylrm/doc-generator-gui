@@ -1,3 +1,5 @@
+import os
+
 from ..contexts.document_context import DocumentContext
 
 from ..services.template_engine_service import TemplateEngineService
@@ -56,4 +58,4 @@ class DocumentViewModel:
     def clearDocumentState(self):
         self._documentContext.printType = ""
         self._documentContext.outputPath = ""
-        self._documentContext.currentHTML = {}
+        self._documentContext.currentHTML = ""

@@ -46,6 +46,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self.setSelectionBehavior(self.selectionBehavior().SelectItems)
         self.setSelectionMode(self.selectionMode().SingleSelection)
         self.verticalHeader().setVisible(False)
+        self.setMinimumHeight(215)
 
         self._htmlRE = re.compile(r"<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});")
         self._filenameRE = re.compile(r"['!*<>:?\"|/\\]")

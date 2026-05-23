@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documento - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    {% include "header.html" %}
+    <table>
+      <thead>
+        <tr>
+          <td>
+            <div class="print-header-space"></div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{% block content %} {% endblock %}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>
+            <div class="print-footer-space"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    {% include "footer.html" %}
+  </body>
+</html>

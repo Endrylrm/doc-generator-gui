@@ -1,9 +1,9 @@
-from PySide6 import QtGui
+import os
+import tempfile
+
+from playwright.sync_api import sync_playwright
 
 from ..contexts.document_context import DocumentContext
-from ..contexts.print_context import PrintContext
-
-from ..factories.printer_factory import PrinterFactory
 
 
 class PDFService:
@@ -14,53 +14,51 @@ class PDFService:
 
     def __init__(self, documentContext: DocumentContext):
         self._documentContext = documentContext
-        self._printer = PrinterFactory.createPrinterToPDF()
-
-    def paintFromHTML(
-        self, doc: QtGui.QTextDocument, painter: QtGui.QPainter, point: list, html: str
-    ):
-        """
-        begin painting by changing the html in our QTextDocument,
-        also translating the QPainter when necessary and call the draw
-        function of our DocumentLayout to start painting.
-        """
-
-        documentPaintCtx = doc.documentLayout().PaintContext()
-
-        painter.translate(point[0], point[1])
-
-        doc.setHtml(html)
-        doc.documentLayout().draw(painter, documentPaintCtx)
 
     def generate(self):
         """
-        we use a QPrinter, QPainter and QTextdocument to generate a
-        PDF file of our HTML, we scale our painter and use the function
-        PaintHTML to paint the html to a new PDF file.
+        we create a temporary file with the current html store,
+        use a Playwright to open a browser and generate the pdf
+        from the html.
         """
 
-        PDF_PAINTER_SCALE: float = 8.5
-        PDF_TEXT_WIDTH: int = 530
+        with tempfile.NamedTemporaryFile(
+            dir="data/templates/",
+            mode="w",
+            suffix=".html",
+            encoding="utf8",
+            delete=False,
+        ) as tmp:
+            tmp.write(self._documentContext.currentHTML)
+            file_path = tmp.name
 
-        HEADER_LOCATION: list[int] = [0, 5]
-        MAIN_LOCATION: list[int] = [30, 72]
-        FOOTER_LOCATION: list[int] = [-30, 665]
+        browsers = [
+            ("chrome", "chromium"),
+            ("firefox", "firefox"),
+            ("msedge", "chromium"),
+        ]
 
-        self._printer.setOutputFileName(self._documentContext.outputPath)
+        for name, driver in browsers:
+            try:
+                with sync_playwright() as p:
+                    # Attempt to launch a browser
+                    browser_type = getattr(p, driver)
+                    browser = browser_type.launch(channel=name)
 
-        pdfDocument = QtGui.QTextDocument()
-        pdfDocument.setTextWidth(PDF_TEXT_WIDTH)
+                    page = browser.new_page()
 
-        htmlData = self._documentContext.currentHTML
+                    file_path = os.path.abspath(file_path)
 
-        with PrintContext(self._printer) as ctx:
-            ctx.painter.scale(PDF_PAINTER_SCALE, PDF_PAINTER_SCALE)
-            self.paintFromHTML(
-                pdfDocument, ctx.painter, HEADER_LOCATION, htmlData["header"]
-            )
-            self.paintFromHTML(
-                pdfDocument, ctx.painter, MAIN_LOCATION, htmlData["document"]
-            )
-            self.paintFromHTML(
-                pdfDocument, ctx.painter, FOOTER_LOCATION, htmlData["footer"]
-            )
+                    page.goto(f"file:///{file_path}")
+
+                    # Generate PDF with specific format
+                    page.pdf(path=self._documentContext.outputPath, format="A4")
+
+                    browser.close()
+
+                    os.remove(file_path)
+                    return
+            except Exception as e:
+                print(f"Browser {name} unavailable: {e}")
+
+        raise Exception("No browser available!")

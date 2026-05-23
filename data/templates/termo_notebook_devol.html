@@ -1,75 +1,31 @@
-<div
-  style="
-    text-align: center;
-    padding-top: 25px;
-    margin-right: 20px;
-    margin-left: 20px;
-    margin-bottom: 30px;
-    color: black;
-    font-kerning: normal;
-    text-rendering: optimizeLegibility;
-  "
->
-  <div
-    align="center"
-    style="font-family: Arial; font-size: 10px; margin-bottom: 50px"
-  >
+{% extends "base.html" %} {% block title %} Notebook - Devolução {% endblock %}
+{% block content %}
+<main class="page content">
+  <div class="content-title">
     <b>TERMO DE ENTREGA DE DISPOSITIVO - Notebook</b>
   </div>
-
-  <div
-    align="justify"
-    style="
-      text-align: justify;
-      margin-right: 10px;
-      margin-left: 10px;
-      font-family: Arial;
-      font-size: 10px;
-      text-indent: 40px;
-    "
-  >
+  <div class="content-main-text">
     A Empresa {{ empresa }}, situada na {{ rua_empresa }}, Bairro: {{
     bairro_empresa }}, inscrita no CNPJ: {{ cnpj_empresa }}, recebe neste ato, o
     Notebook da Marca/Modelo:
-    <b style="font-size: 11px">{{ notebook }},</b> Serial do Notebook:
-    <b style="font-size: 11px">{{ serial }},</b> que foi cedido para uso no
+    <b class="content-hl-text">{{ notebook }}</b> com o Serial:
+    <b class="content-hl-text">{{ serial }},</b> que foi cedido para uso no
     trabalho ao Funcionário/Parceiro:
-    <b style="font-size: 11px">{{ name }},</b> CPF/CNPJ:
-    <b style="font-size: 11px">{{ cpf }}.</b>
+    <b class="content-hl-text">{{ name }},</b> CPF/CNPJ:
+    <b class="content-hl-text">{{ cpf }}.</b>
   </div>
-
-  <div
-    align="center"
-    style="
-      font-size: 10px;
-      font-family: Arial;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    "
-  >
+  <div class="content-remark-text">
     {% if obs %}
     <b>Observação: </b>{{ obs }} {% endif %}
   </div>
-
-  <div
-    align="center"
-    style="
-      font-size: 10px;
-      font-family: Arial;
-      margin-top: 20px;
-      margin-bottom: 80px;
-    "
-  >
+  <div class="content-agreement-text">
     Declaro estar ciente e de acordo com as cláusulas acima.
   </div>
-
-  <div align="center" style="font-size: 12px; font-family: Arial">
+  <div class="content-signature-text">
     __________________________________________________________________
   </div>
-  <div
-    align="center"
-    style="font-size: 11px; font-family: Arial; margin-top: 5px"
-  >
+  <div class="content-name-text">
     <b>{{ name }}</b>
   </div>
-</div>
+</main>
+{% endblock %}

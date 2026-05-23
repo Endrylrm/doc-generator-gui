@@ -73,14 +73,23 @@
 				"error_message": "Celular do Funcionário",
 				"template": "celular"
 			},
-			"imei": {
+			"imei1": {
 				"type": "normal",
 				"required": true,
-				"description": "IMEI do Celular do Funcionário (Obrigatório):",
-				"placeholder": "Digite o IMEI do Celular a ser entregue ao funcionário...",
-				"error_message": "IMEI do Celular do Funcionário",
-				"max_text_length": 33,
-				"template": "imei"
+				"description": "IMEI 1 do Celular do Funcionário (Obrigatório):",
+				"placeholder": "Digite o IMEI 1 do Celular a ser entregue ao funcionário...",
+				"error_message": "IMEI 1 do Celular do Funcionário",
+				"max_text_length": 15,
+				"template": "imei1"
+			},
+			"imei2": {
+				"type": "normal",
+				"required": true,
+				"description": "IMEI 2 do Celular do Funcionário (Obrigatório):",
+				"placeholder": "Digite o IMEI 2 do Celular a ser entregue ao funcionário...",
+				"error_message": "IMEI 2 do Celular do Funcionário",
+				"max_text_length": 15,
+				"template": "imei2"
 			},
 			"remark": {
 				"type": "remark",

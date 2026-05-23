@@ -1,0 +1,144 @@
+/* base document styles */
+
+body {
+  color: black;
+  font-size: 14px;
+  font-family: Arial;
+  font-kerning: auto;
+  text-rendering: optimizeLegibility;
+}
+
+.print-header,
+.print-header-space {
+  height: 65px;
+}
+
+.print-footer,
+.print-footer-space {
+  height: 85px;
+}
+
+.print-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.print-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.print-header,
+.print-footer {
+  text-align: center;
+}
+
+.logo-div {
+  text-align: right;
+}
+
+.logo-img {
+  height: 42px;
+  width: 170px;
+  margin-right: 30px;
+}
+
+.separator {
+  margin-top: 5px;
+  border-top: 3px solid #2b4162;
+  width: 100%;
+}
+
+.content {
+  text-align: center;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.content-title {
+  padding-top: 10px;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.content-main-text {
+  text-align: justify;
+  margin-right: 10px;
+  margin-left: 10px;
+  text-indent: 40px;
+}
+
+.content-hl-text {
+  font-size: 15px;
+}
+
+.content-conditions {
+  margin-top: 15px;
+}
+
+.content-conditions-item {
+  margin-bottom: 5px;
+  text-indent: 40px;
+}
+
+.content-remark-text {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.content-agreement-text {
+  margin-bottom: 55px;
+  text-align: center;
+}
+
+.content-signature-text {
+  text-align: center;
+}
+
+.content-name-text {
+  font-size: 15px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.footer-text {
+  margin-top: 5px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.footer-italic-text {
+  font-style: italic;
+}
+
+.page {
+  break-after: page;
+  page-break-after: always;
+}
+
+.page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+@page {
+  size: A4;
+  margin: 0.5cm 1cm;
+}
+
+@media print {
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  body {
+    margin: 0;
+  }
+}

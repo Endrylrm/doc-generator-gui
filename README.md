@@ -85,6 +85,7 @@ Exemplo - `layouts.json`:
 para o programa funcionar só precisamos de duas dependências:
 - [`PySide6`](https://doc.qt.io/qtforpython-6/index.html)
 - [`Jinja2`](https://jinja.palletsprojects.com/en/stable/)
+- [`playwright`](https://playwright.dev/python/)
 
 para empacotarmos o programa precisamos de qualquer um desses dois:
 - [`Nuitka`](https://nuitka.net/)

@@ -1,8 +1,8 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
 class DocumentContext:
     printType: str = ""
     outputPath: str = ""
-    currentHTML: dict[str, str] = field(default_factory=dict[str, str])
+    currentHTML: str = ""

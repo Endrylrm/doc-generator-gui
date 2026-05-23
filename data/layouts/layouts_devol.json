@@ -73,14 +73,23 @@
 				"error_message": "Devolução - Celular do Funcionário",
 				"template": "celular"
 			},
-			"imei": {
+			"imei1": {
 				"type": "normal",
 				"required": true,
-				"description": "IMEI do Celular da Devolução (Obrigatório):",
-				"placeholder": "Digite o IMEI do Celular que será devolvido...",
-				"error_message": "Devolução - IMEI do Celular do Funcionário",
-				"max_text_length": 33,
-				"template": "imei"
+				"description": "IMEI 1 do Celular da Devolução (Obrigatório):",
+				"placeholder": "Digite o IMEI 1 do Celular que será devolvido...",
+				"error_message": "Devolução - IMEI 1 do Celular do Funcionário",
+				"max_text_length": 15,
+				"template": "imei1"
+			},
+			"imei2": {
+				"type": "normal",
+				"required": true,
+				"description": "IMEI 2 do Celular da Devolução (Obrigatório):",
+				"placeholder": "Digite o IMEI 2 do Celular que será devolvido...",
+				"error_message": "Devolução - IMEI 2 do Celular do Funcionário",
+				"max_text_length": 15,
+				"template": "imei2"
 			},
 			"remark": {
 				"type": "remark",
