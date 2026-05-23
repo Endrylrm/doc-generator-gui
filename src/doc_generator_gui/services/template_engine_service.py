@@ -14,7 +14,7 @@ class TemplateEngineService:
 
         self._env = Environment(loader=FileSystemLoader("data/templates"))
 
-    def parse(self, file: str, input_data: dict[str, str]):
+    def render(self, file: str, input_data: dict[str, str]):
         """
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.

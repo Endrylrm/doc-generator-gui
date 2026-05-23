@@ -25,7 +25,7 @@ class DocumentViewModel:
         self._printerService = printerService
 
     def parseHTML(self, fileToRead: str, input_data: dict[str, str]):
-        self._tmplEngineService.parse(fileToRead, input_data)
+        self._tmplEngineService.render(fileToRead, input_data)
 
     def generatePDF(self):
         self._pdfService.generate()
