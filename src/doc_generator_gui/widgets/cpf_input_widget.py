@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets
 
 
-class CpfInput(QtWidgets.QLineEdit):
+class CpfInputWidget(QtWidgets.QLineEdit):
     """
     This widget is responsible for the CPF/CNPJ input
     formatting while typing.

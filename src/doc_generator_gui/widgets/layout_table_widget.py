@@ -2,7 +2,7 @@ import re
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from .cpf_input import CpfInput
+from .cpf_input_widget import CpfInputWidget
 
 from ..schemas.components import UIComponent
 
@@ -96,10 +96,10 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
     def createRowInput(
         self, key: str, component: UIComponent
-    ) -> QtWidgets.QLineEdit | CpfInput:
+    ) -> QtWidgets.QLineEdit | CpfInputWidget:
         match component["type"]:
             case "cpf":
-                rowInput = CpfInput()
+                rowInput = CpfInputWidget()
             case _:
                 rowInput = QtWidgets.QLineEdit()
                 rowInput.setMaxLength(component.get("max_text_length", 30000))
