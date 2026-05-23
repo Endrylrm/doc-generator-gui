@@ -80,6 +80,20 @@ Exemplo - `layouts.json`:
 }
 ```
 
+## Dependências
+
+para o programa funcionar só precisamos de duas dependências:
+- [`PySide6`](https://doc.qt.io/qtforpython-6/index.html)
+- [`Jinja2`](https://jinja.palletsprojects.com/en/stable/)
+
+para empacotarmos o programa precisamos de qualquer um desses dois:
+- [`Nuitka`](https://nuitka.net/)
+- [`PyInstaller`](https://pyinstaller.org/en/stable/)
+
+para criação e execução de testes:
+- [`pytest`](https://docs.pytest.org/en/stable/)
+- [`pytest-qt`](https://pytest-qt.readthedocs.io/en/latest/intro.html)
+
 ## Build / Deploy
 
 se precisa criar um executável para seus usuários, usamos o [`PyInstaller`](https://pyinstaller.org/en/stable/) ou o [`Nuitka (Recomendado)`](https://nuitka.net/).
