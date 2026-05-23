@@ -19,6 +19,7 @@ class TemplateEngineService:
         this function changes all the variables in our html with the correct data,
         returning a dictionary containing all cleaned html data.
         """
+
         template = self._env.get_template("header.html")
         self._documentContext.currentHTML["header"] = template.render(**input_data)
 
