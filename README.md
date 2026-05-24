@@ -81,7 +81,7 @@ Exemplo - `layouts.json`:
 				"template": "$obs$"
 			}
 		},
-		"Config": {
+		"config": {
             "document_template": "termo_celular.html",
 			"output": "./documents/Termo de Entrega de Celular"
 		}
