@@ -17,9 +17,9 @@ class PDFService:
 
     def generate(self):
         """
-        we create a temporary file with the current html store,
-        use a Playwright to open a browser and generate the pdf
-        from the html.
+        we create a temporary file with the current stored html
+        in our context, use Playwright to open a browser and
+        generate the pdf from the html.
         """
 
         with tempfile.NamedTemporaryFile(
