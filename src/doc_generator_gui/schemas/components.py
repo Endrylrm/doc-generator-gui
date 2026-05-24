@@ -16,8 +16,6 @@ class BaseInputUI(BaseUI):
 class InputUI(BaseInputUI):
     type: Literal["normal", "name", "remark"]
     max_text_length: int
-    prefix: str
-    suffix: str
 
 
 class CPFInputUI(BaseInputUI):
