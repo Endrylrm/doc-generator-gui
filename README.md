@@ -91,16 +91,16 @@ Exemplo - `layouts.json`:
 
 ## Dependências
 
-para o programa funcionar só precisamos de duas dependências:
+usamos os seguintes pacotes para o sistema funcionar:
 - [`PySide6`](https://doc.qt.io/qtforpython-6/index.html)
 - [`Jinja2`](https://jinja.palletsprojects.com/en/stable/)
 - [`playwright`](https://playwright.dev/python/)
 
-para empacotarmos o programa precisamos de qualquer um desses dois:
+podemos usar os seguintes pacotes para empacotarmos o sistema:
 - [`Nuitka`](https://nuitka.net/)
 - [`PyInstaller`](https://pyinstaller.org/en/stable/)
 
-para criação e execução de testes:
+usamos os seguintes pacotes para criação e execução de testes:
 - [`pytest`](https://docs.pytest.org/en/stable/)
 - [`pytest-qt`](https://pytest-qt.readthedocs.io/en/latest/intro.html)
 
