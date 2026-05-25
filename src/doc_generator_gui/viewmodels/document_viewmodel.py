@@ -56,6 +56,5 @@ class DocumentViewModel:
         self._documentContext.outputPath = f"{path} - {employeeName}.pdf"
 
     def clearDocumentState(self):
-        self._documentContext.printType = ""
         self._documentContext.outputPath = ""
         self._documentContext.currentHTML = ""
