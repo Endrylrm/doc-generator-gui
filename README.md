@@ -36,15 +36,15 @@ Exemplo - `layouts.json`:
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
 				"error_message": "Nome do funcionário",
-				"template": "$name$"
+				"template": "name"
 			},
 			"cpf": {
 				"type": "cpf",
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
-				"placeholder": "Observação: Digite apenas os números do CPF, formatação automática.",
+				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
 				"error_message": "CPF / CNPJ do funcionário",
-				"template": "$cpf$"
+				"template": "cpf"
 			},
 			"celular": {
 				"type": "normal",
@@ -52,7 +52,7 @@ Exemplo - `layouts.json`:
 				"description": "Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
 				"error_message": "Celular do Funcionário",
-				"template": "$celular$"
+				"template": "celular"
 			},
 			"imei1": {
 				"type": "normal",
@@ -78,7 +78,7 @@ Exemplo - `layouts.json`:
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse celular...",
 				"error_message": "Observação do Celular do Funcionário",
-				"template": "$obs$"
+				"template": "obs"
 			}
 		},
 		"config": {
