@@ -2,7 +2,7 @@
 
 Esse software tem a função de gerar termos em PDF para empresas usando HTML e CSS, através do PySide6 (QT).
 
-para iniciá-lo, use `uv run main` no seu terminal.
+para iniciá-lo, use `uv run main` no seu terminal ou empacote e use o executável.
 
 <b style="color: red;">Atenção:</b> Esse projeto que criei é com o intuito de estudar programação através da linguagem Python e me auxiliar com essa parte de termos onde estava trabalhando, não deve ser usado em produção, devido a possíveis falhas de seguranças ou bugs.
 
