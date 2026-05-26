@@ -108,18 +108,18 @@ usamos os seguintes pacotes para criação e execução de testes:
 
 se precisa criar um executável para seus usuários, usamos o [`PyInstaller`](https://pyinstaller.org/en/stable/) ou o [`Nuitka (Recomendado)`](https://nuitka.net/).
 
-Para isso possuímos um script, onde você irá escolher o metodo de compilação que você deseja:
+Para isso possuímos scripts, onde você irá escolher o metodo de compilação que você deseja:
 
 <details>
 <summary>Nuitka</summary>
 
-> `uv run build.py` ou `uv run build.py nuitka`
+> `uv run build_nuitka.py`
 
 </details>
 
 <details>
 <summary>Pyinstaller</summary>
 
-> `uv run build.py pyinstaller`
+> `uv run build_pyinstaller.py`
 
 </details>
