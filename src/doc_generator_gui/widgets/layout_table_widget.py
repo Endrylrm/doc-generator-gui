@@ -77,7 +77,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         for row in range(self.rowCount()):
             isEmptyCell = self.cellWidget(row, 1).text() == ""
-            isRequired = self.layoutVM.getLayoutValueByIndex(row, "required", "")
+            isRequired = self.layoutVM.getLayoutValueByIndex(row, "required", False)
             errorMsg = self.layoutVM.getLayoutValueByIndex(row, "error_message", {})
 
             if isEmptyCell and isRequired:
