@@ -147,7 +147,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
     def switchLayoutTab(self, index: int):
         layout = self.tabs.tabText(index)
-        self.tableDocument.setTableLayout(layout)
+        self.tableDocument.setDocumentLayout(layout)
         self.labelTitle.setText(
             f"<b>Gerador de Termos de Responsabilidade - {layout}</b>"
         )
@@ -199,4 +199,4 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         # set the ViewModel state to it's default value after using it
         self.inputVM.setDefaultState()
-        self.documentVM.clearDocumentState()
+        self.documentVM.setDefaultState()

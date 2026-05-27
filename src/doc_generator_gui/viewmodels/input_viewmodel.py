@@ -49,5 +49,5 @@ class InputViewModel:
         self._inputData = dict(list(self._inputData.items())[:9])
 
     def clearInputState(self):
-        self._inputData = {}
-        self._inputHistory = {}
+        self._inputData.clear()
+        self._inputHistory.clear()

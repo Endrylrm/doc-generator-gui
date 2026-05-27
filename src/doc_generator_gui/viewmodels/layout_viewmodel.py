@@ -50,4 +50,4 @@ class LayoutViewModel:
 
     def clearLayoutState(self):
         self._curLayout = ""
-        self._layouts = {}
+        self._layouts.clear()

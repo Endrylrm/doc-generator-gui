@@ -51,9 +51,9 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self._htmlRE = re.compile(r"<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});")
         self._filenameRE = re.compile(r"['!*<>:?\"|/\\]")
 
-    def setTableLayout(self, layout_name: str = ""):
+    def setDocumentLayout(self, layout_name: str = ""):
         """
-        matches our selected Print layout, changes the text
+        matches our selected document layout, changes the widgets
         and layout of the table widget accordingly.
         """
 
