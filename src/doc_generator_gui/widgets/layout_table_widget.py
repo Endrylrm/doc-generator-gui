@@ -77,8 +77,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         for row in range(self.rowCount()):
             isEmptyCell = self.cellWidget(row, 1).text() == ""
-            isRequired = self.layoutVM.getLayoutValueByIndex(row, "required", False)
-            errorMsg = self.layoutVM.getLayoutValueByIndex(row, "error_message", {})
+            isRequired = self.layoutVM.getUIComponentByIndex(row, "required", False)
+            errorMsg = self.layoutVM.getUIComponentByIndex(row, "error_message", {})
 
             if isEmptyCell and isRequired:
                 return InputValidationResult(False, errorMsg)
@@ -137,7 +137,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             if (currentText := self.cellWidget(row, 1).text()) == "":
                 continue
 
-            template = self.layoutVM.getLayoutValueByIndex(row, "template", "")
+            template = self.layoutVM.getUIComponentByIndex(row, "template", "")
 
             currentText = re.sub(self._htmlRE, "", currentText)
 
@@ -145,7 +145,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
     def getEmployeeName(self) -> str:
         for row in range(self.rowCount()):
-            if self.layoutVM.getLayoutValueByIndex(row, "type", "") == "name":
+            if self.layoutVM.getUIComponentByIndex(row, "type", "") == "name":
                 name = self.cellWidget(row, 1).text()
                 name = re.sub(self._htmlRE, "", name)
                 name = re.sub(self._filenameRE, "", name)

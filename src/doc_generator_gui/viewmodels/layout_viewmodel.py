@@ -18,13 +18,13 @@ class LayoutViewModel:
         self._layouts = None
         self._curLayout = ""
 
-    def getLayoutValueByIndex(
+    def getUIComponentByIndex(
         self, index: int, key: str, default: Any = None
     ) -> Any | None:
         """
-        The current layout dictionary is converted into a list of
-        values, allowing indexed access to a layout entry. Then the
-        requested value is retrieved from that entry by the index.
+        The current layout user interface dictionary is converted into
+        a list of values, allowing indexed access to a layout entry. Then
+        the requested value is retrieved from that entry by the index.
         """
 
         layoutData = list(self.getCurrentLayoutUI().values())[index]
