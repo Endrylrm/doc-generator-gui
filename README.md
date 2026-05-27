@@ -35,7 +35,11 @@ Exemplo - `layouts.json`:
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
 				"placeholder": "Digite o nome do funcionário...",
-				"error_message": "Nome do funcionário",
+				"error_message": {
+    				"window_title": "Aviso - Campo Nome do funcionário está vazio!",
+    				"title_text": "Sem Nome do funcionário!",
+    				"info_text": "Por gentileza, coloque o Nome do funcionário."
+				},
 				"template": "name"
 			},
 			"cpf": {
@@ -43,7 +47,11 @@ Exemplo - `layouts.json`:
 				"required": true,
 				"description": "CPF / CNPJ do Funcionário (Obrigatório):",
 				"placeholder": "Observação: Digite apenas os números do CPF ou CNPJ, formatação automática.",
-				"error_message": "CPF / CNPJ do funcionário",
+				"error_message": {
+    				"window_title": "Aviso - Campo CPF / CNPJ do funcionário está vazio!",
+    				"title_text": "Sem CPF / CNPJ do funcionário!",
+    				"info_text": "Por gentileza, coloque o CPF / CNPJ do funcionário."
+				},
 				"template": "cpf"
 			},
 			"celular": {
@@ -51,7 +59,11 @@ Exemplo - `layouts.json`:
 				"required": true,
 				"description": "Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
-				"error_message": "Celular do Funcionário",
+				"error_message": {
+    				"window_title": "Aviso - Campo Marca/Modelo do Celular do Funcionário está vazio!",
+    				"title_text": "Sem Marca/Modelo do Celular do Funcionário!",
+    				"info_text": "Por gentileza, coloque o Marca/Modelo do Celular do Funcionário."
+				},
 				"template": "celular"
 			},
 			"imei1": {
@@ -59,7 +71,11 @@ Exemplo - `layouts.json`:
 				"required": true,
 				"description": "IMEI 1 do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI 1 do Celular a ser entregue ao funcionário...",
-				"error_message": "IMEI 1 do Celular do Funcionário",
+				"error_message": {
+    				"window_title": "Aviso - Campo IMEI 1 do Celular do Funcionário está vazio!",
+    				"title_text": "Sem IMEI 1 do Celular do Funcionário!",
+    				"info_text": "Por gentileza, coloque o IMEI 1 do Celular do Funcionário."
+				},
 				"max_text_length": 15,
 				"template": "imei1"
 			},
@@ -68,7 +84,11 @@ Exemplo - `layouts.json`:
 				"required": true,
 				"description": "IMEI 2 do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI 2 do Celular a ser entregue ao funcionário...",
-				"error_message": "IMEI 2 do Celular do Funcionário",
+				"error_message": {
+    				"window_title": "Aviso - Campo IMEI 2 do Celular do Funcionário está vazio!",
+    				"title_text": "Sem IMEI 2 do Celular do Funcionário!",
+    				"info_text": "Por gentileza, coloque o IMEI 2 do Celular do Funcionário."
+				},
 				"max_text_length": 15,
 				"template": "imei2"
 			},
@@ -77,7 +97,11 @@ Exemplo - `layouts.json`:
 				"required": false,
 				"description": "Observação (Opcional):",
 				"placeholder": "Digite uma observação referente a esse celular...",
-				"error_message": "Observação do Celular do Funcionário",
+				"error_message": {
+    				"window_title": "Aviso - Campo Observação do Celular do Funcionário está vazio!",
+    				"title_text": "Sem Observação do Celular do Funcionário!",
+    				"info_text": "Por gentileza, coloque a Observação do Celular do Funcionário."
+				},
 				"template": "obs"
 			}
 		},

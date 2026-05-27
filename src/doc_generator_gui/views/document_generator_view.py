@@ -168,9 +168,9 @@ class DocumentGeneratorView(QtWidgets.QWidget):
             msgBoxIcon = QtGui.QIcon("gen_document.ico")
 
             DialogFactory.createInfoMessageBox(
-                f"Aviso - Campo {result.errorMessage} está vazio!",
-                f"Sem {result.errorMessage}!",
-                f"Por gentileza, coloque o {result.errorMessage}.",
+                result.errorMessage["window_title"],
+                result.errorMessage["title_text"],
+                result.errorMessage["info_text"],
                 msgWinIcon=msgBoxIcon,
             )
             return
