@@ -30,7 +30,7 @@ Exemplo - `layouts.json`:
 {
     "Celular": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -47,7 +47,7 @@ Exemplo - `layouts.json`:
 				"template": "cpf"
 			},
 			"celular": {
-				"type": "normal",
+				"type": "celular",
 				"required": true,
 				"description": "Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
@@ -55,7 +55,7 @@ Exemplo - `layouts.json`:
 				"template": "celular"
 			},
 			"imei1": {
-				"type": "normal",
+				"type": "imei1",
 				"required": true,
 				"description": "IMEI 1 do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI 1 do Celular a ser entregue ao funcionário...",
@@ -64,7 +64,7 @@ Exemplo - `layouts.json`:
 				"template": "imei1"
 			},
 			"imei2": {
-				"type": "normal",
+				"type": "imei2",
 				"required": true,
 				"description": "IMEI 2 do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI 2 do Celular a ser entregue ao funcionário...",

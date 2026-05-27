@@ -1,7 +1,7 @@
 {
     "Cartucho": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -18,7 +18,7 @@
 				"template": "cpf"
 			},
 			"cartucho": {
-				"type": "normal",
+				"type": "cartucho",
 				"required": true,
 				"description": "Cartucho de Impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite o cartucho de impressora a ser entregue ao funcionário...",
@@ -26,7 +26,7 @@
 				"template": "cartucho"
 			},
 			"impressora": {
-				"type": "normal",
+				"type": "impressora",
 				"required": true,
 				"description": "Modelo de impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite o modelo de impressora que será usado esse cartucho...",
@@ -49,7 +49,7 @@
     },
     "Celular": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -66,7 +66,7 @@
 				"template": "cpf"
 			},
 			"celular": {
-				"type": "normal",
+				"type": "celular",
 				"required": true,
 				"description": "Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Celular a ser entregue ao funcionário...",
@@ -74,7 +74,7 @@
 				"template": "celular"
 			},
 			"imei1": {
-				"type": "normal",
+				"type": "imei1",
 				"required": true,
 				"description": "IMEI 1 do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI 1 do Celular a ser entregue ao funcionário...",
@@ -83,7 +83,7 @@
 				"template": "imei1"
 			},
 			"imei2": {
-				"type": "normal",
+				"type": "imei2",
 				"required": true,
 				"description": "IMEI 2 do Celular do Funcionário (Obrigatório):",
 				"placeholder": "Digite o IMEI 2 do Celular a ser entregue ao funcionário...",
@@ -107,7 +107,7 @@
     },
 	"iButton": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -124,7 +124,7 @@
 				"template": "cpf"
 			},
 			"ibutton": {
-				"type": "normal",
+				"type": "ibutton",
 				"required": true,
 				"description": "Código do iButton (Obrigatório):",
 				"placeholder": "Digite o código do iButton a ser entregue ao funcionário...",
@@ -148,7 +148,7 @@
     },
 	"Impressora": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -165,7 +165,7 @@
 				"template": "cpf"
 			},
 			"impressora": {
-				"type": "normal",
+				"type": "impressora",
 				"required": true,
 				"description": "Impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite a impressora a ser entregue ao funcionário...",
@@ -173,7 +173,7 @@
 				"template": "impressora"
 			},
 			"serial": {
-				"type": "normal",
+				"type": "serial",
 				"required": true,
 				"description": "Serial da impressora do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Serial da impressora a ser entregue ao funcionário...",
@@ -197,7 +197,7 @@
     },
 	"Inversor": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -214,7 +214,7 @@
 				"template": "cpf"
 			},
 			"inversor": {
-				"type": "normal",
+				"type": "inversor",
 				"required": true,
 				"description": "Marca/Modelo do inversor (Obrigatório):",
 				"placeholder": "Digite o inversor a ser entregue ao funcionário...",
@@ -238,7 +238,7 @@
     },
 	"Notebook": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário (Obrigatório):",
@@ -255,7 +255,7 @@
 				"template": "cpf"
 			},
 			"notebook": {
-				"type": "normal",
+				"type": "notebook",
 				"required": true,
 				"description": "Notebook do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Notebook a ser entregue ao funcionário...",
@@ -263,7 +263,7 @@
 				"template": "notebook"
 			},
 			"serial": {
-				"type": "normal",
+				"type": "serial",
 				"required": true,
 				"description": "Serial do Notebook do Funcionário (Obrigatório):",
 				"placeholder": "Digite o Serial do Notebook a ser entregue ao funcionário...",

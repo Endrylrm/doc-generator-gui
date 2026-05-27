@@ -1,7 +1,7 @@
 {
     "Devolução de Cartucho": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário da Devolução (Obrigatório):",
@@ -18,7 +18,7 @@
 				"template": "cpf"
 			},
 			"cartucho": {
-				"type": "normal",
+				"type": "cartucho",
 				"required": true,
 				"description": "Cartucho de Impressora da Devolução (Obrigatório):",
 				"placeholder": "Digite o cartucho de impressora que será devolvido...",
@@ -26,7 +26,7 @@
 				"template": "cartucho"
 			},
 			"impressora": {
-				"type": "normal",
+				"type": "impressora",
 				"required": true,
 				"description": "Modelo de impressora da Devolução (Obrigatório):",
 				"placeholder": "Digite o modelo de impressora que era usado esse cartucho...",
@@ -49,7 +49,7 @@
     },
     "Devolução de Celular": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário da Devolução (Obrigatório):",
@@ -66,7 +66,7 @@
 				"template": "cpf"
 			},
 			"celular": {
-				"type": "normal",
+				"type": "celular",
 				"required": true,
 				"description": "Celular da Devolução (Obrigatório):",
 				"placeholder": "Digite o Celular que será devolvido...",
@@ -74,7 +74,7 @@
 				"template": "celular"
 			},
 			"imei1": {
-				"type": "normal",
+				"type": "imei1",
 				"required": true,
 				"description": "IMEI 1 do Celular da Devolução (Obrigatório):",
 				"placeholder": "Digite o IMEI 1 do Celular que será devolvido...",
@@ -83,7 +83,7 @@
 				"template": "imei1"
 			},
 			"imei2": {
-				"type": "normal",
+				"type": "imei2",
 				"required": true,
 				"description": "IMEI 2 do Celular da Devolução (Obrigatório):",
 				"placeholder": "Digite o IMEI 2 do Celular que será devolvido...",
@@ -107,7 +107,7 @@
     },
 	"Devolução de iButton": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário da Devolução (Obrigatório):",
@@ -124,7 +124,7 @@
 				"template": "cpf"
 			},
 			"ibutton": {
-				"type": "normal",
+				"type": "ibutton",
 				"required": true,
 				"description": "Código do iButton da Devolução(Obrigatório):",
 				"placeholder": "Digite o código do iButton que será devolvido...",
@@ -148,7 +148,7 @@
     },
 	"Devolução de Impressora": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário da Devolução (Obrigatório):",
@@ -165,7 +165,7 @@
 				"template": "cpf"
 			},
 			"impressora": {
-				"type": "normal",
+				"type": "impressora",
 				"required": true,
 				"description": "Impressora da Devolução (Obrigatório):",
 				"placeholder": "Digite a impressora que será devolvida...",
@@ -173,7 +173,7 @@
 				"template": "impressora"
 			},
 			"serial": {
-				"type": "normal",
+				"type": "serial",
 				"required": true,
 				"description": "Serial da impressora da Devolução (Obrigatório):",
 				"placeholder": "Digite o Serial da impressora que será devolvida...",
@@ -197,7 +197,7 @@
     },
 	"Devolução de Inversor": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário da Devolução (Obrigatório):",
@@ -214,7 +214,7 @@
 				"template": "cpf"
 			},
 			"inversor": {
-				"type": "normal",
+				"type": "inversor",
 				"required": true,
 				"description": "Marca/Modelo do inversor da Devolução (Obrigatório):",
 				"placeholder": "Digite o inversor que será devolvido...",
@@ -238,7 +238,7 @@
     },
 	"Devolução de Notebook": {
 		"user_interface": {
-			"nome": {
+			"name": {
 				"type": "name",
 				"required": true,
 				"description": "Nome do Funcionário da Devolução (Obrigatório):",
@@ -255,7 +255,7 @@
 				"template": "cpf"
 			},
 			"notebook": {
-				"type": "normal",
+				"type": "notebook",
 				"required": true,
 				"description": "Notebook da Devolução (Obrigatório):",
 				"placeholder": "Digite o Notebook que será devolvido...",
@@ -263,7 +263,7 @@
 				"template": "notebook"
 			},
 			"serial": {
-				"type": "normal",
+				"type": "serial",
 				"required": true,
 				"description": "Serial do Notebook da Devolução (Obrigatório):",
 				"placeholder": "Digite o Serial do Notebook que será devolvido...",
