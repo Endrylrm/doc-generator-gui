@@ -20,7 +20,58 @@ Após preencher e marcar as opções desejadas, é só clicar em "Gerar Document
 
 ![Visualizador de impressão](/assets/img/print-preview.png "Visualizador de impressão")
 
-## Extendendo
+## Estrutura do Projeto
+
+```text
+assets/
+└─── icons/									# Ícones da aplicação
+data/
+├─── layouts/								# Layouts/configurações dos Documentos em json
+├─── templates/								# Templates dos Documentos em HTML
+└─── company.json							# Dados da empresa
+documents/									# Documentos gerados pelo sistema
+src/
+├─── doc_generator_gui/
+│    ├─── contexts
+│    │ 	  ├─── document_context.py			# Contexto do documento atual
+│    │ 	  └─── print_context.py				# Contexto usado para Impressão
+│    ├─── core
+│    │ 	  ├─── di_container.py				# Container de injeção de dependência
+│    │ 	  └─── providers.py					# Providers de injeção de dependência
+│    ├─── factories
+│    │ 	  ├─── dialog_factory.py			# Factory para criação de Dialogs
+│    │ 	  └─── printer_factory.py			# Factory para criação QPrinter/QPainter
+│    ├─── schemas
+│    │ 	  ├─── components.py				# Schema dos componentes GUI do Layout
+│    │ 	  └─── layouts.py					# Schema do Layout de Documentos
+│    ├─── services
+│    │ 	  ├─── pdf_service.py				# Serviço de criação de PDF
+│    │ 	  ├─── printer_service.py			# Serviço de impressão
+│    │ 	  ├─── readers.py					# Leitores de Arquivos
+│    │ 	  └─── template_engine_service.py	# Serviço de HTML Template
+│    ├─── validations
+│    │ 	  └─── results.py					# Resultados das validações
+│    ├─── viewmodels
+│    │ 	  ├─── document_viewmodel.py		# Viewmodel dos documentos a serem criados
+│    │ 	  ├─── input_viewmodel.py			# Viewmodel dos inputs
+│    │ 	  └─── layout_viewmodel.py			# Viewmodel dos layouts json
+│    ├─── views
+│    │ 	  ├─── document_generator_view.py	# View do gerador de documentos
+│    │ 	  └─── main_view.py					# View principal - Container
+│    ├─── widgets
+│    │ 	  ├─── cpf_input_widget.py			# Widget númerico - Input de CPF/CNPJ
+│    │ 	  └─── layout_table_widget.py		# Widget Tabela - Layouts
+│    ├─── bootstrap.py						# Bootstrap para iniciar a aplicação quando empacotado
+│    └─── main.py							# Entrypoint da aplicação
+tests/
+├─── test_cpf_cnpj.py						# Teste - Validação de CPF/CNPJ
+└─── test_output_path.py					# Teste - Caminho dos Documentos
+upx/										# UPX - Reduzir tamanhos dos executáveis (Windows e Linux)
+build_nuitka.py								# Build com Nuitka
+build_pyinstaller.py						# Build com Pyinstaller
+```
+
+## Extendendo/Adicionando novos tipo de documentos
 
 Layouts de impressão são criados através dos arquivos `.json` na pasta `data/layouts/` e os dados da empresa ficam no arquivo `data/company.json`.
 
@@ -127,6 +178,9 @@ podemos usar os seguintes pacotes para empacotarmos o sistema:
 usamos os seguintes pacotes para criação e execução de testes:
 - [`pytest`](https://docs.pytest.org/en/stable/)
 - [`pytest-qt`](https://pytest-qt.readthedocs.io/en/latest/intro.html)
+
+Outros:
+- [`imageio`](https://imageio.readthedocs.io/en/stable/index.html) - usado pelo Nuitka para converter ícones
 
 ## Build / Deploy
 

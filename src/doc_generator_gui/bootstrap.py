@@ -60,7 +60,7 @@ def bootstrap():
         title="Gerador de Termos",
         width=800,
         height=600,
-        icon="gen_document.ico",
+        icon="gen_document.png",
         documentVM=container.resolve(DocumentViewModel),
         inputVM=container.resolve(InputViewModel),
         layoutVM=container.resolve(LayoutViewModel),
