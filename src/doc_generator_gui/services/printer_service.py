@@ -53,7 +53,7 @@ class PrinterService:
         printDialog.setWindowTitle(
             f"Imprimir termo de {self._documentContext.printType}"
         )
-        printDialogIcon = QtGui.QIcon("gen_document.ico")
+        printDialogIcon = QtGui.QIcon("gen_document.png")
         printDialog.setWindowIcon(printDialogIcon)
         if printDialog.exec() == printDialog.DialogCode.Accepted:
             self.paintDocument()
@@ -68,7 +68,7 @@ class PrinterService:
         printPreviewDialog.setWindowTitle(
             f"Imprimir termo de {self._documentContext.printType}"
         )
-        printPreviewDialogIcon = QtGui.QIcon("gen_document.ico")
+        printPreviewDialogIcon = QtGui.QIcon("gen_document.png")
         printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
         printPreviewDialog.paintRequested.connect(self.paintDocument)
         printPreviewDialog.exec()

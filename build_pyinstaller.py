@@ -10,13 +10,13 @@ def build_pyinstaller():
             [
                 "--noconsole",
                 "--icon",
-                "gen_document.ico",
+                "./assets/icons/gen_document.ico",
                 "--upx-dir",
                 "./upx/",
                 "--contents-directory=.",
                 "--add-data=data;data",
                 "--add-data=documents;documents",
-                "--add-data=gen_document.ico;.",
+                "--add-data=./assets/icons/gen_document.png;.",
                 "./src/doc_generator_gui/main.py",
             ]
         )
@@ -26,13 +26,13 @@ def build_pyinstaller():
             [
                 "--noconsole",
                 "--icon",
-                "gen_document.ico",
+                "./assets/icons/gen_document.png",
                 "--upx-dir",
                 "./upx/",
                 "--contents-directory=.",
                 "--add-data=data:data",
                 "--add-data=documents:documents",
-                "--add-data=gen_document.ico:.",
+                "--add-data=./assets/icons/gen_document.png:.",
                 "./src/doc_generator_gui/main.py",
             ]
         )
@@ -42,11 +42,11 @@ def build_pyinstaller():
             [
                 "--noconsole",
                 "--icon",
-                "gen_document.icns",
+                "./assets/icons/gen_document.icns",
                 "--contents-directory=.",
                 "--add-data=data:data",
                 "--add-data=documents:documents",
-                "--add-data=gen_document.ico:.",
+                "--add-data=./assets/icons/gen_document.png:.",
                 "./src/doc_generator_gui/main.py",
             ]
         )
