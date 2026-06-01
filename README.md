@@ -1,6 +1,6 @@
-# Gerador de termos para empresas
+# Gerador de Documentos para empresas
 
-Esse software tem a função de gerar termos em PDF para empresas usando HTML e CSS, através do PySide6 (QT).
+Esse software tem a função de gerar documentos em PDF para empresas usando HTML e CSS, através do PySide6 (QT) e Playwright.
 
 para iniciá-lo, use `uv run main` no seu terminal ou empacote e use o executável.
 
@@ -8,7 +8,7 @@ para iniciá-lo, use `uv run main` no seu terminal ou empacote e use o executáv
 
 ## Usando o Gerador de Termos
 
-Esse pequeno sistema foi pensado na simplicidade, através da sua interface gráfica e na facilidade de adicionar novos layouts de termos.
+Esse pequeno sistema foi pensado na simplicidade, através da sua interface gráfica e na facilidade de adicionar novos layouts de documentos.
 
 ![Interface Gráfica](/assets/img/gui.png "Interface Gráfica")
 
