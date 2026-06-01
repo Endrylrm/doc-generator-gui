@@ -182,7 +182,7 @@ usamos os seguintes pacotes para criação e execução de testes:
 Outros:
 - [`imageio`](https://imageio.readthedocs.io/en/stable/index.html) - usado pelo Nuitka para converter ícones
 
-## Build / Deploy
+## Build
 
 se precisa criar um executável para seus usuários, usamos o [`PyInstaller`](https://pyinstaller.org/en/stable/) ou o [`Nuitka (Recomendado)`](https://nuitka.net/).
 
@@ -201,3 +201,19 @@ Para isso possuímos scripts, onde você irá escolher o metodo de compilação 
 > `uv run build_pyinstaller.py`
 
 </details>
+
+## Deploy
+
+Exemplo para realizar o deploy da aplicação no Linux:
+
+```bash
+# Faça a build da aplicação
+uv run build_nuitka.py
+
+# mover a aplicação para a pasta desejada
+mv main.dist $HOME/Applications/doc_generator_gui
+
+# iniciar a aplicação
+cd $HOME/Applications/doc_generator_gui
+./main.bin
+```
