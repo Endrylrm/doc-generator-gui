@@ -6,7 +6,7 @@ para iniciá-lo, use `uv run main` no seu terminal ou empacote e use o executáv
 
 <b style="color: red;">Atenção:</b> Esse projeto que criei é com o intuito de estudar programação através da linguagem Python e me auxiliar com essa parte de termos onde estava trabalhando, não deve ser usado em produção, devido a possíveis falhas de seguranças ou bugs.
 
-## Usando o Gerador de Termos
+## Usando o Gerador de Documentos
 
 Esse pequeno sistema foi pensado na simplicidade, através da sua interface gráfica e na facilidade de adicionar novos layouts de documentos.
 
