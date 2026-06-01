@@ -26,7 +26,7 @@ Após preencher e marcar as opções desejadas, é só clicar em "Gerar Document
 assets/
 └─── icons/									# Ícones da aplicação
 data/
-├─── layouts/								# Layouts/configurações dos Documentos em json
+├─── layouts/								# Layouts de impressão em json
 ├─── templates/								# Templates dos Documentos em HTML
 └─── company.json							# Dados da empresa
 documents/									# Documentos gerados pelo sistema
