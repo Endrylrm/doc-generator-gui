@@ -32,33 +32,33 @@ data/
 documents/									# Documentos gerados pelo sistema
 src/
 ├─── doc_generator_gui/
-│    ├─── contexts
+│    ├─── contexts/
 │    │ 	  ├─── document_context.py			# Contexto do documento atual
 │    │ 	  └─── print_context.py				# Contexto usado para Impressão
-│    ├─── core
+│    ├─── core/
 │    │ 	  ├─── di_container.py				# Container de injeção de dependência
 │    │ 	  └─── providers.py					# Providers de injeção de dependência
-│    ├─── factories
+│    ├─── factories/
 │    │ 	  ├─── dialog_factory.py			# Factory para criação de Dialogs
 │    │ 	  └─── printer_factory.py			# Factory para criação QPrinter/QPainter
-│    ├─── schemas
+│    ├─── schemas/
 │    │ 	  ├─── components.py				# Schema dos componentes GUI do Layout
 │    │ 	  └─── layouts.py					# Schema do Layout de Documentos
-│    ├─── services
+│    ├─── services/
 │    │ 	  ├─── pdf_service.py				# Serviço de criação de PDF
 │    │ 	  ├─── printer_service.py			# Serviço de impressão
 │    │ 	  ├─── readers.py					# Leitores de Arquivos
 │    │ 	  └─── template_engine_service.py	# Serviço de HTML Template
-│    ├─── validations
+│    ├─── validations/
 │    │ 	  └─── results.py					# Resultados das validações
-│    ├─── viewmodels
+│    ├─── viewmodels/
 │    │ 	  ├─── document_viewmodel.py		# Viewmodel dos documentos a serem criados
 │    │ 	  ├─── input_viewmodel.py			# Viewmodel dos inputs
 │    │ 	  └─── layout_viewmodel.py			# Viewmodel dos layouts json
-│    ├─── views
+│    ├─── views/
 │    │ 	  ├─── document_generator_view.py	# View do gerador de documentos
 │    │ 	  └─── main_view.py					# View principal - Container
-│    ├─── widgets
+│    ├─── widgets/
 │    │ 	  ├─── cpf_input_widget.py			# Widget númerico - Input de CPF/CNPJ
 │    │ 	  └─── layout_table_widget.py		# Widget Tabela - Layouts
 │    ├─── bootstrap.py						# Bootstrap para iniciar a aplicação quando empacotado
