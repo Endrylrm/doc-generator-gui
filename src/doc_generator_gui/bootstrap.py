@@ -57,7 +57,7 @@ def bootstrap():
     container.register(LayoutViewModel)
 
     window = MainView(
-        title="Gerador de Termos",
+        title="Gerador de Documentos",
         width=800,
         height=600,
         icon="gen_document.png",

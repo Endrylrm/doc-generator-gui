@@ -53,9 +53,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
             self.tabs.addTab(layout)
         self.tabs.tabBarClicked.connect(self.switchLayoutTab)
         # Label - Title
-        self.labelTitle = QtWidgets.QLabel(
-            self, text="<b>Gerador de Termos de Responsabilidade</b>"
-        )
+        self.labelTitle = QtWidgets.QLabel(self, text="<b>Gerador de Documentos</b>")
         # separator - Title
         self.separatorTitle = QtWidgets.QFrame(self)
         self.separatorTitle.setLineWidth(1)
@@ -148,9 +146,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
     def switchLayoutTab(self, index: int):
         layout = self.tabs.tabText(index)
         self.tableDocument.setDocumentLayout(layout)
-        self.labelTitle.setText(
-            f"<b>Gerador de Termos de Responsabilidade - {layout}</b>"
-        )
+        self.labelTitle.setText(f"<b>Gerador de Documentos - {layout}</b>")
 
     def enableDatePicker(self):
         isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False
