@@ -1,6 +1,6 @@
 import sys
 
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore, QtGui
 
 from .core.di_container import DIContainer
 
@@ -22,6 +22,7 @@ from .views.main_view import MainView
 
 def bootstrap():
     app = QtWidgets.QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon("assets/icons/gen_document.png"))
 
     translator = QtCore.QTranslator()
 
@@ -60,7 +61,7 @@ def bootstrap():
         title="Gerador de Documentos",
         width=800,
         height=600,
-        icon="gen_document.png",
+        icon="assets/icons/gen_document.png",
         documentVM=container.resolve(DocumentViewModel),
         inputVM=container.resolve(InputViewModel),
         layoutVM=container.resolve(LayoutViewModel),

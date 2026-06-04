@@ -16,7 +16,7 @@ def build_pyinstaller():
                 "--contents-directory=.",
                 "--add-data=data;data",
                 "--add-data=documents;documents",
-                "--add-data=./assets/icons/gen_document.png;.",
+                "--add-data=./assets/icons/gen_document.png;assets/icons",
                 "./src/doc_generator_gui/main.py",
             ]
         )
@@ -32,7 +32,7 @@ def build_pyinstaller():
                 "--contents-directory=.",
                 "--add-data=data:data",
                 "--add-data=documents:documents",
-                "--add-data=./assets/icons/gen_document.png:.",
+                "--add-data=./assets/icons/gen_document.png:assets/icons",
                 "./src/doc_generator_gui/main.py",
             ]
         )
@@ -46,7 +46,7 @@ def build_pyinstaller():
                 "--contents-directory=.",
                 "--add-data=data:data",
                 "--add-data=documents:documents",
-                "--add-data=./assets/icons/gen_document.png:.",
+                "--add-data=./assets/icons/gen_document.png:assets/icons",
                 "./src/doc_generator_gui/main.py",
             ]
         )

@@ -161,7 +161,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         result = self.tableDocument.validateRequiredInputs()
 
         if not result.isValid:
-            msgBoxIcon = QtGui.QIcon("gen_document.png")
+            msgBoxIcon = QtGui.QIcon("assets/icons/gen_document.png")
 
             DialogFactory.createInfoMessageBox(
                 result.errorMessage["window_title"],
