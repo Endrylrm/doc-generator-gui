@@ -30,9 +30,9 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         locale.setlocale(locale.LC_ALL, "")
 
-        self.documentVM = documentVM
-        self.inputVM = inputVM
-        self.layoutVM = layoutVM
+        self._documentVM = documentVM
+        self._inputVM = inputVM
+        self._layoutVM = layoutVM
 
         self._createWidgets(parent)
         self._setGridConfiguration()
@@ -49,7 +49,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
 
         # Tabs - layout
         self.tabs = QtWidgets.QTabBar(self)
-        for layout in self.layoutVM.getAllLayouts().keys():
+        for layout in self._layoutVM.getAllLayouts().keys():
             self.tabs.addTab(layout)
         self.tabs.tabBarClicked.connect(self._switchLayoutTab)
         # Label - Title
@@ -61,7 +61,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.separatorTitle.setFrameShadow(QtWidgets.QFrame.Sunken)
         # Table - Layouts Data
         self.tableDocument = LayoutTableWidget(
-            self, self.documentVM, self.inputVM, self.layoutVM
+            self, self._documentVM, self._inputVM, self._layoutVM
         )
         # separator - CheckBox
         self.separatorCheckbox = QtWidgets.QFrame(self)
@@ -174,8 +174,8 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.tableDocument.getDataFromInputs()
 
         employeeName = self.tableDocument.getEmployeeName()
-        defaultPath = self.layoutVM.getCurrentLayoutConfig().get("output", "")
-        self.documentVM.setOutputPath(employeeName, defaultPath)
+        defaultPath = self._layoutVM.getCurrentLayoutConfig().get("output", "")
+        self._documentVM.setOutputPath(employeeName, defaultPath)
 
         dateText = (
             self.datePicker.text()
@@ -183,16 +183,18 @@ class DocumentGeneratorView(QtWidgets.QWidget):
             else str(datetime.now().strftime("%A, %d de %B de %Y"))
         )
 
-        self.inputVM.setInputData("data", dateText)
+        self._inputVM.setInputData("data", dateText)
 
-        fileToRead = self.layoutVM.getCurrentLayoutConfig().get("document_template", "")
+        fileToRead = self._layoutVM.getCurrentLayoutConfig().get(
+            "document_template", ""
+        )
 
-        self.documentVM.parseHTML(fileToRead, self.inputVM.getInputData())
-        self.documentVM.generatePDF()
+        self._documentVM.parseHTML(fileToRead, self._inputVM.getInputData())
+        self._documentVM.generatePDF()
 
         if not self.disablePrinter.isChecked():
-            self.documentVM.sendToPrinter(self.disablePrinterPreview.isChecked())
+            self._documentVM.sendToPrinter(self.disablePrinterPreview.isChecked())
 
         # set the ViewModel state to it's default value after using it
-        self.inputVM.setDefaultState()
-        self.documentVM.setDefaultState()
+        self._inputVM.setDefaultState()
+        self._documentVM.setDefaultState()
