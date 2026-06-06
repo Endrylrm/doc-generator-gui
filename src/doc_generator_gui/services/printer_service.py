@@ -51,7 +51,7 @@ class PrinterService:
 
         printDialog = QtPrintSupport.QPrintDialog(self._printer)
         printDialog.setWindowTitle(
-            f"Imprimir termo de {self._documentContext.printType}"
+            f"Imprimir Documento - {self._documentContext.printType}"
         )
         printDialogIcon = QtGui.QIcon("assets/icons/gen_document.png")
         printDialog.setWindowIcon(printDialogIcon)
@@ -66,7 +66,7 @@ class PrinterService:
 
         printPreviewDialog = QtPrintSupport.QPrintPreviewDialog(self._printer)
         printPreviewDialog.setWindowTitle(
-            f"Imprimir termo de {self._documentContext.printType}"
+            f"Imprimir Documento - {self._documentContext.printType}"
         )
         printPreviewDialogIcon = QtGui.QIcon("assets/icons/gen_document.png")
         printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
