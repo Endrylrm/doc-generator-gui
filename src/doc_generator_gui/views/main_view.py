@@ -30,7 +30,7 @@ class MainView(QtWidgets.QMainWindow):
         if title is not None:
             self.setWindowTitle(title)
         if width and height is not None:
-            self.centerWindow(width, height)
+            self._centerWindow(width, height)
         if icon is not None:
             self.setWindowIcon(QtGui.QIcon(icon))
 
@@ -45,19 +45,13 @@ class MainView(QtWidgets.QMainWindow):
         self.container.setLayout(self.containerGrid)
         self.setCentralWidget(self.container)
 
-    def centerWindow(self, width: int = 300, height: int = 300):
+    def _centerWindow(self, width: int = 300, height: int = 300):
         """
         Center our windows on screen and controls it's size.
         """
 
-        # set the size of our window
         self.setGeometry(0, 0, width, height)
-        # get the frame geometry (size and position)
         appGeometry = self.frameGeometry()
-        # get the center of the screen
         screen = self.screen().availableGeometry().center()
-        # Move the frame to the center of the screen
         appGeometry.moveCenter(screen)
-        # move our widget to the center of the screen
-        # based on the top left point
         self.move(appGeometry.topLeft())
