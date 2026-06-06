@@ -5,6 +5,7 @@ from datetime import datetime
 from PySide6 import QtWidgets, QtGui, QtCore
 
 from ..widgets.layout_table_widget import LayoutTableWidget
+from ..widgets.layout_tab_widget import LayoutTabWidget
 
 from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.input_viewmodel import InputViewModel
@@ -37,8 +38,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self._createWidgets(parent)
         self._setGridConfiguration()
 
-        # start with a tab opened
-        self._switchLayoutTab(0)
+        self.tabs.switchLayoutTab(0)
 
     def _createWidgets(self, controller):
         """
@@ -48,12 +48,14 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         """
 
         # Tabs - layout
-        self.tabs = QtWidgets.QTabBar(self)
-        for layout in self._layoutVM.getAllLayouts().keys():
-            self.tabs.addTab(layout)
-        self.tabs.tabBarClicked.connect(self._switchLayoutTab)
+        self.tabs = LayoutTabWidget(self, self._documentVM, self._layoutVM)
         # Label - Title
         self.labelTitle = QtWidgets.QLabel(self, text="<b>Gerador de Documentos</b>")
+        self._layoutVM.onLayoutChanged.connect(
+            lambda layout: self.labelTitle.setText(
+                f"<b>Gerador de Documentos - {layout}</b>"
+            )
+        )
         # separator - Title
         self.separatorTitle = QtWidgets.QFrame(self)
         self.separatorTitle.setLineWidth(1)
@@ -146,11 +148,6 @@ class DocumentGeneratorView(QtWidgets.QWidget):
     def _enableDatePicker(self):
         isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False
         self.datePicker.setEnabled(isDateSelectable)
-
-    def _switchLayoutTab(self, index: int):
-        layout = self.tabs.tabText(index)
-        self.tableDocument.setDocumentLayout(layout)
-        self.labelTitle.setText(f"<b>Gerador de Documentos - {layout}</b>")
 
     def _generateDocument(self):
         """

@@ -51,6 +51,8 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         self._htmlRE = re.compile(r"<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});")
         self._filenameRE = re.compile(r"['!*<>:?\"|/\\]")
 
+        self._layoutVM.onLayoutChanged.connect(self.setDocumentLayout)
+
     def setDocumentLayout(self, layout_name: str = ""):
         """
         matches our selected document layout, changes the widgets
@@ -61,9 +63,6 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             return
 
         self.setRowCount(0)
-
-        self._layoutVM.setCurrentLayout(layout_name)
-        self._documentVM.setPrintType(layout_name)
 
         for key in self._layoutVM.getCurrentLayoutUI():
             self._addRowToTable(key)

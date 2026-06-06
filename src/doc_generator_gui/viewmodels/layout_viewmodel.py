@@ -1,18 +1,23 @@
 from typing import Any, Generator
 
+from PySide6 import QtCore
+
 from ..services.readers import ILayoutReader
 
 from ..schemas.components import UIComponent
 from ..schemas.layouts import LayoutContainer, Layout, LayoutConfig
 
 
-class LayoutViewModel:
+class LayoutViewModel(QtCore.QObject):
     """
     This class is a ViewModel for controlling the layout
     our table widget uses.
     """
 
+    onLayoutChanged = QtCore.Signal(str)
+
     def __init__(self, reader: ILayoutReader):
+        super().__init__()
         self._layoutReader = reader
 
         self._layouts = None
@@ -40,6 +45,7 @@ class LayoutViewModel:
 
     def setCurrentLayout(self, key: str):
         self._curLayout = key
+        self.onLayoutChanged.emit(key)
 
     def getAllLayouts(self) -> LayoutContainer:
         if self._layouts is None:
