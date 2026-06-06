@@ -51,7 +51,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.tabs = QtWidgets.QTabBar(self)
         for layout in self.layoutVM.getAllLayouts().keys():
             self.tabs.addTab(layout)
-        self.tabs.tabBarClicked.connect(self.switchLayoutTab)
+        self.tabs.tabBarClicked.connect(self._switchLayoutTab)
         # Label - Title
         self.labelTitle = QtWidgets.QLabel(self, text="<b>Gerador de Documentos</b>")
         # separator - Title
