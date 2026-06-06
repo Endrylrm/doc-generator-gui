@@ -34,13 +34,13 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.inputVM = inputVM
         self.layoutVM = layoutVM
 
-        self.createWidgets(parent)
-        self.setGridConfiguration()
+        self._createWidgets(parent)
+        self._setGridConfiguration()
 
         # start with a tab opened
-        self.switchLayoutTab(0)
+        self._switchLayoutTab(0)
 
-    def createWidgets(self, controller):
+    def _createWidgets(self, controller):
         """
         Used to create new widgets (labels, buttons, etc.),
         controller (main window / controller widget) is used
@@ -73,7 +73,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.isDateSelectable.setToolTip(
             "<b>Ativar Data Manual:</b>\nDesativa a data automâtica e permite a seleção de datas."
         )
-        self.isDateSelectable.stateChanged.connect(self.enableDatePicker)
+        self.isDateSelectable.stateChanged.connect(self._enableDatePicker)
         # CheckBox - Desativar Visualização de Impressão
         self.disablePrinterPreview = QtWidgets.QCheckBox(
             self, text="Desativar visualização de impressão."
@@ -103,9 +103,9 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.buttonGenDoc = QtWidgets.QPushButton(
             self, text="\N{DOCUMENT} " + "Gerar Documento"
         )
-        self.buttonGenDoc.clicked.connect(self.generateDocument)
+        self.buttonGenDoc.clicked.connect(self._generateDocument)
 
-    def setGridConfiguration(self):
+    def _setGridConfiguration(self):
         """
         Used to configure this frame grid (columns and rows) for our widgets.
         """
@@ -143,16 +143,16 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         # set this widget layout to the grid layout
         self.setLayout(widgetGridLayout)
 
-    def switchLayoutTab(self, index: int):
+    def _enableDatePicker(self):
+        isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False
+        self.datePicker.setEnabled(isDateSelectable)
+
+    def _switchLayoutTab(self, index: int):
         layout = self.tabs.tabText(index)
         self.tableDocument.setDocumentLayout(layout)
         self.labelTitle.setText(f"<b>Gerador de Documentos - {layout}</b>")
 
-    def enableDatePicker(self):
-        isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False
-        self.datePicker.setEnabled(isDateSelectable)
-
-    def generateDocument(self):
+    def _generateDocument(self):
         """
         Responsible to start the PDF creation and sending to a
         printer (optional).
