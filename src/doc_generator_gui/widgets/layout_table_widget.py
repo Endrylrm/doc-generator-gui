@@ -28,9 +28,9 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
     ):
         super().__init__(parent=parent)
 
-        self.documentVM = documentVM
-        self.inputVM = inputVM
-        self.layoutVM = layoutVM
+        self._documentVM = documentVM
+        self._inputVM = inputVM
+        self._layoutVM = layoutVM
 
         table_headers = ["Descrição", "Preencher"]
 
@@ -62,11 +62,11 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self.setRowCount(0)
 
-        self.layoutVM.setCurrentLayout(layout_name)
-        self.documentVM.setPrintType(layout_name)
+        self._layoutVM.setCurrentLayout(layout_name)
+        self._documentVM.setPrintType(layout_name)
 
-        for key in self.layoutVM.getCurrentLayoutUI():
-            self.addRowToTable(key)
+        for key in self._layoutVM.getCurrentLayoutUI():
+            self._addRowToTable(key)
 
     def validateRequiredInputs(self) -> InputValidationResult:
         """
@@ -77,15 +77,15 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         for row in range(self.rowCount()):
             isEmptyCell = self.cellWidget(row, 1).text() == ""
-            isRequired = self.layoutVM.getUIValueByIndex(row, "required", False)
-            errorMsg = self.layoutVM.getUIValueByIndex(row, "error_message", {})
+            isRequired = self._layoutVM.getUIValueByIndex(row, "required", False)
+            errorMsg = self._layoutVM.getUIValueByIndex(row, "error_message", {})
 
             if isEmptyCell and isRequired:
                 return InputValidationResult(False, errorMsg)
 
         return InputValidationResult(True)
 
-    def createRowDescription(
+    def _createRowDescription(
         self, component: UIComponent
     ) -> QtWidgets.QTableWidgetItem:
         descriptionFont = QtGui.QFont()
@@ -95,7 +95,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
         rowDescription.setFlags(QtCore.Qt.ItemFlag.NoItemFlags)
         return rowDescription
 
-    def createRowInput(
+    def _createRowInput(
         self, key: str, component: UIComponent
     ) -> QtWidgets.QLineEdit | CpfInputWidget:
         match component["type"]:
@@ -106,25 +106,22 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
                 rowInput.setMaxLength(component.get("max_text_length", 30000))
         rowInput.setPlaceholderText(component.get("placeholder", ""))
         rowInput.textEdited.connect(
-            lambda: self.setInputHistoryData(key, rowInput.text())
+            lambda: self._inputVM.setInputHistory(key, rowInput.text())
         )
-        rowInput.setText(self.inputVM.getInputHistory().get(key, ""))
+        rowInput.setText(self._inputVM.getInputHistory().get(key, ""))
         return rowInput
 
-    def setInputHistoryData(self, key: str, text: str):
-        self.inputVM.setInputHistory(key, text)
-
-    def addRowToTable(self, key: str):
+    def _addRowToTable(self, key: str):
         """
         Adds a new row to our tablewidget based on our layout.
         """
 
         index = self.rowCount()
-        layoutComponent = self.layoutVM.getCurrentLayoutUI()[key]
+        layoutComponent = self._layoutVM.getCurrentLayoutUI()[key]
         self.setRowCount(index + 1)
-        rowDescription = self.createRowDescription(layoutComponent)
+        rowDescription = self._createRowDescription(layoutComponent)
         self.setItem(index, 0, rowDescription)
-        rowInput = self.createRowInput(key, layoutComponent)
+        rowInput = self._createRowInput(key, layoutComponent)
         self.setCellWidget(index, 1, rowInput)
 
     def getDataFromInputs(self):
@@ -137,15 +134,15 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
             if (currentText := self.cellWidget(row, 1).text()) == "":
                 continue
 
-            template = self.layoutVM.getUIValueByIndex(row, "template", "")
+            template = self._layoutVM.getUIValueByIndex(row, "template", "")
 
             currentText = re.sub(self._htmlRE, "", currentText)
 
-            self.inputVM.setInputData(template, currentText)
+            self._inputVM.setInputData(template, currentText)
 
     def getEmployeeName(self) -> str:
         for row in range(self.rowCount()):
-            if self.layoutVM.getUIValueByIndex(row, "type", "") == "name":
+            if self._layoutVM.getUIValueByIndex(row, "type", "") == "name":
                 name = self.cellWidget(row, 1).text()
                 name = re.sub(self._htmlRE, "", name)
                 name = re.sub(self._filenameRE, "", name)
