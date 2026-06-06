@@ -16,7 +16,7 @@ class PrinterService:
         self._documentContext = documentContext
         self._printer = PrinterFactory.createPrinterToNative()
 
-    def paintDocument(self):
+    def _paintDocument(self):
         """
         this function is responsible to convert our pdf file in a
         image and then use a QPainter to paint to a native printer.
@@ -44,7 +44,7 @@ class PrinterService:
                 ctx.painter.translate(START_LOCATION[0], START_LOCATION[1])
                 ctx.painter.drawImage(0, 0, pageImageFromPDF)
 
-    def printDialog(self):
+    def _printDialog(self):
         """
         this function is responsible for creating a print dialog.
         """
@@ -56,9 +56,9 @@ class PrinterService:
         printDialogIcon = QtGui.QIcon("assets/icons/gen_document.png")
         printDialog.setWindowIcon(printDialogIcon)
         if printDialog.exec() == printDialog.DialogCode.Accepted:
-            self.paintDocument()
+            self._paintDocument()
 
-    def printPreviewDialog(self):
+    def _printPreviewDialog(self):
         """
         this function is responsible for creating a print dialog
         with preview.
@@ -70,7 +70,7 @@ class PrinterService:
         )
         printPreviewDialogIcon = QtGui.QIcon("assets/icons/gen_document.png")
         printPreviewDialog.setWindowIcon(printPreviewDialogIcon)
-        printPreviewDialog.paintRequested.connect(self.paintDocument)
+        printPreviewDialog.paintRequested.connect(self._paintDocument)
         printPreviewDialog.exec()
 
     def print(self, disablePrintPreview: bool = False):
@@ -81,7 +81,7 @@ class PrinterService:
         """
 
         if disablePrintPreview:
-            self.printDialog()
+            self._printDialog()
             return
 
-        self.printPreviewDialog()
+        self._printPreviewDialog()
