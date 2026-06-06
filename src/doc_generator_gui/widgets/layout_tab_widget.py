@@ -1,4 +1,4 @@
-from PySide6 import QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.layout_viewmodel import LayoutViewModel
@@ -26,6 +26,7 @@ class LayoutTabWidget(QtWidgets.QTabBar):
 
         self.tabBarClicked.connect(self.switchLayoutTab)
 
+    @QtCore.Slot(int)
     def switchLayoutTab(self, index: int):
         layout = self.tabText(index)
         self._layoutVM.setCurrentLayout(layout)

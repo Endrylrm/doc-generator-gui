@@ -1,15 +1,21 @@
 from typing import Any
 
+from PySide6 import QtCore
+
 from ..services.readers import ICompanyReader
 
 
-class InputViewModel:
+class InputViewModel(QtCore.QObject):
     """
     This class is a ViewModel for managing our inputs
     state that we use before printing.
     """
 
+    onInputDataChanged = QtCore.Signal(str, str)
+    onInputHistoryChanged = QtCore.Signal(str, str)
+
     def __init__(self, reader: ICompanyReader):
+        super().__init__()
         self._companyDataReader = reader
 
         self._inputData = {}

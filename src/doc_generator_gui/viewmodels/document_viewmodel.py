@@ -1,5 +1,7 @@
 import os
 
+from PySide6 import QtCore
+
 from ..contexts.document_context import DocumentContext
 
 from ..services.template_engine_service import TemplateEngineService
@@ -7,11 +9,14 @@ from ..services.pdf_service import PDFService
 from ..services.printer_service import PrinterService
 
 
-class DocumentViewModel:
+class DocumentViewModel(QtCore.QObject):
     """
     This class is a ViewModel for controlling our document
     state that we use when printing.
     """
+
+    onPrintTypeChanged = QtCore.Signal(str)
+    onOutputChanged = QtCore.Signal(str)
 
     def __init__(
         self,
@@ -20,6 +25,7 @@ class DocumentViewModel:
         pdfService: PDFService,
         printerService: PrinterService,
     ):
+        super().__init__()
         self._documentContext = documentContext
 
         self._tmplEngineService = tmplEngineService
@@ -43,6 +49,7 @@ class DocumentViewModel:
 
     def setPrintType(self, printType: str) -> str:
         self._documentContext.printType = printType
+        self.onPrintTypeChanged.emit(printType)
 
     def getOutputPath(self) -> str:
         return self._documentContext.outputPath
@@ -54,6 +61,7 @@ class DocumentViewModel:
         """
 
         self._documentContext.outputPath = f"{path} - {employeeName}.pdf"
+        self.onOutputChanged.emit(self._documentContext.outputPath)
 
     def setDefaultState(self):
         self._documentContext.outputPath = ""
