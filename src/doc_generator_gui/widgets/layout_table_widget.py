@@ -53,6 +53,7 @@ class LayoutTableWidget(QtWidgets.QTableWidget):
 
         self._layoutVM.onLayoutChanged.connect(self.setDocumentLayout)
 
+    @QtCore.Slot(str)
     def setDocumentLayout(self, layout_name: str = ""):
         """
         matches our selected document layout, changes the widgets
