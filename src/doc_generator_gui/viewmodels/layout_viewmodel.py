@@ -34,14 +34,14 @@ class LayoutViewModel(QtCore.QObject):
         layoutData = list(self.getCurrentLayoutUI().values())[index]
         return layoutData.get(key, default)
 
-    def _getCurrentLayout(self) -> Layout:
+    def getCurrentLayout(self) -> Layout:
         return self.getAllLayouts().get(self._curLayout, {})
 
     def getCurrentLayoutUI(self) -> dict[str, UIComponent]:
-        return self._getCurrentLayout().get("user_interface", {})
+        return self.getCurrentLayout().get("user_interface", {})
 
     def getCurrentLayoutConfig(self) -> LayoutConfig:
-        return self._getCurrentLayout().get("config", {})
+        return self.getCurrentLayout().get("config", {})
 
     def setCurrentLayout(self, key: str):
         self._curLayout = key
