@@ -1,5 +1,3 @@
-from typing import Any
-
 from PySide6 import QtCore
 
 from ..services.readers import ICompanyReader

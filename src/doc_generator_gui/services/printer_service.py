@@ -2,7 +2,6 @@ from PySide6 import QtGui, QtPdf, QtPrintSupport
 
 from ..contexts.document_context import DocumentContext
 from ..contexts.print_context import PrintContext
-
 from ..factories.printer_factory import PrinterFactory
 
 

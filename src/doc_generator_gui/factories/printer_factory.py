@@ -1,4 +1,4 @@
-from PySide6 import QtGui, QtCore, QtPrintSupport
+from PySide6 import QtCore, QtGui, QtPrintSupport
 
 
 class PrinterFactory:

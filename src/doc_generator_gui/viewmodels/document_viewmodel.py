@@ -1,12 +1,9 @@
-import os
-
 from PySide6 import QtCore
 
 from ..contexts.document_context import DocumentContext
-
-from ..services.template_engine_service import TemplateEngineService
 from ..services.pdf_service import PDFService
 from ..services.printer_service import PrinterService
+from ..services.template_engine_service import TemplateEngineService
 
 
 class DocumentViewModel(QtCore.QObject):

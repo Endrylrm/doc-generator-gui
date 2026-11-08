@@ -1,17 +1,14 @@
 import locale
-
 from datetime import datetime
 
-from PySide6 import QtWidgets, QtGui, QtCore
+from PySide6 import QtCore, QtGui, QtWidgets
 
-from ..widgets.layout_table_widget import LayoutTableWidget
-from ..widgets.layout_tab_widget import LayoutTabWidget
-
+from ..factories.dialog_factory import DialogFactory
 from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.input_viewmodel import InputViewModel
 from ..viewmodels.layout_viewmodel import LayoutViewModel
-
-from ..factories.dialog_factory import DialogFactory
+from ..widgets.layout_tab_widget import LayoutTabWidget
+from ..widgets.layout_table_widget import LayoutTableWidget
 
 
 class DocumentGeneratorView(QtWidgets.QWidget):

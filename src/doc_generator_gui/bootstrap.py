@@ -1,22 +1,21 @@
 import sys
 
-from PySide6 import QtWidgets, QtCore, QtGui
-
-from .core.di_container import DIContainer
+from PySide6 import QtCore, QtGui, QtWidgets
 
 from .contexts.document_context import DocumentContext
-
-from .services.readers import ICompanyReader, ILayoutReader
-from .services.readers import CompanyJsonReader, LayoutJsonReader
-
-from .services.template_engine_service import TemplateEngineService
+from .core.di_container import DIContainer
 from .services.pdf_service import PDFService
 from .services.printer_service import PrinterService
-
+from .services.readers import (
+    CompanyJsonReader,
+    ICompanyReader,
+    ILayoutReader,
+    LayoutJsonReader,
+)
+from .services.template_engine_service import TemplateEngineService
 from .viewmodels.document_viewmodel import DocumentViewModel
 from .viewmodels.input_viewmodel import InputViewModel
 from .viewmodels.layout_viewmodel import LayoutViewModel
-
 from .views.main_view import MainView
 
 

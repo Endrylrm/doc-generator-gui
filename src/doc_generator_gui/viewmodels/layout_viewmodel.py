@@ -1,11 +1,10 @@
-from typing import Any, Generator
+from typing import Any
 
 from PySide6 import QtCore
 
-from ..services.readers import ILayoutReader
-
 from ..schemas.components import UIComponent
-from ..schemas.layouts import LayoutContainer, Layout, LayoutConfig
+from ..schemas.layouts import Layout, LayoutConfig, LayoutContainer
+from ..services.readers import ILayoutReader
 
 
 class LayoutViewModel(QtCore.QObject):

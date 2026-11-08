@@ -1,9 +1,8 @@
-from PySide6 import QtWidgets, QtGui
+from PySide6 import QtGui, QtWidgets
 
 from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.input_viewmodel import InputViewModel
 from ..viewmodels.layout_viewmodel import LayoutViewModel
-
 from .document_generator_view import DocumentGeneratorView
 
 

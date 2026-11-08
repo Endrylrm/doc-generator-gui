@@ -2,15 +2,12 @@ import re
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from .cpf_input_widget import CpfInputWidget
-
 from ..schemas.components import UIComponent
-
+from ..validations.results import InputValidationResult
 from ..viewmodels.document_viewmodel import DocumentViewModel
 from ..viewmodels.input_viewmodel import InputViewModel
 from ..viewmodels.layout_viewmodel import LayoutViewModel
-
-from ..validations.results import InputValidationResult
+from .cpf_input_widget import CpfInputWidget
 
 
 class LayoutTableWidget(QtWidgets.QTableWidget):

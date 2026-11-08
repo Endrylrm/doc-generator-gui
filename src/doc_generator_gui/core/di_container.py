@@ -1,5 +1,4 @@
 import inspect
-
 from typing import Any, Callable, Type
 
 from .providers import Provider
