@@ -21,7 +21,7 @@ class LayoutTabWidget(QtWidgets.QTabBar):
         self._documentVM = documentVM
         self._layoutVM = layoutVM
 
-        for layout in self._layoutVM.getAllLayouts().keys():
+        for layout in self._layoutVM.getAllLayouts():
             self.addTab(layout)
 
         self.tabBarClicked.connect(self.switchLayoutTab)
