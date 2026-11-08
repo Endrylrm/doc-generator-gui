@@ -143,8 +143,7 @@ class DocumentGeneratorView(QtWidgets.QWidget):
         self.setLayout(widgetGridLayout)
 
     def _enableDatePicker(self):
-        isDateSelectable: bool = True if self.isDateSelectable.isChecked() else False
-        self.datePicker.setEnabled(isDateSelectable)
+        self.datePicker.setEnabled(self.isDateSelectable.isChecked())
 
     def _generateDocument(self):
         """
