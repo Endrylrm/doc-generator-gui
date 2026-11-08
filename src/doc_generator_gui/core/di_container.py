@@ -1,20 +1,21 @@
 import inspect
-from typing import Any, Callable, Type
+from collections.abc import Callable
+from typing import Any
 
 from .providers import Provider
 
 
 class DIContainer:
     def __init__(self):
-        self._providers: dict[Type, Provider] = {}
-        self._singletons: dict[Type, Any] = {}
+        self._providers: dict[type, Provider] = {}
+        self._singletons: dict[type, Any] = {}
 
-        self._reflectionCache: dict[Type, list[Any]] = {}
+        self._reflectionCache: dict[type, list[Any]] = {}
 
     def register(
         self,
-        interface: Type,
-        implementation: Type | None = None,
+        interface: type,
+        implementation: type | None = None,
         singleton: bool = False,
     ):
         implementation = implementation or interface
@@ -24,13 +25,13 @@ class DIContainer:
 
     def registerFactory(
         self,
-        interface: Type,
+        interface: type,
         factory: Callable,
         singleton: bool = False,
     ):
         self._providers[interface] = Provider(factory=factory, singleton=singleton)
 
-    def resolve(self, interface: Type) -> Any:
+    def resolve(self, interface: type) -> Any:
         if interface in self._singletons:
             return self._singletons[interface]
 
@@ -53,7 +54,7 @@ class DIContainer:
         if provider.implementation:
             return self._createInstance(provider.implementation)
 
-    def _getReflection(self, cls: Type) -> list[Any]:
+    def _getReflection(self, cls: type) -> list[Any]:
         if cls in self._reflectionCache:
             return self._reflectionCache[cls]
 
@@ -71,7 +72,7 @@ class DIContainer:
 
         return dependencies
 
-    def _createInstance(self, cls: Type) -> Any:
+    def _createInstance(self, cls: type) -> Any:
         dependencies = self._reflectionCache.get(cls)
 
         if dependencies is None:
