@@ -3,7 +3,7 @@ name = "doc-generator-gui"
 version = "0.1.0"
 description = "Gerador de termos para empresas."
 authors = [{ name = "Endryl Richard Monteiro", email = "endrylrm@hotmail.com" }]
-requires-python = ">=3.10,<3.15"
+requires-python = ">=3.11,<3.15"
 readme = "README.md"
 license = "MIT"
 classifiers = [
@@ -16,8 +16,8 @@ classifiers = [
 ]
 dependencies = [
     "jinja2>=3.1.6",
-    "playwright>=1.60.0",
-    "PySide6>=6.11.1,<7",
+    "playwright>=1.64.1",
+    "PySide6>=6.12.0,<7",
 ]
 
 [project.scripts]
@@ -25,10 +25,10 @@ main = "doc_generator_gui.main:main"
 
 [dependency-groups]
 dev = [
-    "imageio>=2.37.3",
-    "Nuitka>=4.1.1,<5",
-    "pyinstaller>=6.20.0,<7",
-    "pytest>=9.0.3,<10",
+    "imageio>=2.38.1",
+    "Nuitka>=4.3.5,<5",
+    "pyinstaller>=6.22.3,<7",
+    "pytest>=9.2.0,<10",
     "pytest-qt>=4.5.0,<5",
 ]
 
