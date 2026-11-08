@@ -26,7 +26,8 @@ def build_nuitka():
                 "--include-data-files=./.venv/Lib/site-packages/PySide6/translations/qt_*=PySide6/translations/",
                 "--include-data-files=./.venv/Lib/site-packages/PySide6/translations/qtbase_*=PySide6/translations/",
                 "./src/doc_generator_gui/main.py",
-            ]
+            ], 
+            check=True
         )
 
     if currentOS == "Linux":
@@ -49,7 +50,8 @@ def build_nuitka():
                 "--include-data-files=./.venv/lib/python3.13/site-packages/PySide6/Qt/translations/qt_*=PySide6/Qt/translations/",
                 "--include-data-files=./.venv/lib/python3.13/site-packages/PySide6/Qt/translations/qtbase_*=PySide6/Qt/translations/",
                 "./src/doc_generator_gui/main.py",
-            ]
+            ], 
+            check=True
         )
 
     if currentOS == "Darwin":
@@ -71,7 +73,8 @@ def build_nuitka():
                 "--include-data-files=./.venv/lib/python3.13/site-packages/PySide6/Qt/translations/qt_*=PySide6/Qt/translations/",
                 "--include-data-files=./.venv/lib/python3.13/site-packages/PySide6/Qt/translations/qtbase_*=PySide6/Qt/translations/",
                 "./src/doc_generator_gui/main.py",
-            ]
+            ], 
+            check=True
         )
 
 
