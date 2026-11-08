@@ -14,10 +14,10 @@ class MainView(QtWidgets.QMainWindow):
 
     def __init__(
         self,
-        title: str = None,
-        width: int = None,
-        height: int = None,
-        icon: str = None,
+        title: str | None = None,
+        width: int | None = None,
+        height: int | None = None,
+        icon: str | None = None,
         documentVM: DocumentViewModel | None = None,
         inputVM: InputViewModel | None = None,
         layoutVM: LayoutViewModel | None = None,
