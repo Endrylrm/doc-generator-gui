@@ -27,4 +27,4 @@ class CPFInputUI(BaseInputUI):
     type: Literal["cpf"]
 
 
-type UIComponent = InputUI | CPFInputUI
+UIComponent = InputUI | CPFInputUI
